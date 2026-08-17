@@ -368,6 +368,26 @@ button:active{transform:translateY(1px)}
 }
 </style>
 
+
+<style id="readable-output-v24">
+/* v24: readable output, compact structure */
+#result, #fuelTable, #backtestResult{font-size:12px!important}
+#result .tablewrap{font-size:12px!important}
+#fuelTable th,#fuelTable td{font-size:12px!important;padding:7px 6px!important}
+#backtestResult .compare-table th,#backtestResult .compare-table td{font-size:12px!important;padding:7px 6px!important}
+#backtestResult .bt-note,#backtestResult .bt-head span{font-size:11px!important}
+#backtestResult .bt-head{padding:8px 10px!important}
+#backtestResult .bt-stats small{font-size:10px!important}
+#backtestResult .bt-stats b{font-size:16px!important}
+#backtestResult .quality-extra-note{font-size:10px!important}
+#backtestResult .quality-extra-note small{font-size:10px!important}
+#result .note{font-size:10px!important;line-height:1.45!important}
+@media(max-width:650px){
+  #result,#fuelTable,#backtestResult{font-size:11px!important}
+  #fuelTable th,#fuelTable td,#backtestResult .compare-table th,#backtestResult .compare-table td{font-size:11px!important;padding:6px 5px!important}
+}
+</style>
+
 </head>
 <body>
 <div class="wrap">
@@ -962,10 +982,16 @@ function build(){
   const steps=Math.round(cl/0.8);
   const mapPct=steps*0.8;
   const afrLowConfidence=afrErr!=null&&Math.abs(afrErr)>=0.5;
-  const quality=
-    afrLowConfidence||afrDirectionConflict?"低可信度":
-    rs.length>=10 && segmentConsistent && (m==null||m<=1.5)?"高可信度":
-    rs.length>=3?"可參考":"資料不足";
+  const wboReadyRate=rs.length?rs.filter(r=>Number(r.WBO2_Ready)===1).length/rs.length:0;
+    const score=(rs.length>=10?2:1)
+      +(segmentConsistent?1:0)
+      +(segments.length>=2?1:0)
+      +(m==null||m<=1.5?1:0)
+      +(wboReadyRate>=0.7?1:0)
+      -(afrLowConfidence||afrDirectionConflict?2:0)
+      -(boundaryFlag?1:0);
+    const quality=rs.length<3?"資料不足":
+      (score>=5?"高可信度":score>=3?"可參考":"低可信度");
   const apStatus=ap>=80?"red":ap>60?"green":"normal";
   return {...c,cl,m,segmentCL,segmentConsistent,afrTarget,afr,afrErr,ap,temp,steps,mapPct,quality,apStatus};
  });
