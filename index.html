@@ -71,7 +71,304 @@ button:active{transform:translateY(1px)}
 @media(max-width:500px){.log-confirm-grid{grid-template-columns:1fr}}
 </style><style>
 .android-map-rule{margin:8px 0;padding:9px 11px;border-radius:9px;background:#f8fafc;border:1px dashed #cbd5e1;color:#475569;font-size:12px;line-height:1.6}
-</style></head>
+</style>
+<style>
+/* v4 UI: clearer hierarchy + upload moved above results */
+.section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px}
+.section-head h2{margin:4px 0 4px}
+.section-tag{display:inline-flex;align-items:center;padding:5px 10px;border-radius:999px;background:#eaf2ff;color:#2563eb;font-size:11px;font-weight:900;letter-spacing:.08em}
+.section-sub{margin:0;color:#64748b;font-size:13px;line-height:1.55}
+.setup-grid{grid-template-columns:repeat(3,1fr);gap:12px}
+.setup-grid label{font-size:13px;color:#475569}
+.setup-grid select{width:100%;min-height:48px;padding:0 14px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;font-size:15px;font-weight:700;color:#111827}
+.setup-warning{margin-top:12px;padding:10px 13px;border-radius:11px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:13px;font-weight:700}
+.rule-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.rule-item{padding:14px;border:1px solid #e2e8f0;border-radius:14px;background:#f8fafc}
+.rule-item b,.rule-item strong,.rule-item span{display:block}
+.rule-item b{font-size:12px;color:#64748b;margin-bottom:6px}
+.rule-item strong{font-size:17px;line-height:1.25}
+.rule-item span{margin-top:5px;font-size:11px;color:#64748b;line-height:1.45}
+.rule-details{margin-top:12px;border-top:1px solid #e5e7eb;padding-top:10px}
+.rule-details summary{cursor:pointer;font-weight:800;color:#475569;font-size:13px}
+.compact-note{margin-top:10px;line-height:1.7}
+.upload-card{border:2px solid #bfdbfe;background:linear-gradient(180deg,#ffffff,#f8fbff)}
+.upload-head{align-items:center}
+.upload-format{font-size:11px;font-weight:800;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:999px;padding:7px 10px;white-space:nowrap}
+.upload-layout{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:14px;align-items:stretch}
+.upload-drop{min-height:180px;padding:24px;border:2px dashed #93c5fd;border-radius:16px;background:#eff6ff;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:.15s}
+.upload-drop:hover{background:#dbeafe;border-color:#60a5fa}
+.upload-drop input[type=file]{display:none}
+.upload-icon{width:46px;height:46px;border-radius:14px;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-size:30px;line-height:1;margin-bottom:10px}
+.upload-main{font-size:18px;font-weight:900;color:#1e3a8a}
+.upload-sub{max-width:560px;margin-top:5px;font-size:12px;line-height:1.55;color:#475569}
+.upload-status{margin-top:12px;padding:7px 10px;border-radius:9px;background:#fff;border:1px solid #dbeafe;color:#64748b;font-size:12px;font-weight:700;max-width:100%}
+.upload-action{display:flex;flex-direction:column;justify-content:space-between;padding:14px;border:1px solid #dbe3ee;border-radius:16px;background:#fff}
+.upload-checks{font-size:12px;line-height:2;color:#166534;font-weight:800}
+.analyze-btn{width:100%;min-height:52px;border:0;border-radius:12px;background:#2563eb;color:#fff;font-size:16px;font-weight:900;cursor:pointer;box-shadow:0 7px 18px #2563eb33}
+.analyze-btn:active{transform:translateY(1px)}
+@media(max-width:800px){
+ .setup-grid{grid-template-columns:1fr}
+ .rule-grid{grid-template-columns:1fr 1fr}
+ .upload-layout{grid-template-columns:1fr}
+ .upload-action{gap:12px}
+}
+@media(max-width:500px){
+ .rule-grid{grid-template-columns:1fr}
+ .section-head{display:block}
+ .upload-format{display:inline-block;margin-top:8px}
+ .upload-drop{min-height:165px;padding:18px}
+}
+</style>
+
+<style>
+.cl-on-banner{margin:12px 0 16px;padding:12px 15px;border:1px solid #fecaca;border-radius:14px;background:#fff7f7;display:flex;align-items:center;gap:12px}
+.cl-on-badge{flex:none;padding:7px 10px;border-radius:999px;background:#dc2626;color:#fff;font-size:11px;font-weight:900;letter-spacing:.04em}
+.cl-on-copy{display:flex;flex-direction:column;gap:2px}
+.cl-on-copy strong{font-size:14px;color:#7f1d1d}
+.cl-on-copy span{font-size:12px;color:#64748b}
+.result-mode{display:inline-flex;align-items:center;margin-bottom:9px;padding:6px 10px;border-radius:999px;background:#fff7f7;border:1px solid #fecaca;color:#991b1b;font-size:11px;font-weight:900}
+@media(max-width:600px){.cl-on-banner{align-items:flex-start}.cl-on-copy strong{font-size:13px}}
+</style>
+<style>
+.quality-card{padding:16px}.quality-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.quality-grid>div{display:flex;align-items:center;gap:9px;padding:11px 12px;border:1px solid #e2e8f0;border-radius:12px;background:#f8fafc}
+.quality-grid b{width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:#e2e8f0;color:#334155;font-size:11px}
+.quality-grid span{font-size:12px;font-weight:800;color:#334155}
+.quality-warning{margin-top:10px;padding:9px 12px;border-radius:10px;background:#fffbeb;border:1px solid #fde68a;color:#92400e;font-size:12px}
+.result-quality-note{margin:-3px 0 10px;color:#64748b;font-size:11px;font-weight:700}
+@media(max-width:700px){.quality-grid{grid-template-columns:1fr 1fr}}@media(max-width:430px){.quality-grid{grid-template-columns:1fr}}
+</style><style>
+.transient-note{margin-top:8px;font-size:11px;color:#64748b}
+</style>
+<style>
+/* v8 compact rules presentation: mobile-first, no logic changes */
+.rules-card{
+  padding-top:16px !important;
+  padding-bottom:14px !important;
+}
+.rules-card .section-head{
+  margin-bottom:10px !important;
+}
+.rules-card .section-head h2{
+  font-size:22px !important;
+  line-height:1.2 !important;
+  margin:3px 0 !important;
+}
+.rules-card .section-sub{
+  font-size:12px !important;
+  line-height:1.4 !important;
+}
+.rules-card .rule-grid{
+  gap:8px !important;
+}
+.rules-card .rule-item{
+  padding:10px 11px !important;
+  border-radius:11px !important;
+}
+.rules-card .rule-item b{
+  font-size:11px !important;
+  margin-bottom:3px !important;
+}
+.rules-card .rule-item strong{
+  font-size:15px !important;
+  line-height:1.2 !important;
+}
+.rules-card .rule-item span{
+  margin-top:3px !important;
+  font-size:10px !important;
+  line-height:1.3 !important;
+}
+.rules-card .rule-details{
+  margin-top:8px !important;
+  padding-top:8px !important;
+}
+.rules-card .rule-details summary{
+  font-size:12px !important;
+}
+@media(max-width:600px){
+  .rules-card .rule-grid{
+    grid-template-columns:1fr 1fr !important;
+  }
+  .rules-card .rule-item{
+    min-height:76px !important;
+  }
+}
+@media(max-width:380px){
+  .rules-card .rule-item{
+    padding:9px !important;
+    min-height:70px !important;
+  }
+  .rules-card .rule-item strong{
+    font-size:14px !important;
+  }
+}
+</style>
+
+<style>
+.temp-priority-legend{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:8px;padding:7px 9px;border-radius:9px;background:#f8fafc;color:#64748b;font-size:10px;font-weight:800}
+@media(max-width:600px){.temp-priority-legend{gap:5px 8px;font-size:9px}}
+</style>
+
+<style>
+/* v10: 詳細採樣標準預設收合，核心規則仍直接可見 */
+.rules-card .rule-details{
+  margin-top:9px !important;
+  border-top:1px solid #e5e7eb;
+  padding-top:8px !important;
+}
+.rules-card .rule-details summary{
+  list-style:none;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  min-height:34px;
+  padding:5px 2px;
+  cursor:pointer;
+  font-size:12px !important;
+  font-weight:900;
+  color:#475569;
+}
+.rules-card .rule-details summary::-webkit-details-marker{display:none}
+.rules-card .rule-details summary:after{
+  content:"＋";
+  font-size:17px;
+  color:#94a3b8;
+}
+.rules-card .rule-details[open] summary:after{content:"−"}
+.rules-card .rule-details .compact-note{
+  margin-top:7px !important;
+  font-size:11px !important;
+  line-height:1.65 !important;
+}
+</style>
+<style>
+/* v11: 整個「採樣與修正標準」可伸縮 */
+.rules-main-details{margin:0}
+.rules-main-details>summary{
+  list-style:none;display:flex;align-items:center;justify-content:space-between;
+  gap:12px;cursor:pointer;padding:4px 2px;
+}
+.rules-main-details>summary::-webkit-details-marker{display:none}
+.rules-main-details>summary>span{display:flex;flex-direction:column;gap:2px;min-width:0}
+.rules-main-details>summary small{font-size:10px;font-weight:900;letter-spacing:.08em;color:#2563eb}
+.rules-main-details>summary strong{font-size:17px;line-height:1.25;color:#111827}
+.rules-main-details>summary em{font-style:normal;font-size:11px;color:#64748b}
+.rules-toggle{
+  flex:none;width:32px;height:32px;border-radius:10px;background:#f1f5f9;
+  display:flex;align-items:center;justify-content:center;color:#64748b;font-size:20px;
+}
+.rules-main-details[open]>.rules-main-body{margin-top:12px}
+.rules-main-details[open] .rules-toggle{background:#eaf2ff;color:#2563eb}
+.rules-main-details[open] .rules-toggle{font-size:0}
+.rules-main-details[open] .rules-toggle:after{content:"−";font-size:20px}
+.rules-main-body .rule-details{margin-top:9px}
+@media(max-width:600px){
+  .rules-main-details>summary{padding:2px 0}
+  .rules-main-details>summary strong{font-size:16px}
+}
+</style><style>
+.backtest-card{border:1px solid #bfdbfe;background:#fbfdff}
+.backtest-layout{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:14px}
+.backtest-drop{min-height:150px;padding:20px;border:2px dashed #93c5fd;border-radius:16px;background:#eff6ff;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer}
+.backtest-drop input[type=file]{display:none}
+.backtest-info{display:flex;flex-direction:column;justify-content:space-between;gap:8px;padding:14px;border:1px solid #dbe3ee;border-radius:16px;background:#fff;font-size:12px;font-weight:800;color:#166534}
+.backtest-info .analyze-btn{margin-top:auto}
+.bt-summary{display:flex;flex-direction:column;gap:4px;padding:12px;border-radius:11px;background:#f0fdf4;border:1px solid #bbf7d0;color:#166534}
+.bt-note{margin-top:8px;padding:10px 12px;border-radius:10px;background:#f8fafc;color:#64748b;font-size:12px;line-height:1.5}
+.bt-warning{padding:12px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:12px;font-weight:800}
+@media(max-width:700px){.backtest-layout{grid-template-columns:1fr}}
+</style>
+<style>
+.compare-upload{display:grid;grid-template-columns:1fr 34px 1fr;gap:10px;align-items:stretch}
+.compare-box{min-height:145px;padding:18px;border:2px dashed #cbd5e1;border-radius:15px;background:#f8fafc;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer}
+.compare-box.before{border-color:#cbd5e1}
+.compare-box.after{border-color:#93c5fd;background:#eff6ff}
+.compare-box input{display:none}
+.compare-label{font-size:11px;font-weight:900;color:#64748b;margin-bottom:5px}
+.compare-box strong{font-size:16px;color:#1e293b}
+.compare-box small{margin-top:4px;font-size:11px;color:#64748b}
+.compare-box em{margin-top:10px;font-style:normal;font-size:11px;font-weight:800;color:#2563eb}
+.compare-arrow{display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#94a3b8}
+.compare-btn{margin-top:12px;width:100%}
+@media(max-width:650px){
+  .compare-upload{grid-template-columns:1fr;gap:8px}
+  .compare-arrow{height:20px;transform:rotate(90deg)}
+  .compare-box{min-height:120px}
+}
+</style>
+
+<style>
+.bt-head{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px;border-radius:11px;background:#f0fdf4;border:1px solid #bbf7d0;color:#166534}
+.bt-head span{font-size:11px;color:#64748b}
+.bt-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.bt-stats>div{padding:10px;border:1px solid #e2e8f0;border-radius:11px;background:#f8fafc;text-align:center}
+.bt-stats small,.bt-stats b{display:block}.bt-stats small{font-size:10px;color:#64748b}.bt-stats b{margin-top:3px;font-size:18px}
+.compare-table-wrap{overflow:auto;margin-top:10px}
+.compare-table{width:100%;border-collapse:collapse;font-size:11px;min-width:760px}
+.compare-table th,.compare-table td{padding:8px;border-bottom:1px solid #e5e7eb;text-align:center;vertical-align:middle}
+.compare-table th{background:#f8fafc;color:#475569;font-weight:900}
+.compare-table th span{font-weight:500;font-size:9px}
+.compare-table td.good{background:#f0fdf4;color:#166534}
+.compare-table td.warn{background:#fffbeb;color:#92400e}
+.compare-table td.bad{background:#fef2f2;color:#991b1b}
+.compare-table td.neutral{background:#f8fafc;color:#64748b}
+.compare-table td span{font-size:9px;font-weight:600}
+@media(max-width:600px){.bt-stats{grid-template-columns:1fr 1fr}.bt-head{display:block}.bt-head span{display:block;margin-top:3px}}
+</style>
+
+<style>
+.backtest-card .section-sub{max-width:560px}
+.bt-note strong{font-weight:900}
+</style>
+
+<style>
+.compare-upload .compare-box small{line-height:1.45}
+.backtest-card .bt-note{line-height:1.6}
+</style>
+
+<style>
+.compare-table td span{font-size:9px;line-height:1.4}
+.bt-note strong{font-weight:900}
+</style>
+<style>.quality-extra-note{margin-top:7px;padding:8px 10px;border-radius:9px;background:#f8fafc;color:#64748b;font-size:10px;font-weight:800;line-height:1.45}.quality-extra-note small{display:block;margin-top:2px;color:#94a3b8;font-weight:600}</style>
+<style id="compact-layout-v21">
+/* v21: compact presentation only; calculation logic unchanged */
+.card{padding:12px!important;margin-bottom:8px!important;border-radius:12px!important}
+.section-head{margin-bottom:7px!important;gap:6px!important}
+.section-head h2{font-size:16px!important;margin:0 0 2px!important}
+.section-sub{font-size:10px!important;line-height:1.3!important;margin:0!important}
+.section-tag{font-size:8px!important}
+.upload-card,.backtest-card{padding:10px!important}
+.drop{min-height:100px!important;padding:10px!important;border-radius:11px!important}
+.upload-icon{font-size:19px!important;margin-bottom:2px!important}
+.upload-main{font-size:13px!important}
+.upload-sub{font-size:9px!important;line-height:1.3!important}
+.upload-status{font-size:9px!important;margin-top:5px!important}
+.compare-upload{gap:6px!important}
+.compare-box{min-height:98px!important;padding:9px!important;border-radius:11px!important}
+.compare-box strong{font-size:13px!important}
+.compare-box small{font-size:9px!important;line-height:1.3!important}
+.compare-box em{font-size:9px!important;margin-top:5px!important}
+.compare-arrow{font-size:17px!important}
+.compare-btn{margin-top:7px!important;padding:8px!important}
+.bt-stats{gap:5px!important;margin-top:6px!important}
+.bt-stats>div{padding:6px!important;border-radius:8px!important}
+.bt-stats small{font-size:8px!important}
+.bt-stats b{font-size:14px!important}
+.bt-head{padding:7px 8px!important}
+.bt-head span{font-size:9px!important}
+.bt-note{margin-top:6px!important;padding:7px 8px!important;font-size:9px!important;line-height:1.4!important}
+.compare-table{font-size:9px!important;min-width:700px!important}
+.compare-table th,.compare-table td{padding:5px 4px!important}
+.quality-extra-note{margin-top:4px!important;padding:5px 7px!important;font-size:8px!important}
+.quality-extra-note small{font-size:8px!important}
+@media(max-width:650px){
+  .card{padding:9px!important;margin-bottom:6px!important}
+  .compare-box{min-height:90px!important}
+}
+</style>
+
+</head>
 <body>
 <div class="wrap">
 <section class="hero">
@@ -84,71 +381,172 @@ button:active{transform:translateY(1px)}
     </div>
   </div>
 </section>
-
-<section class="card">
-<h2><span class="section-tag">PROFILE</span>① Log 系統 → ② ECU 系列 → ③ 引擎</h2>
-<div class="format-grid">
-
-</div>
-<div class="note" style="margin-top:7px">先選 Log 系統，再選 ECU 系列與引擎；程式只使用該組對應的格式與真實 Map，不會跨系列套用。</div>
-<div class="sample-rule-box" id="samplingRulesVisible">
-<strong>📌 採樣標準</strong><br>
-🌡️ <strong>T_Eng &gt; 67°C</strong> 才採樣<br>
-📈 <strong>Fuel_CL 超過 ±3%</strong> 才採樣；<strong>-2%～+2% 不採樣</strong>（CL 準確度已足夠，無需再修正）<br>
-⏱️ 進入對應的<strong>真實 App Map 格</strong>後，穩定 <strong>1 秒</strong> 才開始收樣<br>
-🔢 單一穩定片段至少 <strong>10 筆</strong>才納入分析
-</div>
-
+<section class="cl-on-banner">
+  <div class="cl-on-badge">🔴 CLOSED LOOP ON</div>
+  <div class="cl-on-copy">
+    <strong>閉迴路開啟專用</strong>
+    <span>Fuel_CL 主判定 · WBO2 / AFR Target 交叉驗證</span>
+  </div>
 </section>
 
-<section class="card">
-<h2><span class="section-tag">PROFILE</span>① Log 系統 → ② ECU 系列 → ③ 引擎</h2>
-<div class="format-grid">
-<div>
-<label>① Log 系統（請自行選擇）</label>
-<select id="logPlatformSelect">
-<option value="">請先選擇</option>
-<option value="apple">Apple Log</option>
-<option value="android">Android aRacer Log</option>
-</select>
-</div>
-<div>
-<label>② ECU 系列（請自行選擇）</label>
-<select id="ecuSeriesSelect">
-<option value="">請先選擇</option>
-<option value="x">X 系列（SuperX / MiniX）</option>
-<option value="xx">XX 系列（SuperXX / MiniXX）</option>
-</select>
-</div>
-<div>
-<label>③ 引擎版本（請自行選擇）</label>
-<select id="profile">
-<option value="">請先選擇</option>
-<option value="ct125_2v">CT125 2V</option>
-<option value="ct125_4v">CT125 4V（待擴充）</option>
-</select>
-</div>
-</div>
-<div class="note" style="margin-top:7px">先選 Log 系統，再選 ECU 系列；程式只會載入該「Log 系統 × ECU 系列 × 引擎」對應的格式與真實 Map，不會跨系列套用。</div>
+<section class="card setup-card">
+  <div class="section-head">
+    <div>
+      <div class="section-tag">SETUP</div>
+      <h2>① 分析設定</h2>
+      <p class="section-sub">先選 Log 平台與 ECU 系列，程式只套用該組對應格式與真實 App Map。</p>
+    </div>
+  </div>
+
+  <div class="format-grid setup-grid">
+    <div>
+      <label>Log 系統</label>
+      <select id="logPlatformSelect">
+        <option value="">請先選擇</option>
+        <option value="apple">Apple Log</option>
+        <option value="android">Android aRacer Log</option>
+      </select>
+    </div>
+    <div>
+      <label>ECU 系列</label>
+      <select id="ecuSeriesSelect">
+        <option value="">請先選擇</option>
+        <option value="x">X 系列（SuperX / MiniX）</option>
+        <option value="xx">XX 系列（SuperXX / MiniXX）</option>
+      </select>
+    </div>
+    <div>
+      <label>引擎版本</label>
+      <select id="profile">
+        <option value="">請先選擇</option>
+        <option value="ct125_2v">CT125 2V</option>
+        <option value="ct125_4v">CT125 4V（待擴充）</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="setup-warning" id="setupHint">
+    ⚠️ 請先完成以上三項設定，再上傳 Log。
+  </div>
 </section>
 
-<section class="card">
-<h2><span class="section-tag">RULES</span>③ 固定分析基準</h2>
-<div class="stats">
-<div class="stat">熱車門檻<b>T_Eng >67°C</b></div>
-<div class="stat">中高負載<b>AP &gt; 60</b></div>
-<div class="stat">Map 調整係數<b>1 = 1格</b></div>
-<div class="stat">單格調整量<b>±0.8%</b></div>
+<section class="card rules-card">
+  <details class="rules-main-details">
+    <summary>
+      <span>
+        <small>RULES</small>
+        <strong>② 採樣與修正標準</strong>
+        <em>固定規則，不因單次 Log 自動改變</em>
+      </span>
+      <b class="rules-toggle">＋</b>
+    </summary>
+    <div class="rules-main-body">
+      <div class="rule-grid">
+    <div class="rule-item"><b>🌡️ 溫度</b><strong>80～110°C；>110°C 降低優先</strong><span>≥67°C 可採樣</span></div>
+<div class="temp-priority-legend">
+  <span>🟢 80–110°C 最高</span>
+  <span>🟡 80–110°C 次之</span>
+  <span>🟠 67–79°C 補充</span>
+  <span>⚠️ &gt;120°C 降低優先</span>
 </div>
-<div class="note" style="margin-top:10px">
-<strong>Fuel_CL 是核心修正標準。</strong> Fuel_CL 代表 ECU + AF2 閉迴路實際產生的燃油修正量；正值＝ECU 增油、負值＝ECU 減油。AFR_Target / AFR_WBO2 只作交叉驗證，不另外用 AFR 差值「猜」一個修正量。<br>
-<strong>RPM / TPS 不提供容許範圍。</strong> Log 只會對應到目前所選 X / XX 系列的實際 App RPM × TPS 格點，不產生虛擬格。<br>
-<strong>Fuel_CL 容許範圍：±3.0%。</strong> |Fuel_CL| ≤ 3.0% 不列入修正；超過 ±3.0% 才進入修正評估。<br><strong>調整係數 1 = 一個格 = ±0.8%。</strong> 例如 Fuel_CL +4.1% → 油圖該格約 +4.0% → +5 格。<br><strong>AFR 交叉驗證：</strong> |AFR_WBO2 − AFR_Target| ≥ 0.5 時降低可信度，並提醒「建議再獲取更多資料再修改」。
-</div>
+
+    <div class="rule-item"><b>📈 修正</b><strong>±3% 內不修</strong><span>先取 Map 格中位數</span></div>
+    <div class="rule-item"><b>⏱️ 穩定</b><strong>進格後 1 秒</strong><span>至少 10 筆</span></div>
+    <div class="rule-item"><b>🧭 Map</b><strong>只用真實格</strong><span>X / XX 分開</span></div>
+  </div>
+<div class="rule-details-inline"><div class="note compact-note">
+      <strong>Fuel_CL 是核心修正標準。</strong> 正值＝ECU 增油、負值＝ECU 減油。先完整收集符合採樣條件的資料，再對每個實際 App Map 格取 Fuel_CL 中位數；<strong>|Fuel_CL 中位數| ≤ 3.0%</strong> 不列入修正（準確度已足夠）。超過 ±3.0% 才進入修正評估。<br>
+      <strong>修正步數＝Fuel_CL 中位數 ÷ 0.8%，四捨五入。</strong> 1 格＝0.8%。<br>
+      <strong>AFR 交叉驗證：</strong> |AFR_WBO2 − AFR_Target| ≥ 0.5 時降低可信度，提醒「建議再獲取更多資料再修改」，但不取代 Fuel_CL 主判定。<br>
+      <strong>閉迴路：</strong> 必須為 ON；OFF 或無法確認時，不提供 Fuel_CL 修正結論。<br><strong>溫度優先：</strong> 同一 Map 格內，穩定資料以較高引擎溫度優先；80～110°C 為最高優先區，67～79°C 僅作低溫補充，&gt;110°C 降低優先度。<br><strong>穩定性：</strong> RPM / TPS 應穩定；多個獨立穩定片段結果不一致時，降低可信度，先取得更多資料。<br><strong>WBO2：</strong> 必須 Ready 才可納入有效採樣。<br><strong>AP：</strong> AP &gt;60 / ≥80 僅作負載提醒，不是採樣剔除條件，也不是爆震判定。<br>
+      <strong>Map 格：</strong> RPM / TPS 只會對應目前所選 X / XX 系列 App 實際存在的格，不建立虛擬格。
+    </div></div>
+
+    </div>
+  </details>
 </section>
+
+
+<section class="card quality-card">
+  <div class="section-head"><div>
+    <div class="section-tag">QUALITY GATE</div>
+    <h2>防失準</h2>
+    <p class="section-sub">品質條件不足時，只提醒，不急著修正。</p>
+  </div></div>
+  <div class="quality-grid">
+    <div><b>①</b><span>閉迴路 ON</span></div>
+    <div><b>②</b><span>WBO2 Ready</span></div>
+    <div><b>③</b><span>RPM / TPS 穩定</span></div>
+    <div><b>④</b><span>多片段一致</span></div>
+  </div>
+  <div class="quality-warning">⚠️ 任一品質條件無法確認 → <strong>降低可信度，不急著修改 Map</strong></div>
+</section>
+<section class="card upload-card" id="uploadSection">
+  <div class="section-head upload-head">
+    <div>
+      <div class="section-tag">INPUT</div>
+      <h2>③ 上傳 Log</h2>
+      <p class="section-sub">設定完成後，把要分析的 Log 放這裡。</p>
+    </div>
+    <div class="upload-format">.loga · .loga.zip · .log · .txt · .csv</div>
+  </div>
+
+  <div class="upload-layout">
+    <label class="drop upload-drop" for="logs">
+      <div class="upload-icon">＋</div>
+      <div class="upload-main">選擇 Log 檔案</div>
+      <div class="upload-sub">可一次選多個檔案；程式會依你選定的平台與 ECU 系列做格式防呆。</div>
+      <input id="logs" type="file" multiple accept=".loga,.zip,.log,.txt,.csv">
+      <div id="status" class="upload-status">尚未選擇 Log</div>
+    </label>
+
+    <div class="upload-action">
+      <div class="upload-checks">
+        <div>✓ 平台格式防呆</div>
+        <div>✓ X / XX 分離</div>
+        <div>✓ 只對應真實 App Map</div>
+      </div>
+      <button id="analyze" type="button" class="analyze-btn">開始分析 Log</button>
+    </div>
+  </div>
+</section>
+
+<section class="card backtest-card" id="backtestSection">
+  <div class="section-head">
+    <div>
+      <div class="section-tag">COMPARE</div>
+      <h2>④ 前後 Log 對比</h2>
+      <p class="section-sub">同一 Map 格，比較修正前與修正後是否真的改善。</p>
+    </div>
+  </div>
+
+  <div class="compare-upload">
+    <label class="compare-box before" for="backtestBeforeLogs">
+      <span class="compare-label">① 修正前 Log</span>
+      <strong>選擇修正前檔案</strong>
+      <small>Map 尚未修改時的 Log</small>
+      <input id="backtestBeforeLogs" type="file" multiple accept=".loga,.zip,.log,.txt,.csv">
+      <em id="backtestBeforeStatus">尚未選擇</em>
+    </label>
+
+    <div class="compare-arrow">→</div>
+
+    <label class="compare-box after" for="backtestAfterLogs">
+      <span class="compare-label">② 修正後 Log</span>
+      <strong>選擇修正後檔案</strong>
+      <small>Map 修改後重新取得的 Log</small>
+      <input id="backtestAfterLogs" type="file" multiple accept=".loga,.zip,.log,.txt,.csv">
+      <em id="backtestAfterStatus">尚未選擇</em>
+    </label>
+  </div>
+
+  <button id="runBacktest" type="button" class="analyze-btn compare-btn">開始前後對比</button>
+  <div id="backtestResult" class="backtest-result" hidden></div>
+</section>
+
 
 <div id="result" class="hidden">
-<section class="card"><h2>④ 本次 Log 總覽</h2><div id="stats" class="stats"></div></section>
+<section class="card"><div class="result-mode">🔴 閉迴路 ON｜Fuel_CL 校正模式</div><div class="result-quality-note">修正建議只在品質條件通過後採用；資料不一致時先取得更多 Log。</div><h2>⑤ 本次 Log 總覽</h2><div id="stats" class="stats"></div></section>
 <section class="card"><h2>🔶 中高負載使用提醒</h2><div id="load"></div></section>
 <section class="card"><h2>⛽ Fuel Map 修正建議</h2>
 <div class="alert yellow"><b>核心：Fuel_CL</b><br>
@@ -170,21 +568,7 @@ Fuel_CL 的穩定統計值直接作為該 Map 格的修正依據；AFR_Target / 
 <footer>aRacer X / XX Log 分析建議｜CT125 2V版本｜本工具只提供分析與調校建議，不會寫入 ECU。AP >60 只作中高負載使用提醒，不代表已判定爆震。<div class="gaggle-credit">此分析程式為 Gaggle 發布</div></footer>
 </div>
 
-<section class="card" id="uploadSection">
-  <h2><span class="section-tag">INPUT</span>② 上傳 Log</h2>
-  <div class="note">
-    請先完成上方「Log 系統 × ECU 系列 × 引擎」選擇，再上傳對應的
-    <strong>.loga</strong> / <strong>.loga.zip</strong> / <strong>.log</strong> / <strong>.txt</strong> / <strong>.csv</strong>。
-  </div>
-  <div class="drop">
-    <label for="logs" style="display:block;cursor:pointer;text-align:center;font-weight:800">
-      📂 點擊這裡選擇 Log 檔案
-    </label>
-    <input id="logs" type="file" multiple accept=".loga,.zip,.log,.txt,.csv">
-    <div id="status" class="note" style="margin-top:10px">尚未選擇 Log</div>
-  </div>
-  <button id="analyze" type="button" style="margin-top:12px">開始分析 Log</button>
-</section>
+
 
 <script>
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{("undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:this).pako=e()}}(function(){return function r(o,s,f){function l(t,e){if(!s[t]){if(!o[t]){var i="function"==typeof require&&require;if(!e&&i)return i(t,!0);if(d)return d(t,!0);var n=new Error("Cannot find module '"+t+"'");throw n.code="MODULE_NOT_FOUND",n}var a=s[t]={exports:{}};o[t][0].call(a.exports,function(e){return l(o[t][1][e]||e)},a,a.exports,r,o,s,f)}return s[t].exports}for(var d="function"==typeof require&&require,e=0;e<f.length;e++)l(f[e]);return l}({1:[function(e,t,i){"use strict";var n="undefined"!=typeof Uint8Array&&"undefined"!=typeof Uint16Array&&"undefined"!=typeof Int32Array;i.assign=function(e){for(var t,i,n=Array.prototype.slice.call(arguments,1);n.length;){var a=n.shift();if(a){if("object"!=typeof a)throw new TypeError(a+"must be non-object");for(var r in a)t=a,i=r,Object.prototype.hasOwnProperty.call(t,i)&&(e[r]=a[r])}}return e},i.shrinkBuf=function(e,t){return e.length===t?e:e.subarray?e.subarray(0,t):(e.length=t,e)};var a={arraySet:function(e,t,i,n,a){if(t.subarray&&e.subarray)e.set(t.subarray(i,i+n),a);else for(var r=0;r<n;r++)e[a+r]=t[i+r]},flattenChunks:function(e){var t,i,n,a,r,o;for(t=n=0,i=e.length;t<i;t++)n+=e[t].length;for(o=new Uint8Array(n),t=a=0,i=e.length;t<i;t++)r=e[t],o.set(r,a),a+=r.length;return o}},r={arraySet:function(e,t,i,n,a){for(var r=0;r<n;r++)e[a+r]=t[i+r]},flattenChunks:function(e){return[].concat.apply([],e)}};i.setTyped=function(e){e?(i.Buf8=Uint8Array,i.Buf16=Uint16Array,i.Buf32=Int32Array,i.assign(i,a)):(i.Buf8=Array,i.Buf16=Array,i.Buf32=Array,i.assign(i,r))},i.setTyped(n)},{}],2:[function(e,t,i){"use strict";var f=e("./common"),a=!0,r=!0;try{String.fromCharCode.apply(null,[0])}catch(e){a=!1}try{String.fromCharCode.apply(null,new Uint8Array(1))}catch(e){r=!1}for(var l=new f.Buf8(256),n=0;n<256;n++)l[n]=252<=n?6:248<=n?5:240<=n?4:224<=n?3:192<=n?2:1;function d(e,t){if(t<65534&&(e.subarray&&r||!e.subarray&&a))return String.fromCharCode.apply(null,f.shrinkBuf(e,t));for(var i="",n=0;n<t;n++)i+=String.fromCharCode(e[n]);return i}l[254]=l[254]=1,i.string2buf=function(e){var t,i,n,a,r,o=e.length,s=0;for(a=0;a<o;a++)55296==(64512&(i=e.charCodeAt(a)))&&a+1<o&&56320==(64512&(n=e.charCodeAt(a+1)))&&(i=65536+(i-55296<<10)+(n-56320),a++),s+=i<128?1:i<2048?2:i<65536?3:4;for(t=new f.Buf8(s),a=r=0;r<s;a++)55296==(64512&(i=e.charCodeAt(a)))&&a+1<o&&56320==(64512&(n=e.charCodeAt(a+1)))&&(i=65536+(i-55296<<10)+(n-56320),a++),i<128?t[r++]=i:(i<2048?t[r++]=192|i>>>6:(i<65536?t[r++]=224|i>>>12:(t[r++]=240|i>>>18,t[r++]=128|i>>>12&63),t[r++]=128|i>>>6&63),t[r++]=128|63&i);return t},i.buf2binstring=function(e){return d(e,e.length)},i.binstring2buf=function(e){for(var t=new f.Buf8(e.length),i=0,n=t.length;i<n;i++)t[i]=e.charCodeAt(i);return t},i.buf2string=function(e,t){var i,n,a,r,o=t||e.length,s=new Array(2*o);for(i=n=0;i<o;)if((a=e[i++])<128)s[n++]=a;else if(4<(r=l[a]))s[n++]=65533,i+=r-1;else{for(a&=2===r?31:3===r?15:7;1<r&&i<o;)a=a<<6|63&e[i++],r--;1<r?s[n++]=65533:a<65536?s[n++]=a:(a-=65536,s[n++]=55296|a>>10&1023,s[n++]=56320|1023&a)}return d(s,n)},i.utf8border=function(e,t){var i;for((t=t||e.length)>e.length&&(t=e.length),i=t-1;0<=i&&128==(192&e[i]);)i--;return i<0?t:0===i?t:i+l[e[i]]>t?i:t}},{"./common":1}],3:[function(e,t,i){"use strict";t.exports=function(e,t,i,n){for(var a=65535&e|0,r=e>>>16&65535|0,o=0;0!==i;){for(i-=o=2e3<i?2e3:i;r=r+(a=a+t[n++]|0)|0,--o;);a%=65521,r%=65521}return a|r<<16|0}},{}],4:[function(e,t,i){"use strict";t.exports={Z_NO_FLUSH:0,Z_PARTIAL_FLUSH:1,Z_SYNC_FLUSH:2,Z_FULL_FLUSH:3,Z_FINISH:4,Z_BLOCK:5,Z_TREES:6,Z_OK:0,Z_STREAM_END:1,Z_NEED_DICT:2,Z_ERRNO:-1,Z_STREAM_ERROR:-2,Z_DATA_ERROR:-3,Z_BUF_ERROR:-5,Z_NO_COMPRESSION:0,Z_BEST_SPEED:1,Z_BEST_COMPRESSION:9,Z_DEFAULT_COMPRESSION:-1,Z_FILTERED:1,Z_HUFFMAN_ONLY:2,Z_RLE:3,Z_FIXED:4,Z_DEFAULT_STRATEGY:0,Z_BINARY:0,Z_TEXT:1,Z_UNKNOWN:2,Z_DEFLATED:8}},{}],5:[function(e,t,i){"use strict";var s=function(){for(var e,t=[],i=0;i<256;i++){e=i;for(var n=0;n<8;n++)e=1&e?3988292384^e>>>1:e>>>1;t[i]=e}return t}();t.exports=function(e,t,i,n){var a=s,r=n+i;e^=-1;for(var o=n;o<r;o++)e=e>>>8^a[255&(e^t[o])];return-1^e}},{}],6:[function(e,t,i){"use strict";t.exports=function(){this.text=0,this.time=0,this.xflags=0,this.os=0,this.extra=null,this.extra_len=0,this.name="",this.comment="",this.hcrc=0,this.done=!1}},{}],7:[function(e,t,i){"use strict";t.exports=function(e,t){var i,n,a,r,o,s,f,l,d,c,u,h,b,m,w,k,_,g,v,p,x,y,S,E,Z;i=e.state,n=e.next_in,E=e.input,a=n+(e.avail_in-5),r=e.next_out,Z=e.output,o=r-(t-e.avail_out),s=r+(e.avail_out-257),f=i.dmax,l=i.wsize,d=i.whave,c=i.wnext,u=i.window,h=i.hold,b=i.bits,m=i.lencode,w=i.distcode,k=(1<<i.lenbits)-1,_=(1<<i.distbits)-1;e:do{b<15&&(h+=E[n++]<<b,b+=8,h+=E[n++]<<b,b+=8),g=m[h&k];t:for(;;){if(h>>>=v=g>>>24,b-=v,0===(v=g>>>16&255))Z[r++]=65535&g;else{if(!(16&v)){if(0==(64&v)){g=m[(65535&g)+(h&(1<<v)-1)];continue t}if(32&v){i.mode=12;break e}e.msg="invalid literal/length code",i.mode=30;break e}p=65535&g,(v&=15)&&(b<v&&(h+=E[n++]<<b,b+=8),p+=h&(1<<v)-1,h>>>=v,b-=v),b<15&&(h+=E[n++]<<b,b+=8,h+=E[n++]<<b,b+=8),g=w[h&_];i:for(;;){if(h>>>=v=g>>>24,b-=v,!(16&(v=g>>>16&255))){if(0==(64&v)){g=w[(65535&g)+(h&(1<<v)-1)];continue i}e.msg="invalid distance code",i.mode=30;break e}if(x=65535&g,b<(v&=15)&&(h+=E[n++]<<b,(b+=8)<v&&(h+=E[n++]<<b,b+=8)),f<(x+=h&(1<<v)-1)){e.msg="invalid distance too far back",i.mode=30;break e}if(h>>>=v,b-=v,(v=r-o)<x){if(d<(v=x-v)&&i.sane){e.msg="invalid distance too far back",i.mode=30;break e}if(S=u,(y=0)===c){if(y+=l-v,v<p){for(p-=v;Z[r++]=u[y++],--v;);y=r-x,S=Z}}else if(c<v){if(y+=l+c-v,(v-=c)<p){for(p-=v;Z[r++]=u[y++],--v;);if(y=0,c<p){for(p-=v=c;Z[r++]=u[y++],--v;);y=r-x,S=Z}}}else if(y+=c-v,v<p){for(p-=v;Z[r++]=u[y++],--v;);y=r-x,S=Z}for(;2<p;)Z[r++]=S[y++],Z[r++]=S[y++],Z[r++]=S[y++],p-=3;p&&(Z[r++]=S[y++],1<p&&(Z[r++]=S[y++]))}else{for(y=r-x;Z[r++]=Z[y++],Z[r++]=Z[y++],Z[r++]=Z[y++],2<(p-=3););p&&(Z[r++]=Z[y++],1<p&&(Z[r++]=Z[y++]))}break}}break}}while(n<a&&r<s);n-=p=b>>3,h&=(1<<(b-=p<<3))-1,e.next_in=n,e.next_out=r,e.avail_in=n<a?a-n+5:5-(n-a),e.avail_out=r<s?s-r+257:257-(r-s),i.hold=h,i.bits=b}},{}],8:[function(e,t,i){"use strict";var z=e("../utils/common"),R=e("./adler32"),N=e("./crc32"),O=e("./inffast"),C=e("./inftrees"),I=1,D=2,T=0,U=-2,F=1,n=852,a=592;function L(e){return(e>>>24&255)+(e>>>8&65280)+((65280&e)<<8)+((255&e)<<24)}function r(){this.mode=0,this.last=!1,this.wrap=0,this.havedict=!1,this.flags=0,this.dmax=0,this.check=0,this.total=0,this.head=null,this.wbits=0,this.wsize=0,this.whave=0,this.wnext=0,this.window=null,this.hold=0,this.bits=0,this.length=0,this.offset=0,this.extra=0,this.lencode=null,this.distcode=null,this.lenbits=0,this.distbits=0,this.ncode=0,this.nlen=0,this.ndist=0,this.have=0,this.next=null,this.lens=new z.Buf16(320),this.work=new z.Buf16(288),this.lendyn=null,this.distdyn=null,this.sane=0,this.back=0,this.was=0}function o(e){var t;return e&&e.state?(t=e.state,e.total_in=e.total_out=t.total=0,e.msg="",t.wrap&&(e.adler=1&t.wrap),t.mode=F,t.last=0,t.havedict=0,t.dmax=32768,t.head=null,t.hold=0,t.bits=0,t.lencode=t.lendyn=new z.Buf32(n),t.distcode=t.distdyn=new z.Buf32(a),t.sane=1,t.back=-1,T):U}function s(e){var t;return e&&e.state?((t=e.state).wsize=0,t.whave=0,t.wnext=0,o(e)):U}function f(e,t){var i,n;return e&&e.state?(n=e.state,t<0?(i=0,t=-t):(i=1+(t>>4),t<48&&(t&=15)),t&&(t<8||15<t)?U:(null!==n.window&&n.wbits!==t&&(n.window=null),n.wrap=i,n.wbits=t,s(e))):U}function l(e,t){var i,n;return e?(n=new r,(e.state=n).window=null,(i=f(e,t))!==T&&(e.state=null),i):U}var d,c,u=!0;function H(e){if(u){var t;for(d=new z.Buf32(512),c=new z.Buf32(32),t=0;t<144;)e.lens[t++]=8;for(;t<256;)e.lens[t++]=9;for(;t<280;)e.lens[t++]=7;for(;t<288;)e.lens[t++]=8;for(C(I,e.lens,0,288,d,0,e.work,{bits:9}),t=0;t<32;)e.lens[t++]=5;C(D,e.lens,0,32,c,0,e.work,{bits:5}),u=!1}e.lencode=d,e.lenbits=9,e.distcode=c,e.distbits=5}function j(e,t,i,n){var a,r=e.state;return null===r.window&&(r.wsize=1<<r.wbits,r.wnext=0,r.whave=0,r.window=new z.Buf8(r.wsize)),n>=r.wsize?(z.arraySet(r.window,t,i-r.wsize,r.wsize,0),r.wnext=0,r.whave=r.wsize):(n<(a=r.wsize-r.wnext)&&(a=n),z.arraySet(r.window,t,i-n,a,r.wnext),(n-=a)?(z.arraySet(r.window,t,i-n,n,0),r.wnext=n,r.whave=r.wsize):(r.wnext+=a,r.wnext===r.wsize&&(r.wnext=0),r.whave<r.wsize&&(r.whave+=a))),0}i.inflateReset=s,i.inflateReset2=f,i.inflateResetKeep=o,i.inflateInit=function(e){return l(e,15)},i.inflateInit2=l,i.inflate=function(e,t){var i,n,a,r,o,s,f,l,d,c,u,h,b,m,w,k,_,g,v,p,x,y,S,E,Z=0,B=new z.Buf8(4),A=[16,17,18,0,8,7,9,6,10,5,11,4,12,3,13,2,14,1,15];if(!e||!e.state||!e.output||!e.input&&0!==e.avail_in)return U;12===(i=e.state).mode&&(i.mode=13),o=e.next_out,a=e.output,f=e.avail_out,r=e.next_in,n=e.input,s=e.avail_in,l=i.hold,d=i.bits,c=s,u=f,y=T;e:for(;;)switch(i.mode){case F:if(0===i.wrap){i.mode=13;break}for(;d<16;){if(0===s)break e;s--,l+=n[r++]<<d,d+=8}if(2&i.wrap&&35615===l){B[i.check=0]=255&l,B[1]=l>>>8&255,i.check=N(i.check,B,2,0),d=l=0,i.mode=2;break}if(i.flags=0,i.head&&(i.head.done=!1),!(1&i.wrap)||(((255&l)<<8)+(l>>8))%31){e.msg="incorrect header check",i.mode=30;break}if(8!=(15&l)){e.msg="unknown compression method",i.mode=30;break}if(d-=4,x=8+(15&(l>>>=4)),0===i.wbits)i.wbits=x;else if(x>i.wbits){e.msg="invalid window size",i.mode=30;break}i.dmax=1<<x,e.adler=i.check=1,i.mode=512&l?10:12,d=l=0;break;case 2:for(;d<16;){if(0===s)break e;s--,l+=n[r++]<<d,d+=8}if(i.flags=l,8!=(255&i.flags)){e.msg="unknown compression method",i.mode=30;break}if(57344&i.flags){e.msg="unknown header flags set",i.mode=30;break}i.head&&(i.head.text=l>>8&1),512&i.flags&&(B[0]=255&l,B[1]=l>>>8&255,i.check=N(i.check,B,2,0)),d=l=0,i.mode=3;case 3:for(;d<32;){if(0===s)break e;s--,l+=n[r++]<<d,d+=8}i.head&&(i.head.time=l),512&i.flags&&(B[0]=255&l,B[1]=l>>>8&255,B[2]=l>>>16&255,B[3]=l>>>24&255,i.check=N(i.check,B,4,0)),d=l=0,i.mode=4;case 4:for(;d<16;){if(0===s)break e;s--,l+=n[r++]<<d,d+=8}i.head&&(i.head.xflags=255&l,i.head.os=l>>8),512&i.flags&&(B[0]=255&l,B[1]=l>>>8&255,i.check=N(i.check,B,2,0)),d=l=0,i.mode=5;case 5:if(1024&i.flags){for(;d<16;){if(0===s)break e;s--,l+=n[r++]<<d,d+=8}i.length=l,i.head&&(i.head.extra_len=l),512&i.flags&&(B[0]=255&l,B[1]=l>>>8&255,i.check=N(i.check,B,2,0)),d=l=0}else i.head&&(i.head.extra=null);i.mode=6;case 6:if(1024&i.flags&&(s<(h=i.length)&&(h=s),h&&(i.head&&(x=i.head.extra_len-i.length,i.head.extra||(i.head.extra=new Array(i.head.extra_len)),z.arraySet(i.head.extra,n,r,h,x)),512&i.flags&&(i.check=N(i.check,n,h,r)),s-=h,r+=h,i.length-=h),i.length))break e;i.length=0,i.mode=7;case 7:if(2048&i.flags){if(0===s)break e;for(h=0;x=n[r+h++],i.head&&x&&i.length<65536&&(i.head.name+=String.fromCharCode(x)),x&&h<s;);if(512&i.flags&&(i.check=N(i.check,n,h,r)),s-=h,r+=h,x)break e}else i.head&&(i.head.name=null);i.length=0,i.mode=8;case 8:if(4096&i.flags){if(0===s)break e;for(h=0;x=n[r+h++],i.head&&x&&i.length<65536&&(i.head.comment+=String.fromCharCode(x)),x&&h<s;);if(512&i.flags&&(i.check=N(i.check,n,h,r)),s-=h,r+=h,x)break e}else i.head&&(i.head.comment=null);i.mode=9;case 9:if(512&i.flags){for(;d<16;){if(0===s)break e;s--,l+=n[r++]<<d,d+=8}if(l!==(65535&i.check)){e.msg="header crc mismatch",i.mode=30;break}d=l=0}i.head&&(i.head.hcrc=i.flags>>9&1,i.head.done=!0),e.adler=i.check=0,i.mode=12;break;case 10:for(;d<32;){if(0===s)break e;s--,l+=n[r++]<<d,d+=8}e.adler=i.check=L(l),d=l=0,i.mode=11;case 11:if(0===i.havedict)return e.next_out=o,e.avail_out=f,e.next_in=r,e.avail_in=s,i.hold=l,i.bits=d,2;e.adler=i.check=1,i.mode=12;case 12:if(5===t||6===t)break e;case 13:if(i.last){l>>>=7&d,d-=7&d,i.mode=27;break}for(;d<3;){if(0===s)break e;s--,l+=n[r++]<<d,d+=8}switch(i.last=1&l,d-=1,3&(l>>>=1)){case 0:i.mode=14;break;case 1:if(H(i),i.mode=20,6!==t)break;l>>>=2,d-=2;break e;case 2:i.mode=17;break;case 3:e.msg="invalid block type",i.mode=30}l>>>=2,d-=2;break;case 14:for(l>>>=7&d,d-=7&d;d<32;){if(0===s)break e;s--,l+=n[r++]<<d,d+=8}if((65535&l)!=(l>>>16^65535)){e.msg="invalid stored block lengths",i.mode=30;break}if(i.length=65535&l,d=l=0,i.mode=15,6===t)break e;case 15:i.mode=16;case 16:if(h=i.length){if(s<h&&(h=s),f<h&&(h=f),0===h)break e;z.arraySet(a,n,r,h,o),s-=h,r+=h,f-=h,o+=h,i.length-=h;break}i.mode=12;break;case 17:for(;d<14;){if(0===s)break e;s--,l+=n[r++]<<d,d+=8}if(i.nlen=257+(31&l),l>>>=5,d-=5,i.ndist=1+(31&l),l>>>=5,d-=5,i.ncode=4+(15&l),l>>>=4,d-=4,286<i.nlen||30<i.ndist){e.msg="too many length or distance symbols",i.mode=30;break}i.have=0,i.mode=18;case 18:for(;i.have<i.ncode;){for(;d<3;){if(0===s)break e;s--,l+=n[r++]<<d,d+=8}i.lens[A[i.have++]]=7&l,l>>>=3,d-=3}for(;i.have<19;)i.lens[A[i.have++]]=0;if(i.lencode=i.lendyn,i.lenbits=7,S={bits:i.lenbits},y=C(0,i.lens,0,19,i.lencode,0,i.work,S),i.lenbits=S.bits,y){e.msg="invalid code lengths set",i.mode=30;break}i.have=0,i.mode=19;case 19:for(;i.have<i.nlen+i.ndist;){for(;k=(Z=i.lencode[l&(1<<i.lenbits)-1])>>>16&255,_=65535&Z,!((w=Z>>>24)<=d);){if(0===s)break e;s--,l+=n[r++]<<d,d+=8}if(_<16)l>>>=w,d-=w,i.lens[i.have++]=_;else{if(16===_){for(E=w+2;d<E;){if(0===s)break e;s--,l+=n[r++]<<d,d+=8}if(l>>>=w,d-=w,0===i.have){e.msg="invalid bit length repeat",i.mode=30;break}x=i.lens[i.have-1],h=3+(3&l),l>>>=2,d-=2}else if(17===_){for(E=w+3;d<E;){if(0===s)break e;s--,l+=n[r++]<<d,d+=8}d-=w,x=0,h=3+(7&(l>>>=w)),l>>>=3,d-=3}else{for(E=w+7;d<E;){if(0===s)break e;s--,l+=n[r++]<<d,d+=8}d-=w,x=0,h=11+(127&(l>>>=w)),l>>>=7,d-=7}if(i.have+h>i.nlen+i.ndist){e.msg="invalid bit length repeat",i.mode=30;break}for(;h--;)i.lens[i.have++]=x}}if(30===i.mode)break;if(0===i.lens[256]){e.msg="invalid code -- missing end-of-block",i.mode=30;break}if(i.lenbits=9,S={bits:i.lenbits},y=C(I,i.lens,0,i.nlen,i.lencode,0,i.work,S),i.lenbits=S.bits,y){e.msg="invalid literal/lengths set",i.mode=30;break}if(i.distbits=6,i.distcode=i.distdyn,S={bits:i.distbits},y=C(D,i.lens,i.nlen,i.ndist,i.distcode,0,i.work,S),i.distbits=S.bits,y){e.msg="invalid distances set",i.mode=30;break}if(i.mode=20,6===t)break e;case 20:i.mode=21;case 21:if(6<=s&&258<=f){e.next_out=o,e.avail_out=f,e.next_in=r,e.avail_in=s,i.hold=l,i.bits=d,O(e,u),o=e.next_out,a=e.output,f=e.avail_out,r=e.next_in,n=e.input,s=e.avail_in,l=i.hold,d=i.bits,12===i.mode&&(i.back=-1);break}for(i.back=0;k=(Z=i.lencode[l&(1<<i.lenbits)-1])>>>16&255,_=65535&Z,!((w=Z>>>24)<=d);){if(0===s)break e;s--,l+=n[r++]<<d,d+=8}if(k&&0==(240&k)){for(g=w,v=k,p=_;k=(Z=i.lencode[p+((l&(1<<g+v)-1)>>g)])>>>16&255,_=65535&Z,!(g+(w=Z>>>24)<=d);){if(0===s)break e;s--,l+=n[r++]<<d,d+=8}l>>>=g,d-=g,i.back+=g}if(l>>>=w,d-=w,i.back+=w,i.length=_,0===k){i.mode=26;break}if(32&k){i.back=-1,i.mode=12;break}if(64&k){e.msg="invalid literal/length code",i.mode=30;break}i.extra=15&k,i.mode=22;case 22:if(i.extra){for(E=i.extra;d<E;){if(0===s)break e;s--,l+=n[r++]<<d,d+=8}i.length+=l&(1<<i.extra)-1,l>>>=i.extra,d-=i.extra,i.back+=i.extra}i.was=i.length,i.mode=23;case 23:for(;k=(Z=i.distcode[l&(1<<i.distbits)-1])>>>16&255,_=65535&Z,!((w=Z>>>24)<=d);){if(0===s)break e;s--,l+=n[r++]<<d,d+=8}if(0==(240&k)){for(g=w,v=k,p=_;k=(Z=i.distcode[p+((l&(1<<g+v)-1)>>g)])>>>16&255,_=65535&Z,!(g+(w=Z>>>24)<=d);){if(0===s)break e;s--,l+=n[r++]<<d,d+=8}l>>>=g,d-=g,i.back+=g}if(l>>>=w,d-=w,i.back+=w,64&k){e.msg="invalid distance code",i.mode=30;break}i.offset=_,i.extra=15&k,i.mode=24;case 24:if(i.extra){for(E=i.extra;d<E;){if(0===s)break e;s--,l+=n[r++]<<d,d+=8}i.offset+=l&(1<<i.extra)-1,l>>>=i.extra,d-=i.extra,i.back+=i.extra}if(i.offset>i.dmax){e.msg="invalid distance too far back",i.mode=30;break}i.mode=25;case 25:if(0===f)break e;if(h=u-f,i.offset>h){if((h=i.offset-h)>i.whave&&i.sane){e.msg="invalid distance too far back",i.mode=30;break}h>i.wnext?(h-=i.wnext,b=i.wsize-h):b=i.wnext-h,h>i.length&&(h=i.length),m=i.window}else m=a,b=o-i.offset,h=i.length;for(f<h&&(h=f),f-=h,i.length-=h;a[o++]=m[b++],--h;);0===i.length&&(i.mode=21);break;case 26:if(0===f)break e;a[o++]=i.length,f--,i.mode=21;break;case 27:if(i.wrap){for(;d<32;){if(0===s)break e;s--,l|=n[r++]<<d,d+=8}if(u-=f,e.total_out+=u,i.total+=u,u&&(e.adler=i.check=i.flags?N(i.check,a,u,o-u):R(i.check,a,u,o-u)),u=f,(i.flags?l:L(l))!==i.check){e.msg="incorrect data check",i.mode=30;break}d=l=0}i.mode=28;case 28:if(i.wrap&&i.flags){for(;d<32;){if(0===s)break e;s--,l+=n[r++]<<d,d+=8}if(l!==(4294967295&i.total)){e.msg="incorrect length check",i.mode=30;break}d=l=0}i.mode=29;case 29:y=1;break e;case 30:y=-3;break e;case 31:return-4;case 32:default:return U}return e.next_out=o,e.avail_out=f,e.next_in=r,e.avail_in=s,i.hold=l,i.bits=d,(i.wsize||u!==e.avail_out&&i.mode<30&&(i.mode<27||4!==t))&&j(e,e.output,e.next_out,u-e.avail_out)?(i.mode=31,-4):(c-=e.avail_in,u-=e.avail_out,e.total_in+=c,e.total_out+=u,i.total+=u,i.wrap&&u&&(e.adler=i.check=i.flags?N(i.check,a,u,e.next_out-u):R(i.check,a,u,e.next_out-u)),e.data_type=i.bits+(i.last?64:0)+(12===i.mode?128:0)+(20===i.mode||15===i.mode?256:0),(0===c&&0===u||4===t)&&y===T&&(y=-5),y)},i.inflateEnd=function(e){if(!e||!e.state)return U;var t=e.state;return t.window&&(t.window=null),e.state=null,T},i.inflateGetHeader=function(e,t){var i;return e&&e.state?0==(2&(i=e.state).wrap)?U:((i.head=t).done=!1,T):U},i.inflateSetDictionary=function(e,t){var i,n=t.length;return e&&e.state?0!==(i=e.state).wrap&&11!==i.mode?U:11===i.mode&&R(1,t,n,0)!==i.check?-3:j(e,t,n,n)?(i.mode=31,-4):(i.havedict=1,T):U},i.inflateInfo="pako inflate (from Nodeca project)"},{"../utils/common":1,"./adler32":3,"./crc32":5,"./inffast":7,"./inftrees":9}],9:[function(e,t,i){"use strict";var I=e("../utils/common"),D=[3,4,5,6,7,8,9,10,11,13,15,17,19,23,27,31,35,43,51,59,67,83,99,115,131,163,195,227,258,0,0],T=[16,16,16,16,16,16,16,16,17,17,17,17,18,18,18,18,19,19,19,19,20,20,20,20,21,21,21,21,16,72,78],U=[1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,257,385,513,769,1025,1537,2049,3073,4097,6145,8193,12289,16385,24577,0,0],F=[16,16,16,16,17,17,18,18,19,19,20,20,21,21,22,22,23,23,24,24,25,25,26,26,27,27,28,28,29,29,64,64];t.exports=function(e,t,i,n,a,r,o,s){var f,l,d,c,u,h,b,m,w,k=s.bits,_=0,g=0,v=0,p=0,x=0,y=0,S=0,E=0,Z=0,B=0,A=null,z=0,R=new I.Buf16(16),N=new I.Buf16(16),O=null,C=0;for(_=0;_<=15;_++)R[_]=0;for(g=0;g<n;g++)R[t[i+g]]++;for(x=k,p=15;1<=p&&0===R[p];p--);if(p<x&&(x=p),0===p)return a[r++]=20971520,a[r++]=20971520,s.bits=1,0;for(v=1;v<p&&0===R[v];v++);for(x<v&&(x=v),_=E=1;_<=15;_++)if(E<<=1,(E-=R[_])<0)return-1;if(0<E&&(0===e||1!==p))return-1;for(N[1]=0,_=1;_<15;_++)N[_+1]=N[_]+R[_];for(g=0;g<n;g++)0!==t[i+g]&&(o[N[t[i+g]]++]=g);if(0===e?(A=O=o,h=19):1===e?(A=D,z-=257,O=T,C-=257,h=256):(A=U,O=F,h=-1),_=v,u=r,S=g=B=0,d=-1,c=(Z=1<<(y=x))-1,1===e&&852<Z||2===e&&592<Z)return 1;for(;;){for(b=_-S,o[g]<h?(m=0,w=o[g]):o[g]>h?(m=O[C+o[g]],w=A[z+o[g]]):(m=96,w=0),f=1<<_-S,v=l=1<<y;a[u+(B>>S)+(l-=f)]=b<<24|m<<16|w|0,0!==l;);for(f=1<<_-1;B&f;)f>>=1;if(0!==f?(B&=f-1,B+=f):B=0,g++,0==--R[_]){if(_===p)break;_=t[i+o[g]]}if(x<_&&(B&c)!==d){for(0===S&&(S=x),u+=v,E=1<<(y=_-S);y+S<p&&!((E-=R[y+S])<=0);)y++,E<<=1;if(Z+=1<<y,1===e&&852<Z||2===e&&592<Z)return 1;a[d=B&c]=x<<24|y<<16|u-r|0}}return 0!==B&&(a[u+B]=_-S<<24|64<<16|0),s.bits=x,0}},{"../utils/common":1}],10:[function(e,t,i){"use strict";t.exports={2:"need dictionary",1:"stream end",0:"","-1":"file error","-2":"stream error","-3":"data error","-4":"insufficient memory","-5":"buffer error","-6":"incompatible version"}},{}],11:[function(e,t,i){"use strict";t.exports=function(){this.input=null,this.next_in=0,this.avail_in=0,this.total_in=0,this.output=null,this.next_out=0,this.avail_out=0,this.total_out=0,this.msg="",this.state=null,this.data_type=2,this.adler=0}},{}],"/lib/inflate.js":[function(e,t,i){"use strict";var c=e("./zlib/inflate"),u=e("./utils/common"),h=e("./utils/strings"),b=e("./zlib/constants"),n=e("./zlib/messages"),a=e("./zlib/zstream"),r=e("./zlib/gzheader"),m=Object.prototype.toString;function o(e){if(!(this instanceof o))return new o(e);this.options=u.assign({chunkSize:16384,windowBits:0,to:""},e||{});var t=this.options;t.raw&&0<=t.windowBits&&t.windowBits<16&&(t.windowBits=-t.windowBits,0===t.windowBits&&(t.windowBits=-15)),!(0<=t.windowBits&&t.windowBits<16)||e&&e.windowBits||(t.windowBits+=32),15<t.windowBits&&t.windowBits<48&&0==(15&t.windowBits)&&(t.windowBits|=15),this.err=0,this.msg="",this.ended=!1,this.chunks=[],this.strm=new a,this.strm.avail_out=0;var i=c.inflateInit2(this.strm,t.windowBits);if(i!==b.Z_OK)throw new Error(n[i]);if(this.header=new r,c.inflateGetHeader(this.strm,this.header),t.dictionary&&("string"==typeof t.dictionary?t.dictionary=h.string2buf(t.dictionary):"[object ArrayBuffer]"===m.call(t.dictionary)&&(t.dictionary=new Uint8Array(t.dictionary)),t.raw&&(i=c.inflateSetDictionary(this.strm,t.dictionary))!==b.Z_OK))throw new Error(n[i])}function s(e,t){var i=new o(t);if(i.push(e,!0),i.err)throw i.msg||n[i.err];return i.result}o.prototype.push=function(e,t){var i,n,a,r,o,s=this.strm,f=this.options.chunkSize,l=this.options.dictionary,d=!1;if(this.ended)return!1;n=t===~~t?t:!0===t?b.Z_FINISH:b.Z_NO_FLUSH,"string"==typeof e?s.input=h.binstring2buf(e):"[object ArrayBuffer]"===m.call(e)?s.input=new Uint8Array(e):s.input=e,s.next_in=0,s.avail_in=s.input.length;do{if(0===s.avail_out&&(s.output=new u.Buf8(f),s.next_out=0,s.avail_out=f),(i=c.inflate(s,b.Z_NO_FLUSH))===b.Z_NEED_DICT&&l&&(i=c.inflateSetDictionary(this.strm,l)),i===b.Z_BUF_ERROR&&!0===d&&(i=b.Z_OK,d=!1),i!==b.Z_STREAM_END&&i!==b.Z_OK)return this.onEnd(i),!(this.ended=!0);s.next_out&&(0!==s.avail_out&&i!==b.Z_STREAM_END&&(0!==s.avail_in||n!==b.Z_FINISH&&n!==b.Z_SYNC_FLUSH)||("string"===this.options.to?(a=h.utf8border(s.output,s.next_out),r=s.next_out-a,o=h.buf2string(s.output,a),s.next_out=r,s.avail_out=f-r,r&&u.arraySet(s.output,s.output,a,r,0),this.onData(o)):this.onData(u.shrinkBuf(s.output,s.next_out)))),0===s.avail_in&&0===s.avail_out&&(d=!0)}while((0<s.avail_in||0===s.avail_out)&&i!==b.Z_STREAM_END);return i===b.Z_STREAM_END&&(n=b.Z_FINISH),n===b.Z_FINISH?(i=c.inflateEnd(this.strm),this.onEnd(i),this.ended=!0,i===b.Z_OK):n!==b.Z_SYNC_FLUSH||(this.onEnd(b.Z_OK),!(s.avail_out=0))},o.prototype.onData=function(e){this.chunks.push(e)},o.prototype.onEnd=function(e){e===b.Z_OK&&("string"===this.options.to?this.result=this.chunks.join(""):this.result=u.flattenChunks(this.chunks)),this.chunks=[],this.err=e,this.msg=this.strm.msg},i.Inflate=o,i.inflate=s,i.inflateRaw=function(e,t){return(t=t||{}).raw=!0,s(e,t)},i.ungzip=s},{"./utils/common":1,"./utils/strings":2,"./zlib/constants":4,"./zlib/gzheader":6,"./zlib/inflate":8,"./zlib/messages":10,"./zlib/zstream":11}]},{},[])("/lib/inflate.js")});
@@ -213,7 +597,12 @@ const MAPS={
   "android_xx":{rpm:XX_RPM_GRID,tps:XX_TPS_GRID}
 };
 
-const cfg={temp:67,apGreen:60,apRed:80,minRef:10,stableMinSamples:10,stableWaitSec:1.0,clDeadband:2.0,clPerCell:0.8};
+const cfg={
+ temp:67,apGreen:60,apRed:80,minRef:10,stableMinSamples:10,stableWaitSec:1.0,
+ clDeadband:3.0,clPerCell:0.8,
+ transientTpsRate:12,transientRpmRate:600,transientHoldSec:0.8,minDwellSec:1.0,
+ tempCoreLow:80,tempCoreHigh:110,tempEdgeLowWeight:0.5,tempHotWeight:0.5
+};
 let rows=[];
 
 
@@ -263,7 +652,8 @@ function loadTier(ap){
  return["一般負載",""];
 }
 function warmValid(r){
- return Number.isFinite(r.T_Eng)&&r.T_Eng>cfg.temp&&Number.isFinite(r.Fuel_CL)&&Math.abs(r.Fuel_CL)>cfg.clDeadband;
+ // 先依熱車與資料有效性完整收樣；±3% deadband 必須在每個實際 Map 格的 Fuel_CL 中位數算完後才套用。
+ return Number.isFinite(r.T_Eng)&&r.T_Eng>=cfg.temp&&Number.isFinite(r.Fuel_CL);
 }
 
 function validateLogHeader(header,name){
@@ -297,7 +687,11 @@ function parseText(text,name){
    const r={_file:name};
    for(const k of REQUIRED)r[k]=n(v[ix[k]]);
    const decKey=ix["Dec_FC_En"]!=null?"Dec_FC_En":(ix["Fuel1.Dec_FC_En"]!=null?"Fuel1.Dec_FC_En":null);
+   const atKey=ix["WBO2_AT_En"]!=null?"WBO2_AT_En":(ix["Fuel5.WBO2_AT_En"]!=null?"Fuel5.WBO2_AT_En":null);
+   const readyKey=ix["WBO2_Ready"]!=null?"WBO2_Ready":(ix["Fuel5.WBO2_Ready"]!=null?"Fuel5.WBO2_Ready":null);
    r.Dec_FC_En=decKey?n(v[ix[decKey]]):null;
+   r.WBO2_AT_En=atKey?n(v[ix[atKey]]):null;
+   r.WBO2_Ready=readyKey?n(v[ix[readyKey]]):null;
    r.Inj_Cut=ix["Inj_Cut"]!=null?n(v[ix["Inj_Cut"]]):null;
    out.push(r);
  }
@@ -378,6 +772,66 @@ function gridCellByMidpoint(v,grid){
  return null;
 }
 
+
+function tempWeight(temp){
+ const x=Number(temp);
+ if(!Number.isFinite(x)||x<cfg.temp)return 0;
+ if(x>=cfg.tempCoreLow&&x<=cfg.tempCoreHigh)return 1;
+ if(x<cfg.tempCoreLow){
+   const span=cfg.tempCoreLow-cfg.temp;
+   return cfg.tempEdgeLowWeight+(1-cfg.tempEdgeLowWeight)*Math.max(0,Math.min(1,(x-cfg.temp)/span));
+ }
+ // Above 110°C: keep data usable but give it lower weight; do not silently discard it.
+ if(x<=130)return 1-(1-cfg.tempHotWeight)*((x-cfg.tempCoreHigh)/20);
+ return cfg.tempHotWeight;
+}
+function weightedMedian(values){
+ const a=values.filter(x=>x&&Number.isFinite(x.v)&&Number.isFinite(x.w)&&x.w>0).sort((a,b)=>a.v-b.v);
+ if(!a.length)return null;
+ const total=a.reduce((s,x)=>s+x.w,0);
+ let acc=0;
+ for(const x of a){acc+=x.w;if(acc>=total/2)return x.v}
+ return a[a.length-1].v;
+}
+function markTransient(rows){
+ let last=null, holdUntil=-Infinity, lastFile=null;
+ for(const r of rows){
+   const file=r._file||"";
+   if(lastFile!==null && file!==lastFile){ last=null; holdUntil=-Infinity; }
+   const tm=Number(r.Time), rpm=Number(r.RPM), tps=Number(r.TPS_Percent);
+   let transient=false;
+   if(Number(r.Dec_FC_En)>0 || Number(r.Inj_Cut)>0) transient=true;
+   if(last&&Number.isFinite(tm)&&Number.isFinite(last.t)&&tm>last.t){
+     const dt=tm-last.t;
+     const tpsRate=Math.abs(tps-last.tps)/dt;
+     const rpmRate=Math.abs(rpm-last.rpm)/dt;
+     if(tpsRate>=cfg.transientTpsRate||rpmRate>=cfg.transientRpmRate)transient=true;
+   }
+   if(transient)holdUntil=Math.max(holdUntil,Number.isFinite(tm)?tm+cfg.transientHoldSec:Infinity);
+   r._transient=transient || (Number.isFinite(tm)&&tm<holdUntil);
+   last={t:tm,rpm,tps}; lastFile=file;
+ }
+ return rows;
+}
+
+
+function preparePrimaryRows(rawRows){
+ // Transient detection uses the COMPLETE raw time sequence first.
+ markTransient(rawRows);
+ const out=[];
+ for(const r of rawRows){
+   // WBO2 Ready is a hard gate. We do not infer readiness from AFR alone.
+   if(!Number.isFinite(r.WBO2_Ready) || Number(r.WBO2_Ready)!==1) continue;
+   // WBO2_AT_En is retained as a per-row status flag for audit. Do not use it
+   // as a proxy for closed-loop state because the log field name does not itself
+   // prove the ECU was applying Fuel_CL feedback on that exact row.
+   if(r._transient) continue;
+   out.push(r);
+ }
+ // T_Eng filtering happens only after transient detection.
+ return out;
+}
+
 function stableMapGroups(validRows){
  const platform=$("logPlatformSelect")?.value||"", series=$("ecuSeriesSelect")?.value||"";
  const key=platform+"_"+series;
@@ -390,55 +844,88 @@ function stableMapGroups(validRows){
 
  const groups=new Map();
  let currentKey=null,currentRows=[],stableStart=null;
+ const boundary=(value,grid,rpm)=>{
+   const x=Number(value);
+   if(!Number.isFinite(x)||!Array.isArray(grid)||grid.length<2)return false;
+   const mids=[];
+   for(let i=0;i<grid.length-1;i++)mids.push((Number(grid[i])+Number(grid[i+1]))/2);
+   const d=Math.min(...mids.map(m=>Math.abs(x-m)));
+   return d <= (rpm?50:1);
+ };
  const flush=()=>{
    if(currentRows.length>=cfg.stableMinSamples){
-     if(!groups.has(currentKey))groups.set(currentKey,{rpm:currentRows[0]._rp,tps:currentRows[0]._tp,rs:[]});
-     groups.get(currentKey).rs.push(...currentRows);
+     const rpms=currentRows.map(r=>Number(r.RPM)).filter(Number.isFinite);
+     const tps=currentRows.map(r=>Number(r.TPS_Percent)).filter(Number.isFinite);
+     const rm=med(rpms), tr=Math.max(...rpms)-Math.min(...rpms);
+     const tpr=Math.max(...tps)-Math.min(...tps);
+     const rpmPct=rm?tr/rm*100:Infinity;
+     const times=currentRows.map(r=>Number(r.Time)).filter(Number.isFinite);
+     let dwell=0;
+     for(let i=1;i<times.length;i++){
+       const dt=times[i]-times[i-1];
+       if(dt>0&&dt<=2)dwell+=dt;
+     }
+
+     if(rpmPct<=4 && tpr<=4 && dwell>=cfg.minDwellSec){
+       if(!groups.has(currentKey)){
+         groups.set(currentKey,{
+           rpm:currentRows[0]._rp,tps:currentRows[0]._tp,rs:[],segments:[],
+           dwell:0,boundary:false,afrConflict:false
+         });
+       }
+       const g=groups.get(currentKey);
+       g.rs.push(...currentRows);
+       g.segments.push(currentRows.slice());
+       g.dwell+=dwell;
+       g.boundary = g.boundary ||
+         currentRows.some(r=>boundary(r.RPM,map.rpm,true)||boundary(r.TPS_Percent,map.tps,false));
+
+       const cl=med(currentRows.map(r=>r.Fuel_CL));
+       const at=med(currentRows.map(r=>r.AFR_Target));
+       const wb=med(currentRows.map(r=>r.AFR_WBO2));
+       if(Number.isFinite(cl)&&Number.isFinite(at)&&Number.isFinite(wb)&&Math.abs(wb-at)>=0.5&&Math.abs(cl)>cfg.clDeadband){
+         // CL + means ECU adding fuel; AFR_WBO2 - Target positive means measured AFR is leaner.
+         // Same signs support the same physical direction; opposite signs conflict.
+         g.afrConflict = g.afrConflict || (Math.sign(cl)!==Math.sign(wb-at));
+       }
+     }
    }
    currentKey=null;currentRows=[];stableStart=null;
  };
 
  for(const r of validRows){
-   // 該 Log 版本已先由 parser 轉成統一 RPM/TPS 數值；
-   // 這裡只允許落入目前所選 ECU 系列 × Log 平台的真實 App Map 軸。
+   if(r._transient){flush();continue;}
    const rp=gridCellByMidpoint(r.RPM,map.rpm);
    const tp=gridCellByMidpoint(r.TPS_Percent,map.tps);
    if(rp==null||tp==null){flush();continue;}
-
-   const cellKey=rp+"|"+tp;
-   const t=Number(r.Time);
-
+   const cellKey=rp+"|"+tp, tm=Number(r.Time);
    if(cellKey!==currentKey){
-     flush();
-     currentKey=cellKey;
-     currentRows=[];
-     stableStart=Number.isFinite(t)?t:null;
+     flush(); currentKey=cellKey; currentRows=[]; stableStart=Number.isFinite(tm)?tm:null;
    }
-
-   // 先進格，穩定滿 1 秒後才開始收樣。
-   if(stableStart!=null&&Number.isFinite(t)&&t-stableStart<cfg.stableWaitSec)continue;
-
-   r._rp=rp;
-   r._tp=tp;
-   currentRows.push(r);
+   if(stableStart!=null&&Number.isFinite(tm)&&tm-stableStart<cfg.stableWaitSec)continue;
+   r._rp=rp;r._tp=tp;currentRows.push(r);
  }
  flush();
  return [...groups.values()].sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);
 }
+
+
 function cellGroups(validRows){ return stableMapGroups(validRows); }
 
 function build(){
  const androidMode=$("logPlatformSelect")?.value==="android";
- const hot=rows.filter(warmValid);
+ const prepared=preparePrimaryRows(rows);
+ const hot=prepared.filter(warmValid);
  const high=hot.filter(r=>r.Cyl1_Eng_AP>cfg.apGreen);
  const cells=cellGroups(hot);
 
  const stats=[
   ["Log 檔案",new Set(rows.map(r=>r._file)).size],
   ["原始樣本",rows.length.toLocaleString()],
-  ["T_Eng >67°C",hot.length.toLocaleString()],
+  ["WBO2 Ready",prepared.length.toLocaleString()],
+  ["T_Eng ≥67°C",hot.length.toLocaleString()],
   ["AP >60",high.length.toLocaleString()],
-  ["已對應 Map 格",cells.length],["Log 格式",androidMode?"Android aRacer":"Apple"]
+  ["已對應 Map 格",cells.length],["瞬態排除",rows.filter(r=>r._transient).length.toLocaleString()],["Log 格式",androidMode?"Android aRacer":"Apple"]
  ];
  $("stats").innerHTML=stats.map(x=>`<div class="stat">${x[0]}<b>${x[1]}</b></div>`).join("");
 
@@ -460,33 +947,48 @@ function build(){
  }
 
  const arr=cells.map(c=>{
-  const rs=c.rs,cl=med(rs.map(r=>r.Fuel_CL)),m=mad(rs.map(r=>r.Fuel_CL));
+  const rs=c.rs;
+  const cl=weightedMedian(rs.map(r=>({v:r.Fuel_CL,w:tempWeight(r.T_Eng)})));
+  const m=mad(rs.map(r=>r.Fuel_CL));
+  const segmentCL=(c.segments||[]).map(seg=>med(seg.map(r=>r.Fuel_CL))).filter(Number.isFinite);
+  const segmentSigns=segmentCL.filter(v=>Math.abs(v)>cfg.clDeadband).map(v=>Math.sign(v));
+  const segmentConsistent=segmentSigns.length>=2&&segmentSigns.every(v=>v===segmentSigns[0]);
   const afrTarget=med(rs.map(r=>r.AFR_Target)),afr=med(rs.map(r=>r.AFR_WBO2));
   const afrErr=afr==null||afrTarget==null?null:afr-afrTarget;
   const ap=med(rs.map(r=>r.Cyl1_Eng_AP)),temp=med(rs.map(r=>r.T_Eng));
+  const dwell=c.dwell||0;
+  const boundaryWarn=!!c.boundary;
+  const afrDirectionConflict=!!c.afrConflict;
+
   const steps=Math.round(cl/0.8);
   const mapPct=steps*0.8;
   const afrLowConfidence=afrErr!=null&&Math.abs(afrErr)>=0.5;
-  const quality=rs.length<cfg.minRef?"資料不足":afrLowConfidence?"低可信度":(m!=null&&m<=1.5?"高可信度":"可參考");
+  const quality=rs.length<cfg.minRef?"資料不足":
+    !segmentConsistent?"需更多片段":
+    afrLowConfidence||afrDirectionConflict?"低可信度":
+    (m!=null&&m<=1.5?"高可信度":"可參考");
   const apStatus=ap>=80?"red":ap>60?"green":"normal";
-  return {...c,cl,m,afrTarget,afr,afrErr,ap,temp,steps,mapPct,quality,apStatus};
+  return {...c,cl,m,segmentCL,segmentConsistent,afrTarget,afr,afrErr,ap,temp,steps,mapPct,quality,apStatus};
  });
 
- arr.sort((a,b)=>Math.abs(b.cl)-Math.abs(a.cl));
- const recommend=arr.filter(c=>c.rs.length>=cfg.minRef&&Math.abs(c.cl)>3.0);
+ arr.sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);
+ const recommend=arr
+   .filter(c=>c.rs.length>=cfg.minRef&&Math.abs(c.cl)>cfg.clDeadband&&c.segmentConsistent&&c.quality!=="低可信度")
+   .sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);
 
  $("fuel").innerHTML=`<div class="stats">
-  <div class="stat">建議修正格<b>${recommend.length}</b></div>
+  <div class="stat">建議修正 Map 格<b>${recommend.length}</b></div>
   <div class="stat">資料不足<b>${arr.filter(c=>c.rs.length<cfg.minRef).length}</b></div>
   <div class="stat">1格<b>±0.8%</b></div>
  </div>
  <div class="note" style="margin-top:9px">
-  修正數值直接取該實際 Map 格的 Fuel_CL 中位數；修正步數＝該實際 Map 格的 Fuel_CL 中位數 ÷ 0.8 後四捨五入。
+  <strong>操作順序：RPM 由低到高排列；同一 RPM 內 TPS 由低到高。</strong><br>
+  修正數值取該實際 Map 格的「溫度加權 Fuel_CL 中位數」；80～110°C 權重最高。修正步數＝加權中位數 ÷ 0.8 後四捨五入。
   |Fuel_CL| ≤ 3.0%：不列入修正。|AFR_WBO2 − AFR_Target| ≥ 0.5：降低可信度，建議再獲取更多資料再修改。
  </div>`;
 
  $("fuelTable").innerHTML=`<thead><tr>
-  <th>RPM實際格</th><th>TPS實際格</th><th>樣本<br><span class="th-zh">有效 Log 筆數</span></th><th>Fuel_CL<br><span class="th-zh">ECU閉迴路燃油修正</span></th>
+  <th>RPM實際格</th><th>TPS實際格</th><th>樣本<br><span class="th-zh">有效 Log 筆數</span></th><th>停留<br><span class="th-zh">有效秒數</span></th><th>片段<br><span class="th-zh">獨立穩定片段</span></th><th>Fuel_CL<br><span class="th-zh">ECU閉迴路燃油修正</span></th>
   <th>油圖修正</th><th>格數</th><th>AFR Target<br><span class="th-zh">目標空燃比</span></th><th>AFR_WBO2<br><span class="th-zh">寬頻氧感測實測空燃比</span></th>
   <th>AFR驗證<br><span class="th-zh">實測值與目標值交叉確認</span></th><th>AP<br><span class="th-zh">引擎負載值</span></th><th>資料品質</th>
  </tr></thead><tbody>${
@@ -496,24 +998,24 @@ function build(){
   const afrAbsErr=Math.abs(c.afrErr??999);
   const afrCheck=afrAbsErr>=0.5?"⚠️ 差值 ≥0.5｜降低可信度｜建議再獲取更多資料再修改":afrAbsErr<=0.15?"一致":afrAbsErr<=0.30?"輕微偏差":"需確認";
   return `<tr>
-   <td><strong>${c.rpm}</strong></td><td><strong>${c.tps}%</strong></td><td>${c.rs.length}</td>
+   <td><strong>${c.rpm}</strong></td><td><strong>${c.tps}%</strong></td><td>${c.rs.length}</td><td>${c.dwell.toFixed(2)}s</td><td>${c.segments?.length||0}</td>
    <td class="${c.cl>0?"red":c.cl<0?"green":""}">${pct(c.cl)}</td>
    <td>${dir} ${sign}${fmt(c.mapPct)}%</td>
    <td>${c.steps>0?"+":""}${c.steps} 格</td>
    <td>${fmt(c.afrTarget)}</td><td>${fmt(c.afr)}</td><td>${afrCheck}</td>
-   <td><span class="ap-dot ${c.apStatus==="green"?"ap-green":c.apStatus==="red"?"ap-red":""}"></span>${fmt(c.ap,1)}${c.apStatus==="red"?" 中高負載":c.apStatus==="green"?" 中高負載":""}</td><td>${c.quality}</td>
+   <td><span class="ap-dot ${c.apStatus==="green"?"ap-green":c.apStatus==="red"?"ap-red":""}"></span>${fmt(c.ap,1)}${c.apStatus==="red"?" 中高負載":c.apStatus==="green"?" 中高負載":""}</td><td>${c.quality}${c.boundaryWarn?"｜⚠️接近Map邊界":""}${c.afrDirectionConflict?"｜⚠️CL/WBO2方向衝突":""}</td>
   </tr>`;
- }).join(""):"<tr><td colspan='11'>目前沒有 |Fuel_CL| > 3.0% 的 Map 格，先不用修改。</td></tr>"
+ }).join(""):"<tr><td colspan='13'>目前沒有 |Fuel_CL| > 3.0% 的 Map 格，先不用修改。</td></tr>"
  }</tbody>`;
 
  $("detail").innerHTML=`<thead><tr>
-  <th>RPM實際格</th><th>TPS實際格</th><th>樣本<br><span class="th-zh">有效 Log 筆數</span></th><th>Fuel_CL<br><span class="th-zh">ECU閉迴路燃油修正</span></th>
+  <th>RPM實際格</th><th>TPS實際格</th><th>樣本<br><span class="th-zh">有效 Log 筆數</span></th><th>停留<br><span class="th-zh">有效秒數</span></th><th>片段<br><span class="th-zh">獨立穩定片段</span></th><th>Fuel_CL<br><span class="th-zh">ECU閉迴路燃油修正</span></th>
   <th>格數</th><th>AFR Target<br><span class="th-zh">目標空燃比</span></th><th>AFR_WBO2<br><span class="th-zh">寬頻氧感測實測空燃比</span></th><th>AP<br><span class="th-zh">引擎負載值</span></th><th>T_Eng</th><th>品質</th>
  </tr></thead><tbody>${
   arr.map(c=>`<tr>
-   <td>${c.rpm}</td><td>${c.tps}%</td><td>${c.rs.length}</td>
+   <td>${c.rpm}</td><td>${c.tps}%</td><td>${c.rs.length}</td><td>${c.dwell.toFixed(2)}s</td><td>${c.segments?.length||0}</td>
    <td>${pct(c.cl)}</td><td>${c.steps>0?"+":""}${c.steps}</td>
-   <td>${fmt(c.afrTarget)}</td><td>${fmt(c.afr)}</td><td><span class="ap-dot ${c.apStatus==="green"?"ap-green":c.apStatus==="red"?"ap-red":""}"></span>${fmt(c.ap,1)}${c.apStatus==="red"?" 中高負載":c.apStatus==="green"?" 中高負載":""}</td><td>${fmt(c.temp,1)}°C</td><td>${c.quality}${Math.abs(c.afrErr??999)>=0.5?"｜AFR差值≥0.5":""}</td>
+   <td>${fmt(c.afrTarget)}</td><td>${fmt(c.afr)}</td><td><span class="ap-dot ${c.apStatus==="green"?"ap-green":c.apStatus==="red"?"ap-red":""}"></span>${fmt(c.ap,1)}${c.apStatus==="red"?" 中高負載":c.apStatus==="green"?" 中高負載":""}</td><td>${fmt(c.temp,1)}°C</td><td>${c.quality}${Math.abs(c.afrErr??999)>=0.5?"｜AFR差值≥0.5":""}${c.boundaryWarn?"｜⚠️接近Map邊界":""}${c.afrDirectionConflict?"｜⚠️CL/WBO2方向衝突":""}</td>
   </tr>`).join("")
  }</tbody>`;
 
@@ -553,5 +1055,80 @@ $("analyze").onclick=async()=>{
   $("status").innerHTML='<span style="color:#b91c1c;font-weight:700">分析失敗：'+esc(e.message)+'</span>';
  }
 };
+</script>
+
+<script>
+(function(){
+ const before=$("backtestBeforeLogs"),after=$("backtestAfterLogs"),bs=$("backtestBeforeStatus"),as=$("backtestAfterStatus"),btn=$("runBacktest"),result=$("backtestResult");
+ if(!before||!after||!bs||!as||!btn||!result)return;
+ const show=(i,n)=>{const c=i.files?.length||0;n.textContent=c?`已選擇 ${c} 個檔案`:"尚未選擇";};
+ before.addEventListener("change",()=>show(before,bs)); after.addEventListener("change",()=>show(after,as));
+
+ async function side(files){
+   const per=[];
+   for(const f of files){
+     const es=await loadFile(f), local=[];
+     for(const e of es){
+       const rr=parseText(e.text,e.name);
+       markTransient(rr);
+       const prepared=rr.filter(r=>Number(r.WBO2_Ready)===1&&!r._transient&&Number(r.T_Eng)>=cfg.temp);
+       const cells=stableMapGroups(prepared);
+       for(const c of cells){
+         const rs=c.rs,cl=weightedMedian(rs.map(r=>({v:r.Fuel_CL,w:tempWeight(r.T_Eng)})));
+         const m=mad(rs.map(r=>r.Fuel_CL));
+         const at=med(rs.map(r=>r.AFR_Target)),wb=med(rs.map(r=>r.AFR_WBO2));
+         const err=(Number.isFinite(at)&&Number.isFinite(wb))?wb-at:null;
+         const segCL=c.segments.map(s=>med(s.map(r=>r.Fuel_CL))).filter(Number.isFinite);
+         const signs=segCL.filter(v=>Math.abs(v)>cfg.clDeadband).map(Math.sign);
+         const consistent=signs.length>=2&&signs.every(x=>x===signs[0]);
+         const quality=rs.length<cfg.minRef?"資料不足":!consistent?"需更多片段":(err!=null&&Math.abs(err)>=.5)?"低可信度":(m!=null&&m<=1.5?"高可信度":"可參考");
+         local.push({rpm:c.rpm,tps:c.tps,cl,m,afrErr:err,samples:rs.length,segments:c.segments.length,dwell:c.dwell,boundary:c.boundary,conflict:c.afrConflict,quality});
+       }
+     }
+     per.push(local);
+   }
+   const gm=new Map();
+   for(const list of per)for(const c of list){
+     const k=c.rpm+"|"+c.tps;if(!gm.has(k))gm.set(k,[]);gm.get(k).push(c);
+   }
+   return [...gm].map(([k,list])=>({rpm:list[0].rpm,tps:list[0].tps,
+     cl:med(list.map(x=>x.cl)),samples:med(list.map(x=>x.samples)),dwell:med(list.map(x=>x.dwell)),
+     quality:list.some(x=>x.quality==="資料不足"||x.quality==="低可信度")?"低可信度":list.every(x=>x.quality==="高可信度")?"高可信度":"可參考",
+     boundary:list.some(x=>x.boundary),conflict:list.some(x=>x.conflict)}));
+ }
+ function outcome(b,a){
+   if(b.quality==="低可信度"||a.quality==="低可信度")return["🟡 資料品質不足","前／後至少一側品質不足","warn"];
+   const ab=Math.abs(b.cl),aa=Math.abs(a.cl),improved=aa<ab-.05,ib=ab<=3,ia=aa<=3;
+   const rev=b.cl!==0&&a.cl!==0&&Math.sign(b.cl)!==Math.sign(a.cl);
+   if(rev&&!ia)return["🔴 可能過修","方向反轉且仍超過 ±3%","bad"];
+   if(ia&&improved)return["🟢 修正成功","已進入 ±3% 內","good"];
+   if(ib&&ia)return["🟢 維持穩定","前後皆在 ±3% 內","good"];
+   if(improved)return["🟡 有改善","更接近 0%，但仍超過 ±3%","warn"];
+   if(Math.abs(aa-ab)<=.05)return["🟡 幾乎不變","前後差異很小","warn"];
+   return["🔴 沒有改善","修正後沒有更接近 0%","bad"];
+ }
+ btn.addEventListener("click",async()=>{
+   if(typeof validateSelection==="function"&&!validateSelection())return;
+   if(!before.files?.length||!after.files?.length){result.hidden=false;result.innerHTML='<div class="bt-warning">⚠️ 請同時選擇「修正前」與「修正後」Log。</div>';return;}
+   btn.disabled=true;btn.textContent="正在比較…";result.hidden=false;result.innerHTML='<div class="bt-note">正在獨立分析前後 Log…</div>';
+   try{
+     const b=await side([...before.files]),a=await side([...after.files]);
+     const bm=new Map(b.map(x=>[x.rpm+"|"+x.tps,x])),am=new Map(a.map(x=>[x.rpm+"|"+x.tps,x]));
+     const keys=[...bm.keys()].filter(k=>am.has(k)).map(k=>{const [rpm,tps]=k.split("|").map(Number);return{k,rpm,tps}}).sort((x,y)=>x.rpm-y.rpm||x.tps-y.tps);
+     let good=0,warn=0,bad=0;
+     const rows=keys.map(x=>{
+       const bb=bm.get(x.k),aa=am.get(x.k),s=outcome(bb,aa);
+       if(s[2]==="good")good++;else if(s[2]==="warn")warn++;else bad++;
+       const notes=[];if(bb.dwell<1||aa.dwell<1)notes.push("停留不足");if(bb.boundary||aa.boundary)notes.push("接近Map邊界");if(bb.conflict||aa.conflict)notes.push("CL/WBO2方向衝突");
+       return `<tr><td>${x.rpm}</td><td>${x.tps}%</td><td>${pct(bb.cl)}</td><td>${pct(aa.cl)}</td><td>${pct(aa.cl-bb.cl)}</td><td>${bb.samples}/${aa.samples}</td><td>${bb.dwell.toFixed(2)}s/${aa.dwell.toFixed(2)}s</td><td class="${s[2]}"><strong>${s[0]}</strong><br><span>${s[1]}${notes.length?"<br>⚠️ "+notes.join("；"):""}</span></td></tr>`;
+     }).join("");
+     result.innerHTML=`<div class="bt-head"><strong>前後對比完成</strong><span>兩組 Log 各自獨立處理，再比較共同實際 Map 格</span></div>
+     <div class="bt-stats"><div><small>共同 Map 格</small><b>${keys.length}</b></div><div><small>🟢 改善／穩定</small><b>${good}</b></div><div><small>🟡 需觀察</small><b>${warn}</b></div><div><small>🔴 未改善／過修</small><b>${bad}</b></div></div>
+     <div class="bt-note"><strong>回測不改 Map。</strong> 停留時間、Map 邊界、CL／WBO2 衝突只作可信度警告；不自動平滑、不猜測缺失格點。</div>
+     <div class="compare-table-wrap"><table class="compare-table"><thead><tr><th>RPM</th><th>TPS</th><th>前 CL</th><th>後 CL</th><th>變化</th><th>樣本 前/後</th><th>停留 前/後</th><th>結果</th></tr></thead><tbody>${rows||'<tr><td colspan="8">沒有共同且可比較的 Map 格。</td></tr>'}</tbody></table></div>`;
+   }catch(e){console.error(e);result.innerHTML='<div class="bt-warning">⚠️ 前後對比失敗：'+esc(e.message)+'</div>';}
+   finally{btn.disabled=false;btn.textContent="開始前後對比";}
+ });
+})();
 </script>
 </body></html>
