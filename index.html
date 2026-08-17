@@ -80,7 +80,7 @@ button:active{transform:translateY(1px)}
     <h1>X / XX Log 分析建議</h1>
     <div class="sub">CT125 2V版本｜依目前選定的 X / XX 系列與 Apple / Android App 實際 Fuel Map 格點採樣，不跨系列套用。</div>
     <div class="hero-meta">
-      <span>Fuel_CL 核心</span><span>T_Eng >85°C</span><span>AP &gt;60 / ≥80 提醒</span><span>實際 Map 格</span>
+      <span>Fuel_CL 核心</span><span>T_Eng >67°C</span><span>AP &gt;60 / ≥80 提醒</span><span>實際 Map 格</span>
     </div>
   </div>
 </section>
@@ -93,8 +93,8 @@ button:active{transform:translateY(1px)}
 <div class="note" style="margin-top:7px">先選 Log 系統，再選 ECU 系列與引擎；程式只使用該組對應的格式與真實 Map，不會跨系列套用。</div>
 <div class="sample-rule-box" id="samplingRulesVisible">
 <strong>📌 採樣標準</strong><br>
-🌡️ <strong>T_Eng &gt; 85°C</strong> 才採樣<br>
-📈 <strong>Fuel_CL 超過 ±2%</strong> 才採樣；<strong>-2%～+2% 不採樣</strong>（CL 準確度已足夠，無需再修正）<br>
+🌡️ <strong>T_Eng &gt; 67°C</strong> 才採樣<br>
+📈 <strong>Fuel_CL 超過 ±3%</strong> 才採樣；<strong>-2%～+2% 不採樣</strong>（CL 準確度已足夠，無需再修正）<br>
 ⏱️ 進入對應的<strong>真實 App Map 格</strong>後，穩定 <strong>1 秒</strong> 才開始收樣<br>
 🔢 單一穩定片段至少 <strong>10 筆</strong>才納入分析
 </div>
@@ -135,7 +135,7 @@ button:active{transform:translateY(1px)}
 <section class="card">
 <h2><span class="section-tag">RULES</span>③ 固定分析基準</h2>
 <div class="stats">
-<div class="stat">熱車門檻<b>T_Eng >85°C</b></div>
+<div class="stat">熱車門檻<b>T_Eng >67°C</b></div>
 <div class="stat">中高負載<b>AP &gt; 60</b></div>
 <div class="stat">Map 調整係數<b>1 = 1格</b></div>
 <div class="stat">單格調整量<b>±0.8%</b></div>
@@ -143,7 +143,7 @@ button:active{transform:translateY(1px)}
 <div class="note" style="margin-top:10px">
 <strong>Fuel_CL 是核心修正標準。</strong> Fuel_CL 代表 ECU + AF2 閉迴路實際產生的燃油修正量；正值＝ECU 增油、負值＝ECU 減油。AFR_Target / AFR_WBO2 只作交叉驗證，不另外用 AFR 差值「猜」一個修正量。<br>
 <strong>RPM / TPS 不提供容許範圍。</strong> Log 只會對應到目前所選 X / XX 系列的實際 App RPM × TPS 格點，不產生虛擬格。<br>
-<strong>調整係數 1 = 一個格 = ±0.8%。</strong> 例如 Fuel_CL +3.2% → 油圖該格 +3.2% → +4 格。
+<strong>Fuel_CL 容許範圍：±3.0%。</strong> |Fuel_CL| ≤ 3.0% 不列入修正；超過 ±3.0% 才進入修正評估。<br><strong>調整係數 1 = 一個格 = ±0.8%。</strong> 例如 Fuel_CL +4.1% → 油圖該格約 +4.0% → +5 格。<br><strong>AFR 交叉驗證：</strong> |AFR_WBO2 − AFR_Target| ≥ 0.5 時降低可信度，並提醒「建議再獲取更多資料再修改」。
 </div>
 </section>
 
@@ -161,7 +161,7 @@ Fuel_CL 的穩定統計值直接作為該 Map 格的修正依據；AFR_Target / 
 <div class="note detail-note">
 這裡列出所有 Log 實際有對應到的 RPM × TPS Map 格，包含樣本不足的格子。
 <b>不代表可以調整油圖。</b><br>
-真正的調校建議只看上方「⛽ Fuel Map 修正建議」；必須符合固定門檻：T_Eng >85°C、每個實際 RPM × TPS Map 格 ≥10 筆有效樣本，且 Fuel_CL 換算後超過 ±1 格。
+真正的調校建議只看上方「⛽ Fuel Map 修正建議」；必須符合固定門檻：T_Eng >67°C、每個實際 RPM × TPS Map 格 ≥10 筆有效樣本，且 |Fuel_CL| > 3.0%；Fuel_CL 在 ±3.0% 以內不列入修正範圍。
 </div>
 <div class="tablewrap"><table id="detail"></table></div>
 </details>
@@ -213,7 +213,7 @@ const MAPS={
   "android_xx":{rpm:XX_RPM_GRID,tps:XX_TPS_GRID}
 };
 
-const cfg={temp:85,apGreen:60,apRed:80,minRef:10,stableMinSamples:10,stableWaitSec:1.0,clDeadband:2.0,clPerCell:0.8};
+const cfg={temp:67,apGreen:60,apRed:80,minRef:10,stableMinSamples:10,stableWaitSec:1.0,clDeadband:2.0,clPerCell:0.8};
 let rows=[];
 
 
@@ -436,7 +436,7 @@ function build(){
  const stats=[
   ["Log 檔案",new Set(rows.map(r=>r._file)).size],
   ["原始樣本",rows.length.toLocaleString()],
-  ["T_Eng >85°C",hot.length.toLocaleString()],
+  ["T_Eng >67°C",hot.length.toLocaleString()],
   ["AP >60",high.length.toLocaleString()],
   ["已對應 Map 格",cells.length],["Log 格式",androidMode?"Android aRacer":"Apple"]
  ];
@@ -456,7 +456,7 @@ function build(){
    這不是爆震判定；本 Log 分析沒有 Knock Signal，不能宣稱已經爆震。
   </div>`;
  }else{
-  $("load").innerHTML=`<div class="alert green">本次T_Eng >85°C 的有效資料中沒有 AP >60 樣本。</div>`;
+  $("load").innerHTML=`<div class="alert green">本次T_Eng >67°C 的有效資料中沒有 AP >60 樣本。</div>`;
  }
 
  const arr=cells.map(c=>{
@@ -466,13 +466,14 @@ function build(){
   const ap=med(rs.map(r=>r.Cyl1_Eng_AP)),temp=med(rs.map(r=>r.T_Eng));
   const steps=Math.round(cl/0.8);
   const mapPct=steps*0.8;
-  const quality=rs.length<cfg.minRef?"資料不足":(m!=null&&m<=1.5?"高可信度":"可參考");
+  const afrLowConfidence=afrErr!=null&&Math.abs(afrErr)>=0.5;
+  const quality=rs.length<cfg.minRef?"資料不足":afrLowConfidence?"低可信度":(m!=null&&m<=1.5?"高可信度":"可參考");
   const apStatus=ap>=80?"red":ap>60?"green":"normal";
   return {...c,cl,m,afrTarget,afr,afrErr,ap,temp,steps,mapPct,quality,apStatus};
  });
 
  arr.sort((a,b)=>Math.abs(b.cl)-Math.abs(a.cl));
- const recommend=arr.filter(c=>c.rs.length>=cfg.minRef&&Math.abs(c.steps)>1);
+ const recommend=arr.filter(c=>c.rs.length>=cfg.minRef&&Math.abs(c.cl)>3.0);
 
  $("fuel").innerHTML=`<div class="stats">
   <div class="stat">建議修正格<b>${recommend.length}</b></div>
@@ -480,8 +481,8 @@ function build(){
   <div class="stat">1格<b>±0.8%</b></div>
  </div>
  <div class="note" style="margin-top:9px">
-  修正數值直接取該實際 Map 格的 Fuel_CL 中位數；Map 格數＝Fuel_CL ÷ 0.8 後四捨五入。
-  AFR_Target / AFR_WBO2 僅做驗證，不取代 Fuel_CL。
+  修正數值直接取該實際 Map 格的 Fuel_CL 中位數；修正步數＝該實際 Map 格的 Fuel_CL 中位數 ÷ 0.8 後四捨五入。
+  |Fuel_CL| ≤ 3.0%：不列入修正。|AFR_WBO2 − AFR_Target| ≥ 0.5：降低可信度，建議再獲取更多資料再修改。
  </div>`;
 
  $("fuelTable").innerHTML=`<thead><tr>
@@ -492,7 +493,8 @@ function build(){
  recommend.length?recommend.map(c=>{
   const dir=c.steps>0?"加油": "減油";
   const sign=c.mapPct>0?"+":"";
-  const afrCheck=Math.abs(c.afrErr??999)<=0.15?"一致":Math.abs(c.afrErr??999)<=0.30?"輕微偏差":"需確認";
+  const afrAbsErr=Math.abs(c.afrErr??999);
+  const afrCheck=afrAbsErr>=0.5?"⚠️ 差值 ≥0.5｜降低可信度｜建議再獲取更多資料再修改":afrAbsErr<=0.15?"一致":afrAbsErr<=0.30?"輕微偏差":"需確認";
   return `<tr>
    <td><strong>${c.rpm}</strong></td><td><strong>${c.tps}%</strong></td><td>${c.rs.length}</td>
    <td class="${c.cl>0?"red":c.cl<0?"green":""}">${pct(c.cl)}</td>
@@ -501,7 +503,7 @@ function build(){
    <td>${fmt(c.afrTarget)}</td><td>${fmt(c.afr)}</td><td>${afrCheck}</td>
    <td><span class="ap-dot ${c.apStatus==="green"?"ap-green":c.apStatus==="red"?"ap-red":""}"></span>${fmt(c.ap,1)}${c.apStatus==="red"?" 中高負載":c.apStatus==="green"?" 中高負載":""}</td><td>${c.quality}</td>
   </tr>`;
- }).join(""):"<tr><td colspan='11'>目前沒有超過 ±1 格的 Fuel_CL 修正 Map 格，先不用修改。</td></tr>"
+ }).join(""):"<tr><td colspan='11'>目前沒有 |Fuel_CL| > 3.0% 的 Map 格，先不用修改。</td></tr>"
  }</tbody>`;
 
  $("detail").innerHTML=`<thead><tr>
@@ -511,7 +513,7 @@ function build(){
   arr.map(c=>`<tr>
    <td>${c.rpm}</td><td>${c.tps}%</td><td>${c.rs.length}</td>
    <td>${pct(c.cl)}</td><td>${c.steps>0?"+":""}${c.steps}</td>
-   <td>${fmt(c.afrTarget)}</td><td>${fmt(c.afr)}</td><td><span class="ap-dot ${c.apStatus==="green"?"ap-green":c.apStatus==="red"?"ap-red":""}"></span>${fmt(c.ap,1)}${c.apStatus==="red"?" 中高負載":c.apStatus==="green"?" 中高負載":""}</td><td>${fmt(c.temp,1)}°C</td><td>${c.quality}</td>
+   <td>${fmt(c.afrTarget)}</td><td>${fmt(c.afr)}</td><td><span class="ap-dot ${c.apStatus==="green"?"ap-green":c.apStatus==="red"?"ap-red":""}"></span>${fmt(c.ap,1)}${c.apStatus==="red"?" 中高負載":c.apStatus==="green"?" 中高負載":""}</td><td>${fmt(c.temp,1)}°C</td><td>${c.quality}${Math.abs(c.afrErr??999)>=0.5?"｜AFR差值≥0.5":""}</td>
   </tr>`).join("")
  }</tbody>`;
 
