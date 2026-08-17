@@ -476,7 +476,7 @@ button:active{transform:translateY(1px)}
   </div>
 <div class="rule-details-inline"><div class="note compact-note">
       <strong>Fuel_CL 是核心修正標準。</strong> 正值＝ECU 增油、負值＝ECU 減油。先完整收集符合採樣條件的資料，再對每個實際 App Map 格取 Fuel_CL 中位數；<strong>|Fuel_CL 中位數| ≤ 3.0%</strong> 不列入修正（準確度已足夠）。超過 ±3.0% 才進入修正評估。<br>
-      <strong>修正步數＝Fuel_CL 中位數 ÷ 0.8%，四捨五入。</strong> 1 格＝0.8%。<br>
+      <strong>修正步數＝以最少 0.8% 格數把 Fuel_CL 修正到 ±3.0% 內；目標是進入容許範圍，不追求完全歸零。</strong> 1 格＝0.8%。<br>
       <strong>AFR 交叉驗證：</strong> |AFR_WBO2 − AFR_Target| ≥ 0.5 時降低可信度，提醒「建議再獲取更多資料再修改」，但不取代 Fuel_CL 主判定。<br>
       <strong>閉迴路：</strong> 必須為 ON；OFF 或無法確認時，不提供 Fuel_CL 修正結論。<br><strong>溫度優先：</strong> 同一 Map 格內，穩定資料以較高引擎溫度優先；80～110°C 為最高優先區，67～79°C 僅作低溫補充，&gt;110°C 降低優先度。<br><strong>穩定性：</strong> RPM / TPS 應穩定；多個獨立穩定片段結果不一致時，降低可信度，先取得更多資料。<br><strong>WBO2：</strong> 必須 Ready 才可納入有效採樣。<br><strong>AP：</strong> AP &gt;60 / ≥80 僅作負載提醒，不是採樣剔除條件，也不是爆震判定。<br>
       <strong>Map 格：</strong> RPM / TPS 只會對應目前所選 X / XX 系列 App 實際存在的格，不建立虛擬格。
@@ -979,7 +979,7 @@ function build(){
   const boundaryWarn=!!c.boundary;
   const afrDirectionConflict=!!c.afrConflict;
 
-  const steps=Math.round(cl/0.8);
+  const steps=Math.abs(cl)<=cfg.clDeadband?0:Math.sign(cl)*Math.ceil((Math.abs(cl)-cfg.clDeadband)/cfg.clPerCell);
   const mapPct=steps*0.8;
   const afrLowConfidence=afrErr!=null&&Math.abs(afrErr)>=0.5;
   const wboReadyRate=rs.length?rs.filter(r=>Number(r.WBO2_Ready)===1).length/rs.length:0;
@@ -1008,8 +1008,8 @@ function build(){
  </div>
  <div class="note" style="margin-top:9px">
   <strong>操作順序：RPM 由低到高排列；同一 RPM 內 TPS 由低到高。</strong><br>
-  修正數值取該實際 Map 格的「溫度加權 Fuel_CL 中位數」；80～110°C 權重最高。修正步數＝加權中位數 ÷ 0.8 後四捨五入。
-  |Fuel_CL| ≤ 3.0%：不列入修正。|AFR_WBO2 − AFR_Target| ≥ 0.5：降低可信度，建議再獲取更多資料再修改。
+  修正數值取該實際 Map 格的「溫度加權 Fuel_CL 中位數」；80～110°C 權重最高。修正步數＝以最少 0.8% 格數把 Fuel_CL 修正到 ±3.0% 內；目標是進入容許範圍，不追求完全歸零。
+  |Fuel_CL| ≤ 3.0%：不列入修正。 <strong>修正目標：</strong>只需進入 |Fuel_CL| ≤ 3.0% 的容許範圍；取達標所需的「最少格數」，不追求完全歸零。|AFR_WBO2 − AFR_Target| ≥ 0.5：降低可信度，建議再獲取更多資料再修改。
  </div>`;
 
  $("fuelTable").innerHTML=`<thead><tr>
