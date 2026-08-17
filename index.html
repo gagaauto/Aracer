@@ -551,7 +551,9 @@ button:active{transform:translateY(1px)}
 <section class="card"><h2>⛽ Fuel Map 修正建議</h2>
 <div class="alert yellow"><b>核心：Fuel_CL</b><br>
 Fuel_CL 的穩定統計值直接作為該 Map 格的修正依據；AFR_Target / AFR_WBO2 只用來驗證。最終顯示的 RPM × TPS 必須是目前所選系列 App 實際存在的格。</div>
-<div id="fuel"></div><div class="tablewrap"><table id="fuelTable"></table></div>
+<div id="fuel"></div><div class="tablewrap"><table id="fuelTable"></table></div><div class="note" style="margin-top:8px">
+<strong>可信度分級：</strong>≥10 筆＋多片段且穩定 → 高可信度；≥3 筆 → 可參考。WBO2 Ready、停留時間、RPM/TPS 波動、Map 邊界與 CL/WBO2 衝突只降低可信度，不再直接剔除 Fuel_CL。
+</div>
 </section>
 <section class="card detail-card">
 <details>
@@ -559,7 +561,7 @@ Fuel_CL 的穩定統計值直接作為該 Map 格的修正依據；AFR_Target / 
 <div class="note detail-note">
 這裡列出所有 Log 實際有對應到的 RPM × TPS Map 格，包含樣本不足的格子。
 <b>不代表可以調整油圖。</b><br>
-真正的調校建議只看上方「⛽ Fuel Map 修正建議」；必須符合固定門檻：T_Eng >67°C、每個實際 RPM × TPS Map 格 ≥10 筆有效樣本，且 |Fuel_CL| > 3.0%；Fuel_CL 在 ±3.0% 以內不列入修正範圍。
+真正的調校建議只看上方「⛽ Fuel Map 修正建議」；硬條件為 T_Eng ≥67°C、排除瞬態、Fuel_CL 有效且對應實際 Map 格。樣本數、停留時間、RPM/TPS 穩定度與 WBO2 Ready 會影響可信度，不再直接把可用資料整格剔除；|Fuel_CL| ≤3.0% 不列入修正範圍。
 </div>
 <div class="tablewrap"><table id="detail"></table></div>
 </details>
@@ -598,9 +600,9 @@ const MAPS={
 };
 
 const cfg={
- temp:67,apGreen:60,apRed:80,minRef:10,stableMinSamples:10,stableWaitSec:1.0,
+ temp:67,apGreen:60,apRed:80,minRef:10,stableMinSamples:3,stableWaitSec:0,
  clDeadband:3.0,clPerCell:0.8,
- transientTpsRate:12,transientRpmRate:600,transientHoldSec:0.8,minDwellSec:1.0,
+ transientTpsRate:12,transientRpmRate:600,transientHoldSec:0.8,minDwellSec:0,
  tempCoreLow:80,tempCoreHigh:110,tempEdgeLowWeight:0.5,tempHotWeight:0.5
 };
 let rows=[];
@@ -816,16 +818,13 @@ function markTransient(rows){
 
 
 function preparePrimaryRows(rawRows){
- // Transient detection uses the COMPLETE raw time sequence first.
+ // Fuel_CL is the primary correction signal. WBO2 Ready is a confidence flag,
+ // not a hard gate; otherwise valid Fuel_CL samples can be discarded wholesale.
  markTransient(rawRows);
  const out=[];
  for(const r of rawRows){
-   // WBO2 Ready is a hard gate. We do not infer readiness from AFR alone.
-   if(!Number.isFinite(r.WBO2_Ready) || Number(r.WBO2_Ready)!==1) continue;
-   // WBO2_AT_En is retained as a per-row status flag for audit. Do not use it
-   // as a proxy for closed-loop state because the log field name does not itself
-   // prove the ECU was applying Fuel_CL feedback on that exact row.
    if(r._transient) continue;
+   if(!Number.isFinite(r.Fuel_CL)) continue;
    out.push(r);
  }
  // T_Eng filtering happens only after transient detection.
@@ -834,8 +833,7 @@ function preparePrimaryRows(rawRows){
 
 function stableMapGroups(validRows){
  const platform=$("logPlatformSelect")?.value||"", series=$("ecuSeriesSelect")?.value||"";
- const key=platform+"_"+series;
- const map=MAPS[key];
+ const key=platform+"_"+series, map=MAPS[key];
  if(!map)throw new Error("找不到「"+key+"」對應的真實 App Map，為避免套錯，已停止分析。");
  const expected=(series==="x")?{rpm:20,tps:17}:{rpm:33,tps:25};
  if(map.rpm.length!==expected.rpm||map.tps.length!==expected.tps){
@@ -843,7 +841,7 @@ function stableMapGroups(validRows){
  }
 
  const groups=new Map();
- let currentKey=null,currentRows=[],stableStart=null;
+ let currentKey=null,currentRows=[];
  const boundary=(value,grid,rpm)=>{
    const x=Number(value);
    if(!Number.isFinite(x)||!Array.isArray(grid)||grid.length<2)return false;
@@ -853,44 +851,46 @@ function stableMapGroups(validRows){
    return d <= (rpm?50:1);
  };
  const flush=()=>{
-   if(currentRows.length>=cfg.stableMinSamples){
+   // A few samples are enough to report a cell. Confidence is handled later.
+   if(currentRows.length>=3){
+     if(!groups.has(currentKey)){
+       groups.set(currentKey,{
+         rpm:currentRows[0]._rp,tps:currentRows[0]._tp,rs:[],segments:[],
+         dwell:0,boundary:false,afrConflict:false,stabilityPct:null
+       });
+     }
+     const g=groups.get(currentKey);
+     g.rs.push(...currentRows);
+     g.segments.push(currentRows.slice());
+
      const rpms=currentRows.map(r=>Number(r.RPM)).filter(Number.isFinite);
      const tps=currentRows.map(r=>Number(r.TPS_Percent)).filter(Number.isFinite);
-     const rm=med(rpms), tr=Math.max(...rpms)-Math.min(...rpms);
-     const tpr=Math.max(...tps)-Math.min(...tps);
+     const rm=med(rpms), tr=rpms.length?Math.max(...rpms)-Math.min(...rpms):Infinity;
+     const tpr=tps.length?Math.max(...tps)-Math.min(...tps):Infinity;
      const rpmPct=rm?tr/rm*100:Infinity;
+     g.stabilityPct = Number.isFinite(g.stabilityPct)
+       ? Math.max(g.stabilityPct,rpmPct)
+       : rpmPct;
+
      const times=currentRows.map(r=>Number(r.Time)).filter(Number.isFinite);
      let dwell=0;
      for(let i=1;i<times.length;i++){
        const dt=times[i]-times[i-1];
        if(dt>0&&dt<=2)dwell+=dt;
      }
+     g.dwell+=dwell;
+     g.boundary = g.boundary ||
+       currentRows.some(r=>boundary(r.RPM,map.rpm,true)||boundary(r.TPS_Percent,map.tps,false));
 
-     if(rpmPct<=4 && tpr<=4 && dwell>=cfg.minDwellSec){
-       if(!groups.has(currentKey)){
-         groups.set(currentKey,{
-           rpm:currentRows[0]._rp,tps:currentRows[0]._tp,rs:[],segments:[],
-           dwell:0,boundary:false,afrConflict:false
-         });
-       }
-       const g=groups.get(currentKey);
-       g.rs.push(...currentRows);
-       g.segments.push(currentRows.slice());
-       g.dwell+=dwell;
-       g.boundary = g.boundary ||
-         currentRows.some(r=>boundary(r.RPM,map.rpm,true)||boundary(r.TPS_Percent,map.tps,false));
-
-       const cl=med(currentRows.map(r=>r.Fuel_CL));
-       const at=med(currentRows.map(r=>r.AFR_Target));
-       const wb=med(currentRows.map(r=>r.AFR_WBO2));
-       if(Number.isFinite(cl)&&Number.isFinite(at)&&Number.isFinite(wb)&&Math.abs(wb-at)>=0.5&&Math.abs(cl)>cfg.clDeadband){
-         // CL + means ECU adding fuel; AFR_WBO2 - Target positive means measured AFR is leaner.
-         // Same signs support the same physical direction; opposite signs conflict.
-         g.afrConflict = g.afrConflict || (Math.sign(cl)!==Math.sign(wb-at));
-       }
+     const cl=med(currentRows.map(r=>r.Fuel_CL));
+     const at=med(currentRows.map(r=>r.AFR_Target));
+     const wb=med(currentRows.map(r=>r.AFR_WBO2));
+     if(Number.isFinite(cl)&&Number.isFinite(at)&&Number.isFinite(wb)&&
+        Math.abs(wb-at)>=0.5&&Math.abs(cl)>cfg.clDeadband){
+       g.afrConflict = g.afrConflict || (Math.sign(cl)!==Math.sign(wb-at));
      }
    }
-   currentKey=null;currentRows=[];stableStart=null;
+   currentKey=null;currentRows=[];
  };
 
  for(const r of validRows){
@@ -898,17 +898,16 @@ function stableMapGroups(validRows){
    const rp=gridCellByMidpoint(r.RPM,map.rpm);
    const tp=gridCellByMidpoint(r.TPS_Percent,map.tps);
    if(rp==null||tp==null){flush();continue;}
-   const cellKey=rp+"|"+tp, tm=Number(r.Time);
+   const cellKey=rp+"|"+tp;
    if(cellKey!==currentKey){
-     flush(); currentKey=cellKey; currentRows=[]; stableStart=Number.isFinite(tm)?tm:null;
+     flush(); currentKey=cellKey; currentRows=[];
    }
-   if(stableStart!=null&&Number.isFinite(tm)&&tm-stableStart<cfg.stableWaitSec)continue;
-   r._rp=rp;r._tp=tp;currentRows.push(r);
+   // No artificial 1-second wait: transient hold already removes the transition.
+   r._rp=rp; r._tp=tp; currentRows.push(r);
  }
  flush();
  return [...groups.values()].sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);
 }
-
 
 function cellGroups(validRows){ return stableMapGroups(validRows); }
 
@@ -922,7 +921,7 @@ function build(){
  const stats=[
   ["Log 檔案",new Set(rows.map(r=>r._file)).size],
   ["原始樣本",rows.length.toLocaleString()],
-  ["WBO2 Ready",prepared.length.toLocaleString()],
+  ["Fuel_CL 有效樣本",prepared.length.toLocaleString()],
   ["T_Eng ≥67°C",hot.length.toLocaleString()],
   ["AP >60",high.length.toLocaleString()],
   ["已對應 Map 格",cells.length],["瞬態排除",rows.filter(r=>r._transient).length.toLocaleString()],["Log 格式",androidMode?"Android aRacer":"Apple"]
@@ -963,17 +962,17 @@ function build(){
   const steps=Math.round(cl/0.8);
   const mapPct=steps*0.8;
   const afrLowConfidence=afrErr!=null&&Math.abs(afrErr)>=0.5;
-  const quality=rs.length<cfg.minRef?"資料不足":
-    !segmentConsistent?"需更多片段":
+  const quality=
     afrLowConfidence||afrDirectionConflict?"低可信度":
-    (m!=null&&m<=1.5?"高可信度":"可參考");
+    rs.length>=10 && segmentConsistent && (m==null||m<=1.5)?"高可信度":
+    rs.length>=3?"可參考":"資料不足";
   const apStatus=ap>=80?"red":ap>60?"green":"normal";
   return {...c,cl,m,segmentCL,segmentConsistent,afrTarget,afr,afrErr,ap,temp,steps,mapPct,quality,apStatus};
  });
 
  arr.sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);
  const recommend=arr
-   .filter(c=>c.rs.length>=cfg.minRef&&Math.abs(c.cl)>cfg.clDeadband&&c.segmentConsistent&&c.quality!=="低可信度")
+   .filter(c=>c.rs.length>=3&&Math.abs(c.cl)>cfg.clDeadband&&c.quality!=="低可信度")
    .sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);
 
  $("fuel").innerHTML=`<div class="stats">
