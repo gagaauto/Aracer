@@ -985,11 +985,11 @@ function build(){
   const wboReadyRate=rs.length?rs.filter(r=>Number(r.WBO2_Ready)===1).length/rs.length:0;
     const score=(rs.length>=10?2:1)
       +(segmentConsistent?1:0)
-      +(segments.length>=2?1:0)
+      +((c.segments||[]).length>=2?1:0)
       +(m==null||m<=1.5?1:0)
       +(wboReadyRate>=0.7?1:0)
       -(afrLowConfidence||afrDirectionConflict?2:0)
-      -(boundaryFlag?1:0);
+      -(boundaryWarn?1:0);
     const quality=rs.length<3?"資料不足":
       (score>=5?"高可信度":score>=3?"可參考":"低可信度");
   const apStatus=ap>=80?"red":ap>60?"green":"normal";
@@ -1003,7 +1003,7 @@ function build(){
 
  $("fuel").innerHTML=`<div class="stats">
   <div class="stat">建議修正 Map 格<b>${recommend.length}</b></div>
-  <div class="stat">資料不足<b>${arr.filter(c=>c.rs.length<cfg.minRef).length}</b></div>
+  <div class="stat">資料不足<b>${arr.filter(c=>c.rs.length<3).length}</b></div>
   <div class="stat">1格<b>±0.8%</b></div>
  </div>
  <div class="note" style="margin-top:9px">
@@ -1013,7 +1013,7 @@ function build(){
  </div>`;
 
  $("fuelTable").innerHTML=`<thead><tr>
-  <th>RPM實際格</th><th>TPS實際格</th><th>樣本<br><span class="th-zh">有效 Log 筆數</span></th><th>停留<br><span class="th-zh">有效秒數</span></th><th>片段<br><span class="th-zh">獨立穩定片段</span></th><th>Fuel_CL<br><span class="th-zh">ECU閉迴路燃油修正</span></th>
+  <th>RPM實際格</th><th>TPS實際格</th><th>樣本<br><span class="th-zh">有效 Log 筆數</span></th><th>Fuel_CL<br><span class="th-zh">ECU閉迴路燃油修正</span></th>
   <th>油圖修正</th><th>格數</th><th>AFR Target<br><span class="th-zh">目標空燃比</span></th><th>AFR_WBO2<br><span class="th-zh">寬頻氧感測實測空燃比</span></th>
   <th>AFR驗證<br><span class="th-zh">實測值與目標值交叉確認</span></th><th>AP<br><span class="th-zh">引擎負載值</span></th><th>資料品質</th>
  </tr></thead><tbody>${
@@ -1023,7 +1023,7 @@ function build(){
   const afrAbsErr=Math.abs(c.afrErr??999);
   const afrCheck=afrAbsErr>=0.5?"⚠️ 差值 ≥0.5｜降低可信度｜建議再獲取更多資料再修改":afrAbsErr<=0.15?"一致":afrAbsErr<=0.30?"輕微偏差":"需確認";
   return `<tr>
-   <td><strong>${c.rpm}</strong></td><td><strong>${c.tps}%</strong></td><td>${c.rs.length}</td><td>${c.dwell.toFixed(2)}s</td><td>${c.segments?.length||0}</td>
+   <td><strong>${c.rpm}</strong></td><td><strong>${c.tps}%</strong></td><td>${c.rs.length}</td>
    <td class="${c.cl>0?"red":c.cl<0?"green":""}">${pct(c.cl)}</td>
    <td>${dir} ${sign}${fmt(c.mapPct)}%</td>
    <td>${c.steps>0?"+":""}${c.steps} 格</td>
@@ -1034,11 +1034,11 @@ function build(){
  }</tbody>`;
 
  $("detail").innerHTML=`<thead><tr>
-  <th>RPM實際格</th><th>TPS實際格</th><th>樣本<br><span class="th-zh">有效 Log 筆數</span></th><th>停留<br><span class="th-zh">有效秒數</span></th><th>片段<br><span class="th-zh">獨立穩定片段</span></th><th>Fuel_CL<br><span class="th-zh">ECU閉迴路燃油修正</span></th>
+  <th>RPM實際格</th><th>TPS實際格</th><th>樣本<br><span class="th-zh">有效 Log 筆數</span></th><th>Fuel_CL<br><span class="th-zh">ECU閉迴路燃油修正</span></th>
   <th>格數</th><th>AFR Target<br><span class="th-zh">目標空燃比</span></th><th>AFR_WBO2<br><span class="th-zh">寬頻氧感測實測空燃比</span></th><th>AP<br><span class="th-zh">引擎負載值</span></th><th>T_Eng</th><th>品質</th>
  </tr></thead><tbody>${
   arr.map(c=>`<tr>
-   <td>${c.rpm}</td><td>${c.tps}%</td><td>${c.rs.length}</td><td>${c.dwell.toFixed(2)}s</td><td>${c.segments?.length||0}</td>
+   <td>${c.rpm}</td><td>${c.tps}%</td><td>${c.rs.length}</td>
    <td>${pct(c.cl)}</td><td>${c.steps>0?"+":""}${c.steps}</td>
    <td>${fmt(c.afrTarget)}</td><td>${fmt(c.afr)}</td><td><span class="ap-dot ${c.apStatus==="green"?"ap-green":c.apStatus==="red"?"ap-red":""}"></span>${fmt(c.ap,1)}${c.apStatus==="red"?" 中高負載":c.apStatus==="green"?" 中高負載":""}</td><td>${fmt(c.temp,1)}°C</td><td>${c.quality}${Math.abs(c.afrErr??999)>=0.5?"｜AFR差值≥0.5":""}${c.boundaryWarn?"｜⚠️接近Map邊界":""}${c.afrDirectionConflict?"｜⚠️CL/WBO2方向衝突":""}</td>
   </tr>`).join("")
@@ -1095,8 +1095,7 @@ $("analyze").onclick=async()=>{
      const es=await loadFile(f), local=[];
      for(const e of es){
        const rr=parseText(e.text,e.name);
-       markTransient(rr);
-       const prepared=rr.filter(r=>Number(r.WBO2_Ready)===1&&!r._transient&&Number(r.T_Eng)>=cfg.temp);
+       const prepared=preparePrimaryRows(rr).filter(r=>Number(r.T_Eng)>=cfg.temp);
        const cells=stableMapGroups(prepared);
        for(const c of cells){
          const rs=c.rs,cl=weightedMedian(rs.map(r=>({v:r.Fuel_CL,w:tempWeight(r.T_Eng)})));
@@ -1106,7 +1105,15 @@ $("analyze").onclick=async()=>{
          const segCL=c.segments.map(s=>med(s.map(r=>r.Fuel_CL))).filter(Number.isFinite);
          const signs=segCL.filter(v=>Math.abs(v)>cfg.clDeadband).map(Math.sign);
          const consistent=signs.length>=2&&signs.every(x=>x===signs[0]);
-         const quality=rs.length<cfg.minRef?"資料不足":!consistent?"需更多片段":(err!=null&&Math.abs(err)>=.5)?"低可信度":(m!=null&&m<=1.5?"高可信度":"可參考");
+         const readyRate=rs.length?rs.filter(r=>Number(r.WBO2_Ready)===1).length/rs.length:0;
+         const score=(rs.length>=10?2:1)
+           +(consistent?1:0)
+           +(c.segments.length>=2?1:0)
+           +(m==null||m<=1.5?1:0)
+           +(readyRate>=0.7?1:0)
+           -((err!=null&&Math.abs(err)>=.5)||c.afrConflict?2:0)
+           -(c.boundary?1:0);
+         const quality=rs.length<3?"資料不足":score>=5?"高可信度":score>=3?"可參考":"低可信度";
          local.push({rpm:c.rpm,tps:c.tps,cl,m,afrErr:err,samples:rs.length,segments:c.segments.length,dwell:c.dwell,boundary:c.boundary,conflict:c.afrConflict,quality});
        }
      }
