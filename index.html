@@ -1022,7 +1022,7 @@ function bindWorkList(){
 }
 function renderWorkList(items){
   window.__ctCompleted=window.__ctCompleted||new Set();
-  const valid=items.filter(c=>c.action&&c.quality==="高可信度"&&!c.extreme);
+  const valid=items.filter(c=>c.quality==="高可信度"&&!c.extreme&&Math.abs(c.deviation)>cfg.clDeadband);
   const doneCount=valid.filter(c=>window.__ctCompleted.has(c.rpm+"|"+c.tps)).length;
   const body=valid.map((c,i)=>{
     const key=c.rpm+"|"+c.tps,done=window.__ctCompleted.has(key),inprog=!done&&i===0;
@@ -1033,14 +1033,14 @@ function renderWorkList(items){
       <div class="work-main">
         <div class="work-title">${c.rpm} RPM / TPS ${c.tps}%</div>
         <div class="work-meta">偏差：<strong>${pct(c.deviation)}</strong>　→　建議${dir}當下油量約 <strong>${fp.toFixed(1)}%</strong><br>目標：進入 ±${cfg.clDeadband.toFixed(1)} 內</div>
-        <button type="button" class="work-action calc-toggle" data-work-action="calc">🧮 計算機</button>
-        <div class="calc-panel">
+        <button type="button" class="work-action calc-toggle" data-work-action="calc">🧮 修改計算</button>
+        <div class="calc-panel show">
           <div class="calc-grid">
             <div><label>目前偏差</label><input class="calc-error" value="${c.deviation.toFixed(2)}" inputmode="decimal"></div>
-            <div><label>容許範圍</label><input class="calc-target" value="${cfg.clDeadband.toFixed(1)}" inputmode="decimal"></div>
+            <div><label>修正目標</label><input class="calc-target" value="${cfg.clDeadband.toFixed(1)}" inputmode="decimal"></div>
           </div>
-          <div class="calc-result">按計算後顯示建議油量調整</div>
-          <button type="button" class="work-action" data-work-action="calc-run">🧮 計算</button>
+          <div class="calc-result">建議${dir}當下油量約 ${fp.toFixed(1)}%，目標進入 ±${cfg.clDeadband.toFixed(1)} 內。</div>
+          <button type="button" class="work-action" data-work-action="calc-run">重新計算</button>
         </div>
       </div>
       <button type="button" class="work-action" data-work-action="${done?"undo":"done"}">${done?"✓ 已完成":"我已完成此格"}</button>
@@ -1093,7 +1093,7 @@ function buildClosedLoop(){
     fuelPct:corr?.fuelPct??0,deviation:cl};
  });
  arr.sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);
- const recommend=arr.filter(c=>c.action);
+ const recommend=arr.filter(c=>c.quality==="高可信度"&&!c.extreme&&Math.abs(c.deviation)>cfg.clDeadband);
 
  $("fuel").innerHTML=`<div class="stats">
    <div class="stat">建議修改<b>${recommend.length}</b></div>
@@ -1186,7 +1186,7 @@ function buildOpenLoop(){
     fuelPct:corrCalc?.fuelPct??0,deviation:corr};
  });
  arr.sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);
- const recommend=arr.filter(c=>c.action);
+ const recommend=arr.filter(c=>c.quality==="高可信度"&&!c.extreme&&Math.abs(c.deviation)>cfg.clDeadband);
 
  $("fuel").innerHTML=`<div class="stats">
    <div class="stat">建議修改<b>${recommend.length}</b></div>
@@ -1381,4 +1381,105 @@ if(loopModeSelect){
   tabs.forEach(t=>t.addEventListener('click',()=>showPage(t.dataset.page)));
   window.showCT181Page=showPage;
 })();
-</script></body></html>
+</script>
+<style id="final-workflow-fix-v2">
+.work-item .calc-panel.show{display:block}
+.work-item .calc-result{padding:8px 9px;border-radius:8px;background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a}
+.work-item .work-meta strong{font-weight:800}
+</style>
+
+<style id="map-input-enhancement">
+.map-input-box{margin-top:12px;padding:12px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:rgba(255,255,255,.035)}
+.map-input-box label{display:block;font-size:12px;color:#aab2c0;margin-bottom:6px}
+.map-input-box input{width:100%;box-sizing:border-box;background:#101522;color:#fff;border:1px solid #394354;border-radius:9px;padding:10px 12px;font-size:15px;outline:none}
+.map-input-box input:focus{border-color:#6f8cff;box-shadow:0 0 0 2px rgba(111,140,255,.12)}
+.map-calc-result{margin-top:9px;font-size:13px;line-height:1.55}
+.map-calc-result .result-main{font-size:16px;font-weight:700}
+.map-calc-result .result-sub{color:#aab2c0}
+.map-calc-hint{margin-top:7px;font-size:11px;color:#7f8999}
+.map-calc-error{color:#ff9c9c}
+</style>
+<script id="map-input-enhancement-script">
+(function(){
+  "use strict";
+
+  function calcFuelCorrection(deviationPct, mapValue){
+    // We want the residual AFR correction to be within +/-2.5%.
+    // Positive deviation means lean -> add fuel.
+    // Negative deviation means rich -> remove fuel.
+    var d = deviationPct / 100;
+    var target = d >= 0 ? 0.025 : -0.025;
+    var multiplier = (1 + d) / (1 + target);
+    var correctionPct = (multiplier - 1) * 100;
+    var newMap = mapValue * multiplier;
+    return {correctionPct: correctionPct, newMap: newMap};
+  }
+
+  function findDeviation(card){
+    var text = card.innerText || "";
+    var m = text.match(/(?:AFR\s*偏差|偏差)\s*[:：]?\s*([+\-]?\d+(?:\.\d+)?)\s*%/i);
+    return m ? parseFloat(m[1]) : null;
+  }
+
+  function enhanceCard(card){
+    if(card.dataset.mapInputEnhanced === "1") return;
+    var deviation = findDeviation(card);
+    if(deviation === null || Math.abs(deviation) <= 2.5 || Math.abs(deviation) >= 20) return;
+
+    card.dataset.mapInputEnhanced = "1";
+
+    var box = document.createElement("div");
+    box.className = "map-input-box";
+    box.innerHTML =
+      '<label>該格目前油圖數值</label>' +
+      '<input type="number" step="0.1" inputmode="decimal" placeholder="輸入該格油圖數值">' +
+      '<div class="map-calc-result" aria-live="polite"></div>' +
+      '<div class="map-calc-hint">輸入後自動計算；目標為將 AFR 偏差控制在 ±2.5% 內。</div>';
+
+    card.appendChild(box);
+
+    var input = box.querySelector("input");
+    var result = box.querySelector(".map-calc-result");
+
+    function update(){
+      var value = parseFloat(input.value);
+      if(!Number.isFinite(value) || value <= 0){
+        result.innerHTML = "";
+        return;
+      }
+      var r = calcFuelCorrection(deviation, value);
+      var sign = r.correctionPct >= 0 ? "+" : "";
+      result.innerHTML =
+        '<div class="result-main">建議燃油：' + sign + r.correctionPct.toFixed(1) + '%</div>' +
+        '<div class="result-sub">目前油圖：' + value.toFixed(1) +
+        ' → 修正後參考值：約 ' + r.newMap.toFixed(1) + '</div>';
+    }
+
+    input.addEventListener("input", update);
+    input.addEventListener("change", update);
+  }
+
+  function scan(){
+    // Correction rows/cards commonly contain "RPM" and "TPS".
+    var nodes = Array.from(document.querySelectorAll("div,section,article,tr"));
+    nodes.forEach(function(n){
+      if(n.children.length > 80) return;
+      var t = n.innerText || "";
+      if(/RPM\s*[:：]?\s*\d+/.test(t) && /TPS\s*[:：]?\s*\d+/.test(t) &&
+         /(?:AFR\s*偏差|偏差)\s*[:：]?\s*[+\-]?\d+(?:\.\d+)?\s*%/i.test(t)){
+        enhanceCard(n);
+      }
+    });
+  }
+
+  var observer = new MutationObserver(function(){ scan(); });
+  observer.observe(document.documentElement, {childList:true, subtree:true});
+  document.addEventListener("DOMContentLoaded", function(){
+    scan();
+    setTimeout(scan,300);
+    setTimeout(scan,1000);
+  });
+})();
+</script>
+
+</body></html>
