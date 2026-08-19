@@ -728,7 +728,7 @@ button:active{transform:translateY(1px)}
   </div>
 </div>
 <div id="fuel"></div><div class="note" style="margin-top:8px">
-<strong>可信度分級：</strong>有效資料先保留，不再要求同一 Map 格連續 3 筆才建立 cell；effectiveN ≥12＋品質條件達標，或下列強工況條件任一達標 → 最高級直接認證；effectiveN 6～<12＋品質條件達標 → 可參考；effectiveN <6 → 數據不足。強工況認證條件：≥3次／10秒內且 RPM/TPS/AP 集中約±15%、≥3穩定片段且每段≥6次並方向一致且落差≤10%、或同一 Map 格穩定停留≥2秒且三軸集中。WBO2 Ready 僅作 OFF 開迴路的資料有效性條件。
+<strong>可信度分級：</strong>有效資料先保留，不再要求同一 Map 格連續 3 筆才建立 cell；effectiveN ≥12＋品質條件達標，或下列強工況條件任一達標 → 最高級直接認證；effectiveN 6～<12＋品質條件達標 → 可參考；effectiveN <6 → 數據不足。強工況認證條件：≥3次連續／約1秒內或≥5次／10秒內，且 RPM/TPS/AP 集中約±15%；≥3穩定片段且每段≥6次並方向一致且落差≤10%、或同一 Map 格穩定停留≥2秒且三軸集中。WBO2 Ready 僅作 OFF 開迴路的資料有效性條件。
 </div>
 </section>
 <section class="card detail-card">
@@ -773,7 +773,7 @@ button:active{transform:translateY(1px)}
   🎯 <strong>補償目標：</strong>將目前偏差拉回 <strong>±3% 內</strong>，不是追求 0% 誤差。
   下方「建議補償」為達到此範圍的估算值。
 </div>
-建議修改　👀 建議觀望　⚠️ 數據不足　🚨 偏差異常。<br/><strong>有效數：</strong> 通過採樣條件後實際納入分析的資料筆數；瞬態仍保留但降低權重，穩定次數另計。<br/><strong>修正：</strong> 建議補償會把偏差拉回同方向的 ±3.0% 邊界；實際 Map 參考值由使用者輸入目前油圖後自動換算；|偏差| ≤3.0% 不修；高可信度且超過 ±3% 才進主修改；輸入目前油圖值後自動計算修正後參考值，按「我已完成此格」自動進下一格。</div></div></div></details>
+建議修改　👀 建議觀望　⚠️ 數據不足　🚨 偏差異常。<br/><strong>有效數：</strong> 通過採樣條件後實際納入分析的資料筆數；瞬態仍保留但降低權重，穩定次數另計。<br/><strong>修正：</strong> 建議補償會把偏差拉回同方向的 ±3.0% 邊界；實際 Map 參考值由使用者輸入目前油圖後自動換算；|偏差| ≤3.0% 不修；最高級直接認證且超過 ±3% 才進主修改；輸入目前油圖值後自動計算修正後參考值，按「我已完成此格」自動進下一格。</div></div></div></details>
 </section><section class="card quality-card">
 <div class="section-head"><div>
 <div class="section-tag">QUALITY GATE</div>
@@ -1043,7 +1043,7 @@ function markTransient(rows){
  for(const r of rows){
    const file=r._file||"";
    if(lastFile!==null && file!==lastFile){ last=null; holdUntil=-Infinity; holdReason=""; }
-   const tm=Number(r.Time), rpm=Number(r.RPM), tps=Number(r.TPS_Percent);
+   const tmRaw=Number(r.Time), tm=Number.isFinite(tmRaw)?tmRaw/1000:null, rpm=Number(r.RPM), tps=Number(r.TPS_Percent);
    let transient=false, reason="";
    if(Number(r.Dec_FC_En)>0 || Number(r.Inj_Cut)>0){
      transient=true; reason="cut";
@@ -1157,7 +1157,7 @@ function stableMapGroups(validRows){
        ? Math.max(g.stabilityPct,rpmPct)
        : rpmPct;
 
-     const times=currentRows.map(r=>Number(r.Time)).filter(Number.isFinite);
+     const times=currentRows.map(r=>Number(r.Time)/1000).filter(Number.isFinite);
      let dwell=0;
      for(let i=1;i<times.length;i++){
        const dt=times[i]-times[i-1];
@@ -1378,7 +1378,7 @@ function strongAdoptionEvidence(c, value){
 
   const timeValue = r => {
     const t=Number(r.Time);
-    return Number.isFinite(t)?t:null;
+    return Number.isFinite(t)?t/1000:null;
   };
 
   const concentrated3in1 = segs.some(seg=>{
@@ -1404,7 +1404,13 @@ function strongAdoptionEvidence(c, value){
   const dwell2 = segs.some(seg=>{
     if(seg.length<3 || !axisConcentrated(seg)) return false;
     const ts=seg.map(timeValue).filter(x=>x!=null);
-    return ts.length>=3 && Math.max(...ts)-Math.min(...ts)>=2;
+    if(ts.length<3) return false;
+    let dwell=0;
+    for(let i=1;i<ts.length;i++){
+      const dt=ts[i]-ts[i-1];
+      if(dt>0&&dt<=2)dwell+=dt;
+    }
+    return dwell>=2;
   });
 
   const goodSegs=segs.filter(seg=>seg.length>=6&&axisConcentrated(seg));
