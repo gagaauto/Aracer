@@ -728,7 +728,7 @@ button:active{transform:translateY(1px)}
   </div>
 </div>
 <div id="fuel"></div><div class="note" style="margin-top:8px">
-<strong>可信度分級：</strong>有效資料先保留，不再要求同一 Map 格連續 3 筆才建立 cell；≥30 筆＋分布集中＋方向一致 → 高可信度；≥15 筆 → 可參考。單一長而穩定片段也可達高可信度；多片段不是必要條件。WBO2 Ready、Map 邊界等輔助條件不足時優先降級，不直接刪除高品質資料。
+<strong>可信度分級：</strong>有效資料先保留，不再要求同一 Map 格連續 3 筆才建立 cell；effectiveN ≥12＋品質條件達標 → 高可信度；effectiveN 6～<12＋品質條件達標 → 可參考；effectiveN <6 → 數據不足。單一長而穩定片段也可達高可信度；多片段不是必要條件。WBO2 Ready、Map 邊界等輔助條件不足時優先降級，不直接刪除高品質資料。
 </div>
 </section>
 <section class="card detail-card">
@@ -768,7 +768,7 @@ button:active{transform:translateY(1px)}
 <div class="rule-item"><b>⏱️ 穩定</b><strong>穩定後採樣</strong><span>依可信度判定</span></div>
 <div class="rule-item"><b>🧭 Map</b><strong>只用真實格</strong><span>X / XX 分開</span></div>
 </div>
-<div class="rule-details-inline"><div class="note compact-note"><strong>ON：</strong> Fuel_CL 主修正；WBO2 / AFR Target 交叉驗證。整條 Log 的 Fuel_CL 全 0 才代表 OFF；只要出現有效非 0 Fuel_CL 就判定 ON，且 ON Log 內的 Fuel_CL=0 仍是有效資料。<br/><strong>OFF：</strong> WBO2＝實測 AFR；AFR Target＝目標 AFR；用 <code>(WBO2 / Target − 1) × 100%</code> 判定。Fuel_CL 不參與 OFF 修正；但 OFF：Fuel_CL 未介入時才進入 OFF 分析。<br/><strong>溫度：</strong> ≥67°C 採樣；80～110°C 最高優先；&gt;110°C 降低優先。ON / OFF 同步。<br/><strong>防誤修：</strong> 跨片段方向不一致或離群值只降低可信度；|AFR 偏差| ≥20%→🚨 偏差異常大，請再取得 Log。高品質資料不因單一輔助條件直接消失。<br/><strong>AFR 驗證：</strong> CL ON 時作次要驗證，|AFR 偏差| ≤3.0% 視為驗證良好；CL OFF 時 WBO2 vs Target 為主要判定。<br/><strong>結果：</strong> 🛠️ 
+<div class="rule-details-inline"><div class="note compact-note"><strong>ON：</strong> Fuel_CL 主修正；WBO2 / AFR Target 交叉驗證。整條 Log 的 Fuel_CL 全 0 才代表 OFF；只要出現有效非 0 Fuel_CL 就判定 ON，且 ON Log 內的 Fuel_CL=0 仍是有效資料。<br/><strong>OFF：</strong> WBO2＝實測 AFR；AFR Target＝目標 AFR；用 <code>(WBO2 / Target − 1) × 100%</code> 判定。Fuel_CL 不參與 OFF 修正；但 OFF：Fuel_CL 未介入時才進入 OFF 分析。<br/><strong>溫度：</strong> ≥67°C 採樣；80～110°C 最高優先；&gt;110°C 降低優先。ON / OFF 同步。<br/><strong>防誤修：</strong> 跨片段方向不一致或離群值只降低可信度；|AFR 偏差| ≥11%→🚨 偏差異常大，請再取得 Log。高品質資料不因單一輔助條件直接消失。<br/><strong>AFR 驗證：</strong> CL ON 時作次要驗證，|AFR 偏差| ≤3.0% 視為驗證良好；CL OFF 時 WBO2 vs Target 為主要判定。<br/><strong>結果：</strong> 🛠️ 
 <div class="compensation-target-note">
   🎯 <strong>補償目標：</strong>將目前偏差拉回 <strong>±3% 內</strong>，不是追求 0% 誤差。
   下方「建議補償」為達到此範圍的估算值。
@@ -1202,7 +1202,7 @@ function isMainRepairCell(c){
     !c.extreme &&
     Number.isFinite(Number(c.deviation)) &&
     Math.abs(Number(c.deviation))>cfg.clDeadband &&
-    Math.abs(Number(c.deviation))<20;
+    Math.abs(Number(c.deviation))<11;
 }
 function correctionFromDeviation(errPct){
   const e=Number(errPct);
@@ -1385,11 +1385,12 @@ function qualityGateCell(c, value, mode){
   const avgTempWeight=tempPairs.length?tempPairs.reduce((a,b)=>a+b.w,0)/tempPairs.length:0;
   const stabilityPct=Number.isFinite(c.stabilityPct)?c.stabilityPct:null;
   let quality="數據不足";
-  if(effectiveN>=8)quality="低可信度";
-  if(effectiveN>=15)quality="可參考";
-  // No legacy total-score gate: confidence is based on interpretable evidence.
+  // 定案：effectiveN<6 資料不足；6<=effectiveN<12 且品質條件達標可參考；effectiveN>=12（含12）且品質條件達標為高品質。
+  // effectiveN 為經溫度／資料品質加權後的有效樣本量；每 1.0 算 1 次。
   const concentrated=Number.isFinite(m)&&m<=8;
-  if(effectiveN>=30&&concentrated&&consistency>=0.7)quality="高可信度";
+  const qualityOk=concentrated&&consistency>=0.7;
+  if(effectiveN>=6&&qualityOk)quality="可參考";
+  if(effectiveN>=12&&qualityOk)quality="高可信度";
   return {quality,m,consistency,consistent:consistency>=0.8,readyRate,readyKnown,
     stabilityOk:stabilityPct==null||stabilityPct<=15,rawN,effectiveN,avgTempWeight,center,score:null};
 }
@@ -1400,7 +1401,7 @@ function renderWatchList(arr){
     const d=Number(c.deviation);
     return Number.isFinite(d) &&
       Math.abs(d)>cfg.clDeadband &&
-      Math.abs(d)<20 &&
+      Math.abs(d)<11 &&
       c.quality!=="高可信度" &&
       c.quality!=="數據不足" &&
       c.quality!=="極端偏差";
@@ -1450,7 +1451,7 @@ function buildClosedLoop(){
   const afrTarget=med(rs.map(r=>r.AFR_Target)),afr=med(rs.map(r=>r.AFR_WBO2));
   const afrErr=afr==null||afrTarget==null?null:(afr/afrTarget-1)*100;
   const ap=med(rs.map(r=>r.Cyl1_Eng_AP)),temp=med(rs.map(r=>r.T_Eng));
-  const extreme=Math.abs(cl)>=20;
+  const extreme=Math.abs(cl)>=11;
   const corr=correctionFromDeviation(cl);
   const q=qualityGateCell(c,r=>r.Fuel_CL,"on");
   const quality=extreme?"極端偏差":q.quality;
@@ -1469,7 +1470,7 @@ arr.sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);
    <div class="stat">極端偏差<b>${arr.filter(c=>c.extreme).length}</b></div>
   
  </div>
- <div class="note" style="margin-top:9px"><strong>修改建議：</strong>只有高可信度且偏差超過 ±${cfg.clDeadband.toFixed(1)}、未達 ±20% 的格才進入修改流程；±3% 內資料保留但不列入修改。≥20% 不直接修改，請再取得 Log。</div>
+ <div class="note" style="margin-top:9px"><strong>修改建議：</strong>只有高可信度且偏差超過 ±${cfg.clDeadband.toFixed(1)}、未達 ±11% 的格才進入修改流程；±3% 內資料保留但不列入修改。≥11% 不直接修改，請再取得 Log。</div>
  ${renderWorkList(recommend)}${renderWatchList(arr)}`;
 
  $("detail").innerHTML=`<thead><tr><th>RPM</th><th>TPS</th><th>有效數</th><th>Fuel_CL</th><th>AFR偏差</th><th>溫度</th><th>穩定次數</th><th>可信度</th></tr></thead><tbody>${
@@ -1544,7 +1545,7 @@ function buildOpenLoop(){
   const afrTarget=med(rs.map(r=>r.AFR_Target)),afr=med(rs.map(r=>r.AFR_WBO2));
   const afrErr=afr==null||afrTarget==null?null:(afr/afrTarget-1)*100;
   const ap=med(rs.map(r=>r.Cyl1_Eng_AP)),temp=med(rs.map(r=>r.T_Eng));
-  const extreme=Math.abs(corr)>=20;
+  const extreme=Math.abs(corr)>=11;
   const corrCalc=correctionFromDeviation(corr);
   const q=qualityGateCell(c,r=>r._analysisCorr,"off");
   const quality=extreme?"極端偏差":q.quality;
@@ -1562,7 +1563,7 @@ arr.sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);
    <div class="stat">數據不足<b>${arr.filter(c=>c.quality==="數據不足").length}</b></div>
    <div class="stat">極端偏差<b>${arr.filter(c=>c.extreme).length}</b></div>
  </div>
- <div class="note" style="margin-top:9px"><strong>修改建議：</strong>只有高可信度且偏差超過 ±${cfg.clDeadband.toFixed(1)}、未達 ±20% 的格才進入修改流程；±3% 內資料保留但不列入修改。≥20% 不直接修改，請再取得 Log。</div>
+ <div class="note" style="margin-top:9px"><strong>修改建議：</strong>只有高可信度且偏差超過 ±${cfg.clDeadband.toFixed(1)}、未達 ±11% 的格才進入修改流程；±3% 內資料保留但不列入修改。≥11% 不直接修改，請再取得 Log。</div>
  ${renderWorkList(recommend)}${renderWatchList(arr)}`;
 
  $("detail").innerHTML=`<thead><tr><th>RPM</th><th>TPS</th><th>有效數</th><th>AFR 偏差</th><th>溫度</th><th>穩定次數</th><th>可信度</th></tr></thead><tbody>${
@@ -1722,7 +1723,7 @@ async function sideOpenLoop(files){
      }).join("");
      result.innerHTML=`<div class="bt-head"><strong>前後對比完成</strong><span>兩組 Log 各自獨立處理，再比較共同實際 Map 格</span></div>
      <div class="bt-stats"><div><small>共同 Map 格</small><b>${keys.length}</b></div><div><small>🟢 改善／成功</small><b>${good}</b></div><div><small>🟡 需觀察</small><b>${warn}</b></div><div><small>🔴 未改善／過修</small><b>${bad}</b></div></div>
-     <div class="bt-note"><strong>本次比較基準：${compareMode==="on"?"Fuel_CL":"WBO2 AFR 偏差（AFR−Target）"}。</strong> 前後 Log 各自獨立判定可信度；AFR Target / WBO2 顯示各自當下值；不以單純數值變小就判定修正成功。回測不改 Map，不猜測缺失格點。</div>
+     <div class="bt-note"><strong>本次比較基準：${compareMode==="on"?"Fuel_CL":"WBO2 AFR 偏差（AFR−Target）"}。</strong> 前後 Log 各自獨立判定可信度（effectiveN：溫度／資料品質加權後的有效樣本量）；AFR Target / WBO2 顯示各自當下值；不以單純數值變小就判定修正成功。回測不改 Map，不猜測缺失格點。</div>
      <div class="compare-table-wrap"><table class="compare-table"><thead><tr><th>RPM</th><th>TPS</th><th>Target AFR 前/後</th><th>WBO2 AFR 前/後</th><th>前 ${label}</th><th>後 ${label}</th><th>變化</th><th>有效數 前/後</th><th>可信度 前/後</th><th>結果</th></tr></thead><tbody>${rows||'<tr><td colspan="10">沒有共同且可比較的 Map 格。</td></tr>'}</tbody></table></div>`;
    }catch(e){console.error(e);result.innerHTML='<div class="bt-warning">⚠️ 前後對比失敗：'+esc(e.message)+'</div>';}
    finally{btn.disabled=false;btn.textContent="開始前後對比";}
