@@ -477,6 +477,15 @@ button:active{transform:translateY(1px)}
 .tps-visible-legend small{width:100%;color:#64748b}
 </style>
 
+
+<style>
+.compensation-target-note{
+  margin:8px 0 12px;padding:9px 12px;border-radius:10px;
+  background:#f7f8fa;border:1px solid #e1e5ea;color:#475569;
+  font-size:.88rem;line-height:1.5
+}
+</style>
+
 </head>
 <body>
 <div class="wrap">
@@ -601,10 +610,10 @@ button:active{transform:translateY(1px)}
 <section class="card"><div class="result-mode" id="resultMode">🔴 閉迴路 ON｜Fuel_CL 校正模式</div><div class="result-quality-note">修正建議只在品質條件通過後採用；資料不一致時先取得更多 Log。</div><h2>⑤ 本次 Log 總覽</h2><div class="stats" id="stats"></div></section>
 <section class="card load-spectrum-card" id="loadSpectrumSection"><div class="spectrum-head"><div><div class="section-tag">LOAD SPECTRUM</div><h2>📊 Log 負載光譜儀</h2><p class="spectrum-sub">X 軸＝RPM｜Y 軸＝AP 負載率（Cyl1_Eng_AP / P_Atm × 100%）。只分析 Log 負載，不參與 Fuel Map 修正。</p></div></div><div id="loadSpectrum"></div></section>
 <section class="knock-spectrum-wrap" id="knockSpectrum">
-  <h2>🔥 實際騎乘爆震敏感區光譜</h2>
+  <h2>🔥 實際騎乘爆震敏感度三指標融合光譜</h2>
   <p class="knock-spectrum-desc">
     這是獨立的負載風險提醒，不會改變 Fuel Map 修正結果。
-    以實際 RPM × AP 負載分布為主，並把 TPS 開度直接納入風險分級，再以點火提前角與 AFR 作輔助證據，
+    RPM × AP × TPS 在程式內先融合成單一敏感度；SA 與 AFR 只作輔助證據，
     標示較值得注意的高負載／高爆震敏感區。
   </p>
   <div class="knock-spectrum-grid">
@@ -677,7 +686,12 @@ Fuel_CL 的穩定統計值直接作為該 Map 格的修正依據；AFR_Target / 
 <div class="rule-item"><b>⏱️ 穩定</b><strong>穩定後採樣</strong><span>依可信度判定</span></div>
 <div class="rule-item"><b>🧭 Map</b><strong>只用真實格</strong><span>X / XX 分開</span></div>
 </div>
-<div class="rule-details-inline"><div class="note compact-note"><strong>ON：</strong> Fuel_CL 主修正；WBO2 / AFR Target 交叉驗證。整條 Log 的 Fuel_CL 全 0 才代表 OFF；只要出現有效非 0 Fuel_CL 就判定 ON，且 ON Log 內的 Fuel_CL=0 仍是有效資料。<br/><strong>OFF：</strong> WBO2＝實測 AFR；AFR Target＝目標 AFR；用 <code>(WBO2 / Target − 1) × 100%</code> 判定。Fuel_CL 不參與 OFF 修正；但 OFF：Fuel_CL 未介入時才進入 OFF 分析。<br/><strong>溫度：</strong> ≥67°C 採樣；80～110°C 最高優先；&gt;110°C 降低優先。ON / OFF 同步。<br/><strong>防誤修：</strong> 跨片段方向不一致或離群值只降低可信度；|AFR 偏差| ≥20%→🚨 偏差異常大，請再取得 Log。高品質資料不因單一輔助條件直接消失。<br/><strong>AFR 驗證：</strong> CL ON 時作次要驗證，|AFR 偏差| ≤3.0% 視為驗證良好；CL OFF 時 WBO2 vs Target 為主要判定。<br/><strong>結果：</strong> 🛠️ 建議修改　👀 建議觀望　⚠️ 數據不足　🚨 偏差異常。<br/><strong>有效數：</strong> 通過採樣條件後實際納入分析的資料筆數；瞬態仍保留但降低權重，穩定次數另計。<br/><strong>修正：</strong> 只顯示修正方向（增加／減少）；實際 Map 參考值由使用者輸入目前油圖後自動換算；|偏差| ≤3.0% 不修；高可信度且超過 ±3% 才進主修改；輸入目前油圖值後自動計算修正後參考值，按「我已完成此格」自動進下一格。</div></div></div></details>
+<div class="rule-details-inline"><div class="note compact-note"><strong>ON：</strong> Fuel_CL 主修正；WBO2 / AFR Target 交叉驗證。整條 Log 的 Fuel_CL 全 0 才代表 OFF；只要出現有效非 0 Fuel_CL 就判定 ON，且 ON Log 內的 Fuel_CL=0 仍是有效資料。<br/><strong>OFF：</strong> WBO2＝實測 AFR；AFR Target＝目標 AFR；用 <code>(WBO2 / Target − 1) × 100%</code> 判定。Fuel_CL 不參與 OFF 修正；但 OFF：Fuel_CL 未介入時才進入 OFF 分析。<br/><strong>溫度：</strong> ≥67°C 採樣；80～110°C 最高優先；&gt;110°C 降低優先。ON / OFF 同步。<br/><strong>防誤修：</strong> 跨片段方向不一致或離群值只降低可信度；|AFR 偏差| ≥20%→🚨 偏差異常大，請再取得 Log。高品質資料不因單一輔助條件直接消失。<br/><strong>AFR 驗證：</strong> CL ON 時作次要驗證，|AFR 偏差| ≤3.0% 視為驗證良好；CL OFF 時 WBO2 vs Target 為主要判定。<br/><strong>結果：</strong> 🛠️ 
+<div class="compensation-target-note">
+  🎯 <strong>補償目標：</strong>將目前偏差拉回 <strong>±3% 內</strong>，不是追求 0% 誤差。
+  下方「建議補償」為達到此範圍的估算值。
+</div>
+建議修改　👀 建議觀望　⚠️ 數據不足　🚨 偏差異常。<br/><strong>有效數：</strong> 通過採樣條件後實際納入分析的資料筆數；瞬態仍保留但降低權重，穩定次數另計。<br/><strong>修正：</strong> 只顯示修正方向（增加／減少）；實際 Map 參考值由使用者輸入目前油圖後自動換算；|偏差| ≤3.0% 不修；高可信度且超過 ±3% 才進主修改；輸入目前油圖值後自動計算修正後參考值，按「我已完成此格」自動進下一格。</div></div></div></details>
 </section><section class="card quality-card">
 <div class="section-head"><div>
 <div class="section-tag">QUALITY GATE</div>
@@ -1701,178 +1715,115 @@ if(loopModeSelect){
     const legend=document.getElementById('knockSpectrumLegend');
     if(!old)return;
 
-    function num(v){
-      const n=Number(v);
-      return Number.isFinite(n)?n:null;
-    }
-    function field(r,names){
-      for(const k of names){
-        if(r && r[k]!==undefined){
-          const n=num(r[k]);
-          if(n!==null)return n;
-        }
-      }
+    const num=v=>Number.isFinite(Number(v))?Number(v):null;
+    const field=(r,names)=>{
+      for(const k of names){ if(r && r[k]!==undefined){ const n=num(r[k]); if(n!==null)return n; } }
       return null;
-    }
+    };
 
     const pts=[];
     for(const r of (Array.isArray(rows)?rows:[])){
       const rpm=field(r,['RPM','rpm']);
       const ap=field(r,['Cyl1_Eng_AP','AP','ap','MAP','Map']);
       const tps=field(r,['TPS_Percent','TPS','tps']);
-      const ign=field(r,['SA','Ignition','Ign','ADV','Advance','SparkAdvance','點火角']);
-      const afr=field(r,['AFR_WBO2','AFR','WBO2','afr']);
-      const target=field(r,['AFR_Target','TargetAFR','Target','target']);
-      if(rpm===null||ap===null)continue;
+      const ign=field(r,['SA','Ignition','Ign','ADV','Advance']);
+      const afr=field(r,['AFR_WBO2','AFR','WBO2']);
+      const target=field(r,['AFR_Target','TargetAFR','Target']);
+      if(rpm===null || ap===null || tps===null) continue;
 
-      // 風險不是只看 AP：
-      // AP = 實際負載主因；RPM = 轉速區；TPS = 駕駛者需求/節氣門開度；
-      // SA/AFR 僅作額外風險證據，不直接宣稱爆震。
       let score=0;
-      let evidence=0;
-
-      // AP load contribution (0–4)
-      if(ap>=80) score+=4;
-      else if(ap>=65) score+=3;
-      else if(ap>=50) score+=2;
-      else if(ap>=35) score+=1;
-
-      // RPM contribution (0–3): low/mid rpm at load is the key concern.
+      // AP
+      if(ap>=80) score+=4; else if(ap>=65) score+=3; else if(ap>=50) score+=2; else if(ap>=30) score+=1;
+      // RPM: prioritize the real riding high-cylinder-pressure band
       if(rpm>=3500 && rpm<=5000) score+=3;
       else if(rpm>=3000 && rpm<=5500) score+=2;
       else if(rpm>=2500 && rpm<=6000) score+=1;
-
-      // TPS contribution (0–2): explicitly included in the color decision.
-      if(tps!==null){
-        evidence++;
-        if(tps>=70) score+=2;
-        else if(tps>=50) score+=2;
-        else if(tps>=30) score+=1;
-      }
-
-      // AP + RPM interaction: the specific high-cylinder-pressure riding zone.
+      // TPS is a first-class factor
+      if(tps>=70) score+=3; else if(tps>=50) score+=2; else if(tps>=30) score+=1;
       if(rpm>=3500 && rpm<=5000 && ap>=65) score+=3;
-      else if(rpm>=3200 && rpm<=5200 && ap>=50) score+=1;
-
-      // TPS + AP interaction: rider is asking for substantial torque.
-      if(tps!==null && tps>=50 && ap>=60) score+=2;
-      else if(tps!==null && tps>=30 && ap>=50) score+=1;
-
-      // Supporting evidence only: ignition advance.
-      if(ign!==null){
-        evidence++;
-        if(rpm>=3000 && rpm<=5500 && ap>=60){
-          if(ign>=28) score+=3;
-          else if(ign>=24) score+=2;
-          else if(ign>=20) score+=1;
-        }
+      if(tps>=50 && ap>=60) score+=2;
+      else if(tps>=30 && ap>=50) score+=1;
+      // Supporting evidence only
+      if(ign!==null && rpm>=3000 && rpm<=5500 && ap>=60){
+        if(ign>=28) score+=3; else if(ign>=24) score+=2; else if(ign>=20) score+=1;
+      }
+      if(afr!==null && target!==null && target!==0 && ap>=60 && rpm>=3000 && rpm<=5500){
+        if(Math.abs((afr/target-1)*100)>3) score+=1;
       }
 
-      // Supporting evidence only: AFR deviation from the actual target.
-      if(afr!==null && target!==null && target!==0){
-        evidence++;
-        const dev=(afr/target-1)*100;
-        if(Math.abs(dev)>3 && ap>=60 && rpm>=3000 && rpm<=5500) score+=1;
-      }
-
-      // Four visible classes. This intentionally requires multiple factors for red.
-      let risk=0;
-      if(score>=11) risk=3;
-      else if(score>=8) risk=2;
-      else if(score>=5) risk=1;
-      else risk=0;
-
-      pts.push({rpm,ap,tps,score,risk,evidence});
+      const risk=score>=12?3:score>=9?2:score>=6?1:0;
+      pts.push({rpm,ap,tps,score,risk});
     }
 
-    const wrap=old.parentElement;
-    if(!wrap)return;
     if(!pts.length){
       old.outerHTML='<div id="knockSpectrumCanvas" class="knock-empty">目前 Log 沒有足夠的 RPM × AP × TPS 資料可建立光譜。</div>';
       return;
     }
 
-    const minR=Math.min(...pts.map(p=>p.rpm));
-    const maxR=Math.max(...pts.map(p=>p.rpm));
-    const maxA=Math.max(100,Math.ceil(Math.max(...pts.map(p=>p.ap))/10)*10);
-    const W=820,H=390,L=72,R=24,T=24,B=58,pw=W-L-R,ph=H-T-B;
-    const sx=r=>L+(r-minR)/Math.max(1,maxR-minR)*pw;
-    const sy=a=>T+ph-Math.max(0,Math.min(maxA,a))/maxA*ph;
-
-    // Background bands show AP load context; point colors show combined RPM/AP/TPS risk.
-    const bands=[
-      [0,30,'#94a3b8'],
-      [30,50,'#60a5fa'],
-      [50,65,'#facc15'],
-      [65,80,'#fb923c'],
-      [80,maxA,'#ef4444']
-    ];
-    const bg=bands.map(b=>`<rect x="${L}" y="${sy(b[1])}" width="${pw}" height="${Math.max(0,sy(b[0])-sy(b[1]))}" fill="${b[2]}" opacity=".08"/>`).join('');
-
-    const grid=[0,30,40,50,65,80,100].map(v=>`<line x1="${L}" y1="${sy(v)}" x2="${L+pw}" y2="${sy(v)}" stroke="#d7dde5"/><text x="${L-10}" y="${sy(v)+4}" text-anchor="end" font-size="13" fill="#697386">${v}%</text>`).join('');
-    const xt=[0,1,2,3,4,5].map(i=>{
-      const r=minR+(maxR-minR)*i/5;
-      return `<line x1="${sx(r)}" y1="${T}" x2="${sx(r)}" y2="${T+ph}" stroke="#edf0f4"/><text x="${sx(r)}" y="${H-18}" text-anchor="middle" font-size="13" fill="#697386">${Math.round(r).toLocaleString()}</text>`;
-    }).join('');
-
-    const riskColors=['#64748b','#2563eb','#f59e0b','#dc2626'];
-    function tpsColor(tps){
-      if(tps===null)return '#94a3b8';
-      if(tps<30)return '#2563eb';
-      if(tps<50)return '#22c55e';
-      if(tps<70)return '#facc15';
-      if(tps<85)return '#f97316';
-      return '#ef4444';
+    // Aggregate real riding data into RPM × AP cells.
+    const rpmStep=250, apStep=5;
+    const cells=new Map();
+    for(const p of pts){
+      const rb=Math.floor(p.rpm/rpmStep)*rpmStep;
+      const ab=Math.floor(p.ap/apStep)*apStep;
+      const k=rb+'|'+ab;
+      let c=cells.get(k);
+      if(!c)c={rb,ab,n:0,riskSum:0,tpsSum:0,maxRisk:0};
+      c.n++; c.riskSum+=p.risk; c.tpsSum+=p.tps; c.maxRisk=Math.max(c.maxRisk,p.risk);
+      cells.set(k,c);
     }
-    const dots=pts.map(p=>{
-      const t=(p.tps===null?0:Math.max(0,Math.min(100,p.tps)));
-      // TPS is now visibly encoded by BOTH point size and outline color.
-      const rr=3.0 + t*0.035 + (p.risk===3?1.4:p.risk===2?.9:p.risk===1?.4:0);
-      const opacity=p.risk===3?.84:p.risk===2?.76:p.risk===1?.68:.54;
-      const tc=tpsColor(p.tps);
-      const title=`RPM ${Math.round(p.rpm)} / AP ${p.ap.toFixed(1)}% / TPS ${p.tps===null?'N/A':p.tps.toFixed(1)+'%'} / 風險 ${p.risk}`;
-      return `<circle cx="${sx(p.rpm).toFixed(1)}" cy="${sy(p.ap).toFixed(1)}" r="${rr.toFixed(2)}" fill="${riskColors[p.risk]}" opacity="${opacity}" stroke="${tc}" stroke-width="${p.tps===null?1.2:(1.2+t/70).toFixed(2)}"><title>${title}</title></circle>`;
+
+    const W=900,H=430,L=74,R=28,T=28,B=66;
+    const pw=W-L-R, ph=H-T-B;
+    const minR=Math.floor(Math.min(...pts.map(p=>p.rpm))/500)*500;
+    const maxR=Math.ceil(Math.max(...pts.map(p=>p.rpm))/500)*500;
+    const maxA=Math.max(100,Math.ceil(Math.max(...pts.map(p=>p.ap))/10)*10);
+    const sx=r=>L+(r-minR)/Math.max(1,maxR-minR)*pw;
+    const sy=a=>T+ph-a/maxA*ph;
+
+    const riskColor=['#94a3b8','#60a5fa','#facc15','#ef4444'];
+    const cellW=Math.max(5,pw/Math.max(1,(maxR-minR)/rpmStep));
+    const cellH=Math.max(4,ph/(maxA/apStep));
+    let marks='';
+
+    for(const c of cells.values()){
+      const avgRisk=c.riskSum/c.n;
+      const risk=avgRisk>=2.5?3:avgRisk>=1.5?2:avgRisk>=.5?1:0;
+      const x=sx(c.rb), y=sy(c.ab+apStep);
+      const tps=c.tpsSum/c.n;
+      const size=3 + tps/100*8;
+      const fill=riskColor[risk];
+      const opacity=.30 + risk*.16;
+      // Cell color = fused RPM/AP/TPS risk. TPS is visibly encoded by an inner ring.
+      marks += `<rect x="${x}" y="${y}" width="${cellW+0.5}" height="${cellH+0.5}" fill="${fill}" opacity="${opacity}"/>`;
+      marks += `<circle cx="${x+cellW/2}" cy="${y+cellH/2}" r="${size.toFixed(1)}" fill="none" stroke="#334155" stroke-width="1.5" opacity=".85"><title>RPM ${Math.round(c.rb)}｜AP ${c.ab}–${c.ab+apStep}%｜TPS 平均 ${tps.toFixed(1)}%｜樣本 ${c.n}</title></circle>`;
+    }
+
+    const gridY=[0,30,40,50,65,80,100].map(v=>
+      `<line x1="${L}" y1="${sy(v)}" x2="${L+pw}" y2="${sy(v)}" stroke="#d7dde5"/><text x="${L-10}" y="${sy(v)+4}" text-anchor="end" font-size="13" fill="#64748b">${v}%</text>`
+    ).join('');
+    const gridX=[0,1,2,3,4,5].map(i=>{
+      const r=minR+(maxR-minR)*i/5;
+      return `<line x1="${sx(r)}" y1="${T}" x2="${sx(r)}" y2="${T+ph}" stroke="#edf0f4"/><text x="${sx(r)}" y="${H-22}" text-anchor="middle" font-size="13" fill="#64748b">${Math.round(r).toLocaleString()}</text>`;
     }).join('');
 
-    // Focus region: 3500–5000 RPM / AP >=65%, with TPS >=30% treated as extra evidence.
-    const zoneX1=sx(Math.max(minR,3500));
-    const zoneX2=sx(Math.min(maxR,5000));
-    const zoneY=sy(65);
-    const zoneW=Math.max(0,zoneX2-zoneX1);
-    const zoneH=Math.max(0,sy(0)-zoneY);
-    const focus = zoneW>0
-      ? `<rect x="${zoneX1}" y="${zoneY}" width="${zoneW}" height="${zoneH}" fill="#ef4444" opacity=".045" stroke="#dc2626" stroke-width="2" stroke-dasharray="8 6"/><text x="${zoneX1+8}" y="${Math.max(T+16,zoneY-8)}" font-size="12" font-weight="800" fill="#b91c1c">3500–5000 RPM / AP≥65%：高敏感關注區（TPS≥30%更值得注意）</text>`
+    const focusX=sx(Math.max(minR,3500)), focusX2=sx(Math.min(maxR,5000));
+    const focusY=sy(65), focusW=Math.max(0,focusX2-focusX);
+    const focus=focusW>0
+      ? `<rect x="${focusX}" y="${focusY}" width="${focusW}" height="${sy(0)-focusY}" fill="#ef4444" opacity=".035" stroke="#dc2626" stroke-width="2" stroke-dasharray="8 6"/><text x="${focusX+8}" y="${Math.max(T+16,focusY-8)}" font-size="12" font-weight="700" fill="#b91c1c">3500–5000 RPM / AP≥65%：高敏感關注區</text>`
       : '';
 
-    const thresholds=[
-      [40,'#3b82f6','40% 中負載'],
-      [50,'#f59e0b','50% 中高負載'],
-      [65,'#f97316','65% 高負載'],
-      [80,'#dc2626','80% 很高負載']
-    ].map(([v,c,label])=>`<line x1="${L}" y1="${sy(v)}" x2="${L+pw}" y2="${sy(v)}" stroke="${c}" stroke-dasharray="7 5" stroke-width="1.4" opacity=".65"/><text x="${L+7}" y="${sy(v)-7}" font-size="12" font-weight="700" fill="${c}">${label}</text>`).join('');
-
-    const svg=`<svg id="knockSpectrumCanvas" class="knock-canvas knock-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="RPM、AP負載、TPS綜合爆震敏感區光譜">${bg}${grid}${xt}${focus}${thresholds}${dots}<text x="${L+pw/2}" y="${H-2}" text-anchor="middle" font-size="13" font-weight="700" fill="#697386">RPM</text><text x="18" y="${T+ph/2}" text-anchor="middle" font-size="13" font-weight="700" fill="#697386" transform="rotate(-90 18 ${T+ph/2})">AP 負載率</text></svg>`;
+    const svg=`<svg id="knockSpectrumCanvas" class="knock-canvas knock-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="RPM、AP、TPS三指標融合爆震敏感度光譜">${gridY}${gridX}${focus}${marks}<text x="${L+pw/2}" y="${H-3}" text-anchor="middle" font-size="13" font-weight="700" fill="#64748b">RPM</text><text x="18" y="${T+ph/2}" text-anchor="middle" font-size="13" font-weight="700" fill="#64748b" transform="rotate(-90 18 ${T+ph/2})">AP 負載率</text></svg>`;
     old.outerHTML=svg;
 
-    const counts=[0,0,0,0];
-    pts.forEach(p=>counts[p.risk]++);
-    const tpsVals=pts.map(p=>p.tps).filter(v=>v!==null);
-    const tpsStats=tpsVals.length
-      ? `TPS 實際資料 ${tpsVals.length.toLocaleString()} 筆｜範圍 ${Math.min(...tpsVals).toFixed(0)}–${Math.max(...tpsVals).toFixed(0)}%`
-      : 'Log 未提供可用 TPS';
-    const tpsLegend=document.querySelector('.tps-visible-legend small');
-    if(tpsLegend)tpsLegend.textContent=`${tpsStats}。點越大＝TPS 越大；外框顏色＝TPS；填色＝RPM × AP × TPS 綜合風險。`;
     if(legend){
-      const labels=[
-        `低風險：負載／轉速／TPS 組合沒有形成明顯敏感條件。（${counts[0].toLocaleString()} 筆）`,
-        `注意：中高負載或中低轉條件出現，建議留意點火角與 AFR。（${counts[1].toLocaleString()} 筆）`,
-        `敏感：RPM × AP 已進入較值得檢查的區域，TPS 開度會進一步提高權重。（${counts[2].toLocaleString()} 筆）`,
-        `高敏感：RPM × AP × TPS 同時偏高，且有額外點火／AFR 證據時優先檢查。（${counts[3].toLocaleString()} 筆）`
-      ];
-      legend.querySelectorAll('.knock-risk').forEach((el,i)=>{
-        const small=el.querySelector('small');
-        if(small)small.textContent=labels[i];
-      });
+      legend.innerHTML=`
+        <div class="knock-risk"><strong>🟢 一般</strong><small>RPM × AP × TPS 綜合風險低。</small></div>
+        <div class="knock-risk"><strong>🔵 注意</strong><small>負載／轉速／TPS 開始進入值得留意的組合。</small></div>
+        <div class="knock-risk"><strong>🟡 敏感</strong><small>三者組合已進入較值得檢查點火角與 AFR 的區域。</small></div>
+        <div class="knock-risk"><strong>🔴 高敏感</strong><small>三者同時偏高，優先檢查是否點火過度提前或 AFR 不合適。</small></div>
+        <div class="knock-risk"><strong>○ 圈大小＝TPS</strong><small>圈越大代表該 RPM × AP 格內平均 TPS 越高；底色則是三指標融合後的風險。</small></div>
+      `;
     }
   }
 
@@ -1886,6 +1837,21 @@ if(loopModeSelect){
   window.addEventListener("resize",()=>refresh());
   document.addEventListener("analysisComplete",()=>refresh());
   setTimeout(()=>refresh(),300);
+})();
+</script>
+
+
+<script>
+(function(){
+  // UI-only helper: the compensation calculation remains unchanged.
+  // The text explicitly states the intended target is the ±3% band.
+  window.formatCompensationTarget = function(deviation, correction){
+    const d = Number(deviation), c = Number(correction);
+    if(!Number.isFinite(d) || !Number.isFinite(c)) return '';
+    const target = d > 0 ? 3 : -3;
+    const dir = c >= 0 ? '增加' : '減少';
+    return `建議${dir}燃油約 ${Math.abs(c).toFixed(1)}% → 預計修正後約 ${target.toFixed(1)}% 偏差（進入 ±3% 允許範圍）`;
+  };
 })();
 </script>
 
