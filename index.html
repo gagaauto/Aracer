@@ -446,7 +446,7 @@ button:active{transform:translateY(1px)}
 .knock-spectrum-wrap h2{margin:0 0 6px;font-size:1.15rem}
 .knock-spectrum-desc{margin:0 0 12px;color:#5f6875;font-size:.9rem;line-height:1.55}
 .knock-spectrum-grid{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:14px}
-.knock-canvas{width:100%;height:340px;border:1px solid #e3e7ec;border-radius:12px;background:#fbfcfd;display:block}
+.knock-canvas{width:100%;height:340px;border:1px solid #e3e7ec;border-radius:12px;background:#fbfcfd;display:block}.knock-empty{height:340px;display:flex;align-items:center;justify-content:center;color:#697386;border:1px solid #e3e7ec;border-radius:12px;background:#fbfcfd}.knock-svg{overflow:hidden}
 .knock-legend{display:grid;gap:8px}
 .knock-risk{padding:10px 12px;border-radius:10px;background:#f7f8fa}
 .knock-risk strong{display:block;margin-bottom:3px}
@@ -1667,23 +1667,14 @@ if(loopModeSelect){
     return null;
   }
   function drawKnockSpectrum(rows){
-    const c=document.getElementById('knockSpectrumCanvas');
+    const host=document.getElementById('knockSpectrum');
+    const old=document.getElementById('knockSpectrumCanvas');
     const legend=document.getElementById('knockSpectrumLegend');
-    if(!c)return;
-    const ctx=c.getContext('2d');
-    const dpr=window.devicePixelRatio||1;
-    const rect=c.getBoundingClientRect();
-    c.width=Math.max(600,rect.width*dpr);
-    c.height=Math.max(300,rect.height*dpr);
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-    const W=rect.width,H=rect.height;
-    ctx.clearRect(0,0,W,H);
-
+    if(!host)return;
     if(!Array.isArray(rows)||!rows.length){
-      ctx.fillText("上傳 Log 並完成分析後顯示",20,30);
+      if(old) old.outerHTML='<div id="knockSpectrumCanvas" class="knock-empty">上傳 Log 並完成分析後顯示</div>';
       return;
     }
-
     const pts=[];
     for(const r of rows){
       const rpm=getField(r,['RPM','rpm']);
@@ -1693,82 +1684,44 @@ if(loopModeSelect){
       const afr=getField(r,['AFR_WBO2','AFR','WBO2','afr']);
       const target=getField(r,['AFR_Target','TargetAFR','Target','target']);
       if(rpm===null||ap===null)continue;
-
-      // Base risk is driven by actual load (AP) and RPM.
-      // TPS, ignition and AFR only increase the warning level when present.
       let risk=0;
       if(ap>=51)risk=1;
       if(ap>=65)risk=2;
       if(ap>=80)risk=3;
-
       if(rpm>=3200 && rpm<=5200 && ap>=51)risk=Math.max(risk,2);
       if(rpm>=3500 && rpm<=5000 && ap>=65)risk=Math.max(risk,3);
       if(tps!==null && tps>=30 && ap>=51)risk=Math.max(risk,Math.min(3,risk+1));
-
       if(ign!==null && rpm>=3000 && rpm<=5500 && ap>=60){
-        // Without a calibration-specific ignition ceiling, treat higher advance
-        // only as a warning factor rather than a hard "knock" diagnosis.
         if(ign>=28)risk=Math.max(risk,3);
         else if(ign>=24)risk=Math.max(risk,2);
       }
-
       if(afr!==null && target!==null && target!==0){
         const dev=(afr/target-1)*100;
-        // Avoid claiming "too lean" from a universal AFR threshold.
-        // Use deviation from the actual Target as the supporting factor.
         if(Math.abs(dev)>3 && ap>=60 && rpm>=3000 && rpm<=5500)risk=Math.max(risk,Math.min(3,risk+1));
       }
-
       pts.push({rpm,ap,risk});
     }
-
+    const wrap=old?.parentElement;
+    if(!wrap)return;
     if(!pts.length){
-      ctx.fillStyle="#697386";
-      ctx.fillText("目前 Log 沒有足夠的 RPM × AP 資料可建立光譜。",20,30);
+      old.outerHTML='<div id="knockSpectrumCanvas" class="knock-empty">目前 Log 沒有足夠的 RPM × AP 資料可建立光譜。</div>';
       return;
     }
-
     const minR=Math.min(...pts.map(p=>p.rpm)), maxR=Math.max(...pts.map(p=>p.rpm));
-    const minA=0,maxA=Math.max(100,Math.ceil(Math.max(...pts.map(p=>p.ap))/10)*10);
-    const L=55,R=18,T=18,B=38;
-    const pw=W-L-R,ph=H-T-B;
-
-    // Draw axes.
-    ctx.strokeStyle="#cbd2da";ctx.lineWidth=1;
-    ctx.beginPath();ctx.moveTo(L,T);ctx.lineTo(L,T+ph);ctx.lineTo(L+pw,T+ph);ctx.stroke();
-
-    // Grid and labels.
-    ctx.fillStyle="#697386";ctx.font="12px sans-serif";
-    for(let i=0;i<=5;i++){
-      const x=L+pw*i/5;
-      const rpm=minR+(maxR-minR)*i/5;
-      ctx.beginPath();ctx.moveTo(x,T);ctx.lineTo(x,T+ph);ctx.stroke();
-      ctx.fillText(Math.round(rpm),x-14,T+ph+20);
-      const y=T+ph-ph*i/5;
-      const ap=maxA*i/5;
-      ctx.fillText(Math.round(ap)+"%",4,y+4);
-    }
-    ctx.fillText("RPM",L+pw-28,H-6);
-    ctx.save();ctx.translate(13,T+ph/2);ctx.rotate(-Math.PI/2);ctx.fillText("AP 負載率",0,0);ctx.restore();
-
-    // Plot points. Use transparency/size to show actual riding density.
-    for(const p of pts){
-      const x=L+(p.rpm-minR)/(maxR-minR||1)*pw;
-      const y=T+ph-(p.ap-minA)/(maxA-minA||1)*ph;
-      const r=p.risk===3?5:p.risk===2?4:3;
-      ctx.globalAlpha=.28;
-      ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
-    }
-    ctx.globalAlpha=1;
-
-    if(legend){
-      const counts=[0,0,0,0];
-      pts.forEach(p=>counts[p.risk]++);
-      legend.querySelectorAll(".knock-risk").forEach((el,i)=>{
-        const small=el.querySelector("small");
-        if(small)small.dataset.count=String(counts[i]);
-      });
-    }
+    const maxA=Math.max(100,Math.ceil(Math.max(...pts.map(p=>p.ap))/10)*10);
+    const W=760,H=340,L=58,R=18,T=18,B=42,pw=W-L-R,ph=H-T-B;
+    const sx=r=>L+(r-minR)/Math.max(1,maxR-minR)*pw;
+    const sy=a=>T+ph-Math.max(0,Math.min(maxA,a))/maxA*ph;
+    const bands=[[0,30,'#2563eb'],[30,51,'#0284c7'],[51,71,'#a16207'],[71,86,'#c2410c'],[86,maxA,'#b91c1c']];
+    const bg=bands.map(b=>`<rect x="${L}" y="${sy(b[1])}" width="${pw}" height="${Math.max(0,sy(b[0])-sy(b[1]))}" fill="${b[2]}" opacity=".10"/>`).join('');
+    const grid=[0,30,51,70,85,100].map(v=>`<line x1="${L}" y1="${sy(v)}" x2="${L+pw}" y2="${sy(v)}" stroke="#d7dde5"/><text x="8" y="${sy(v)+4}" font-size="12" fill="#697386">${v}%</text>`).join('');
+    const xt=[0,1,2,3,4,5,6].map(i=>{const r=minR+(maxR-minR)*i/6;return `<line x1="${sx(r)}" y1="${T}" x2="${sx(r)}" y2="${T+ph}" stroke="#edf0f4"/><text x="${sx(r)-18}" y="${H-14}" font-size="12" fill="#697386">${Math.round(r).toLocaleString()}</text>`}).join('');
+    const dots=pts.map(p=>{const rr=p.risk===3?5:p.risk===2?4:3;const fill=['#64748b','#0284c7','#c58a00','#b91c1c'][p.risk];return `<circle cx="${sx(p.rpm)}" cy="${sy(p.ap)}" r="${rr}" fill="${fill}" opacity=".28"/>`;}).join('');
+    const threshold=`<line x1="${L}" y1="${sy(51)}" x2="${L+pw}" y2="${sy(51)}" stroke="#c58a00" stroke-dasharray="7 5"/><text x="${L+8}" y="${sy(51)-8}" font-size="12" font-weight="700" fill="#8a5b00">51% 中高負載</text>`;
+    const svg=`<svg id="knockSpectrumCanvas" class="knock-canvas knock-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="RPM 對 AP 負載爆震敏感區光譜">${bg}${grid}${xt}${threshold}${dots}<text x="${W-55}" y="${H-14}" font-size="12" fill="#697386">RPM</text><text x="13" y="${T+ph/2}" font-size="12" fill="#697386" transform="rotate(-90 13 ${T+ph/2})">AP 負載率</text></svg>`;
+    old.outerHTML=svg;
+    const counts=[0,0,0,0];pts.forEach(p=>counts[p.risk]++);
+    if(legend)legend.querySelectorAll('.knock-risk').forEach((el,i)=>{const small=el.querySelector('small');if(small)small.textContent=small.textContent.replace(/（本次\s*\d+\s*筆）$/,'')+`（本次 ${counts[i].toLocaleString()} 筆）`;});
   }
 
   // Hook into common analysis-result stores when available.
