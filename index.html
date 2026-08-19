@@ -607,7 +607,7 @@ Fuel_CL 的穩定統計值直接作為該 Map 格的修正依據；AFR_Target / 
 <div class="rule-item"><b>⏱️ 穩定</b><strong>穩定後採樣</strong><span>依可信度判定</span></div>
 <div class="rule-item"><b>🧭 Map</b><strong>只用真實格</strong><span>X / XX 分開</span></div>
 </div>
-<div class="rule-details-inline"><div class="note compact-note"><strong>ON：</strong> Fuel_CL 主修正；WBO2 / AFR Target 交叉驗證。整條 Log 的 Fuel_CL 全 0 才代表 OFF；只要出現有效非 0 Fuel_CL 就判定 ON，且 ON Log 內的 Fuel_CL=0 仍是有效資料。<br/><strong>OFF：</strong> WBO2＝實測 AFR；AFR Target＝目標 AFR；用 <code>(WBO2 / Target − 1) × 100%</code> 判定。Fuel_CL 不參與 OFF 修正；但 OFF：Fuel_CL 未介入時才進入 OFF 分析。<br/><strong>溫度：</strong> ≥67°C 採樣；80～110°C 最高優先；&gt;110°C 降低優先。ON / OFF 同步。<br/><strong>防誤修：</strong> 跨片段方向不一致或離群值只降低可信度；|AFR 偏差| ≥20%→🚨 偏差異常大，請再取得 Log。高品質資料不因單一輔助條件直接消失。<br/><strong>AFR 驗證：</strong> CL ON 時作次要驗證，|AFR 偏差| ≤3.0% 視為驗證良好；CL OFF 時 WBO2 vs Target 為主要判定。<br/><strong>結果：</strong> 🛠️ 建議修改　👀 建議觀望　⚠️ 數據不足　🚨 偏差異常。<br/><strong>有效數：</strong> 通過採樣條件後實際納入分析的資料筆數；瞬態仍保留但降低權重，穩定次數另計。<br/><strong>修正：</strong> 直接顯示建議當下油量增加／減少百分比；|偏差| ≤3.0% 不修；高可信度且超過 ±3% 才進主修改；輸入目前油圖值後自動計算修正後參考值，按「我已完成此格」自動進下一格。</div></div></div></details>
+<div class="rule-details-inline"><div class="note compact-note"><strong>ON：</strong> Fuel_CL 主修正；WBO2 / AFR Target 交叉驗證。整條 Log 的 Fuel_CL 全 0 才代表 OFF；只要出現有效非 0 Fuel_CL 就判定 ON，且 ON Log 內的 Fuel_CL=0 仍是有效資料。<br/><strong>OFF：</strong> WBO2＝實測 AFR；AFR Target＝目標 AFR；用 <code>(WBO2 / Target − 1) × 100%</code> 判定。Fuel_CL 不參與 OFF 修正；但 OFF：Fuel_CL 未介入時才進入 OFF 分析。<br/><strong>溫度：</strong> ≥67°C 採樣；80～110°C 最高優先；&gt;110°C 降低優先。ON / OFF 同步。<br/><strong>防誤修：</strong> 跨片段方向不一致或離群值只降低可信度；|AFR 偏差| ≥20%→🚨 偏差異常大，請再取得 Log。高品質資料不因單一輔助條件直接消失。<br/><strong>AFR 驗證：</strong> CL ON 時作次要驗證，|AFR 偏差| ≤3.0% 視為驗證良好；CL OFF 時 WBO2 vs Target 為主要判定。<br/><strong>結果：</strong> 🛠️ 建議修改　👀 建議觀望　⚠️ 數據不足　🚨 偏差異常。<br/><strong>有效數：</strong> 通過採樣條件後實際納入分析的資料筆數；瞬態仍保留但降低權重，穩定次數另計。<br/><strong>修正：</strong> 只顯示修正方向（增加／減少）；實際 Map 參考值由使用者輸入目前油圖後自動換算；|偏差| ≤3.0% 不修；高可信度且超過 ±3% 才進主修改；輸入目前油圖值後自動計算修正後參考值，按「我已完成此格」自動進下一格。</div></div></div></details>
 </section><section class="card quality-card">
 <div class="section-head"><div>
 <div class="section-tag">QUALITY GATE</div>
@@ -1303,10 +1303,10 @@ arr.sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);
  <div class="note" style="margin-top:9px"><strong>修改建議：</strong>只有高可信度且偏差超過 ±${cfg.clDeadband.toFixed(1)}、未達 ±20% 的格才進入修改流程；±3% 內資料保留但不列入修改。≥20% 不直接修改，請再取得 Log。</div>
  ${renderWorkList(recommend)}${renderWatchList(arr)}`;
 
- $("fuelTable").innerHTML=`<thead><tr><th>RPM</th><th>TPS</th><th>有效數</th><th>Fuel_CL</th><th>建議燃油</th><th>AFR Target</th><th>WBO2</th><th>AFR 驗證</th><th>可信度</th></tr></thead><tbody>${
+ $("fuelTable").innerHTML=`<thead><tr><th>RPM</th><th>TPS</th><th>有效數</th><th>Fuel_CL</th><th>修正方向</th><th>AFR Target</th><th>WBO2</th><th>AFR 驗證</th><th>可信度</th></tr></thead><tbody>${
  (recommend.map(c=>`<tr><td><strong>${c.rpm}</strong></td><td><strong>${c.tps}%</strong></td><td>${c.rs.length}</td>
  <td class="${c.cl>0?"red":c.cl<0?"green":""}">${pct(c.cl)}</td>
- <td>🛠️ ${c.fuelPct>=0?"增加":"減少"} ${Math.abs(c.fuelPct).toFixed(1)}%</td>
+ <td>🛠️ ${c.fuelPct>=0?"增加":"減少"}</td>
  <td>${fmt(c.afrTarget)}</td><td>${fmt(c.afr)}</td><td>高可信度</td></tr>`).join("") || '<tr><td colspan="8">目前沒有需要修改的高可信度格。</td></tr>')}</tbody>`;
 
  $("detail").innerHTML=`<thead><tr><th>RPM</th><th>TPS</th><th>有效數</th><th>Fuel_CL</th><th>AFR偏差</th><th>溫度</th><th>穩定次數</th><th>可信度</th></tr></thead><tbody>${
@@ -1401,10 +1401,10 @@ arr.sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);
  <div class="note" style="margin-top:9px"><strong>修改建議：</strong>只有高可信度且偏差超過 ±${cfg.clDeadband.toFixed(1)}、未達 ±20% 的格才進入修改流程；±3% 內資料保留但不列入修改。≥20% 不直接修改，請再取得 Log。</div>
  ${renderWorkList(recommend)}${renderWatchList(arr)}`;
 
- $("fuelTable").innerHTML=`<thead><tr><th>RPM</th><th>TPS</th><th>有效數</th><th>AFR 偏差</th><th>建議燃油</th><th>AFR Target</th><th>WBO2</th><th>AFR 驗證</th><th>可信度</th></tr></thead><tbody>${
+ $("fuelTable").innerHTML=`<thead><tr><th>RPM</th><th>TPS</th><th>有效數</th><th>AFR 偏差</th><th>修正方向</th><th>AFR Target</th><th>WBO2</th><th>AFR 驗證</th><th>可信度</th></tr></thead><tbody>${
  (recommend.map(c=>`<tr><td><strong>${c.rpm}</strong></td><td><strong>${c.tps}%</strong></td><td>${c.rs.length}</td>
  <td class="${c.cl>0?"red":c.cl<0?"green":""}">${pct(c.cl)}</td>
- <td>🛠️ ${c.fuelPct>=0?"增加":"減少"} ${Math.abs(c.fuelPct).toFixed(1)}%</td>
+ <td>🛠️ ${c.fuelPct>=0?"增加":"減少"}</td>
  <td>${fmt(c.afrTarget)}</td><td>${fmt(c.afr)}</td><td>高可信度</td></tr>`).join("") || '<tr><td colspan="8">目前沒有需要修改的高可信度格。</td></tr>')}</tbody>`;
 
  $("detail").innerHTML=`<thead><tr><th>RPM</th><th>TPS</th><th>有效數</th><th>AFR 偏差</th><th>溫度</th><th>穩定次數</th><th>可信度</th></tr></thead><tbody>${
