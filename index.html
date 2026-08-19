@@ -545,6 +545,18 @@ button:active{transform:translateY(1px)}
 }
 </style>
 
+
+<style id="hide-duplicate-detail-table-v36">
+/* UI ONLY:
+   #detail is the legacy raw Map table displayed directly below the watch area.
+   The actionable result is already shown above. Do not show this duplicate table. */
+#result #detail,
+#result #detailWrap,
+#result .detail-table-wrap {
+  display:none !important;
+}
+</style>
+
 </head>
 <body>
 <div class="wrap">
@@ -1989,6 +2001,21 @@ if(loopModeSelect){
   document.addEventListener('DOMContentLoaded', hideDuplicateFuelTable);
   var obs=new MutationObserver(hideDuplicateFuelTable);
   obs.observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
+
+
+<script id="hide-duplicate-detail-runtime-v36">
+(function(){
+  function hideLegacyDetail(){
+    var t=document.getElementById('detail');
+    if(!t)return;
+    t.style.display='none';
+    var w=t.closest('.tablewrap');
+    if(w)w.style.display='none';
+  }
+  document.addEventListener('DOMContentLoaded', hideLegacyDetail);
+  new MutationObserver(hideLegacyDetail).observe(document.documentElement,{childList:true,subtree:true});
 })();
 </script>
 
