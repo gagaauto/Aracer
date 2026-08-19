@@ -673,7 +673,7 @@ button:active{transform:translateY(1px)}
  function build(raw){
    const rows=Array.isArray(raw)?raw:[]; const map=new Map();
    for(const r of rows){
-     const rpm=num(r?.RPM),tps=num(r?.TPS),ap=apOf(r);
+     const rpm=num(r?.RPM),tps=num(r?.TPS_Percent ?? r?.TPS ?? r?.tps),ap=apOf(r);
      if(rpm==null||tps==null||ap==null||rpm<=0||tps<0||tps>100||ap<0||ap>110)continue;
      const rk=Math.round(rpm/200)*200, tk=Math.round(tps/5)*5, k=rk+'|'+tk;
      let q=map.get(k); if(!q)map.set(k,q={rpm:rk,tps:tk,aps:[],n:0}); q.aps.push(ap);q.n++;
@@ -1580,7 +1580,10 @@ $("analyze").onclick=async()=>{
   window.__ctCompleted=new Set();
   window.__ctLogRows=rows;
   build();
-  if(window.renderLoadZoneV43)window.renderLoadZoneV43(window.__ctLogRows||[]);
+  // 負載圖只讀取已完成分析的 raw Log；等待 result 顯示後再繪製，避免隱藏容器造成 Canvas 尺寸為 0。
+  requestAnimationFrame(()=>{
+    if(window.renderLoadZoneV43)window.renderLoadZoneV43(window.__ctLogRows||[]);
+  });
   $("result").scrollIntoView({behavior:"smooth"});
  }catch(e){
   console.error(e);
