@@ -728,7 +728,7 @@ button:active{transform:translateY(1px)}
   </div>
 </div>
 <div id="fuel"></div><div class="note" style="margin-top:8px">
-<strong>可信度分級：</strong>有效資料先保留，不再要求同一 Map 格連續 3 筆才建立 cell；effectiveN ≥12＋品質條件達標 → 高可信度；effectiveN 6～<12＋品質條件達標 → 可參考；effectiveN <6 → 數據不足。單一長而穩定片段也可達高可信度；多片段不是必要條件。WBO2 Ready、Map 邊界等輔助條件不足時優先降級，不直接刪除高品質資料。
+<strong>可信度分級：</strong>有效資料先保留，不再要求同一 Map 格連續 3 筆才建立 cell；effectiveN ≥12＋品質條件達標，或下列強工況條件任一達標 → 最高級直接認證；effectiveN 6～<12＋品質條件達標 → 可參考；effectiveN <6 → 數據不足。強工況認證條件：≥3次／10秒內且 RPM/TPS/AP 集中約±15%、≥3穩定片段且每段≥6次並方向一致且落差≤10%、或同一 Map 格穩定停留≥2秒且三軸集中。WBO2 Ready 僅作 OFF 開迴路的資料有效性條件。
 </div>
 </section>
 <section class="card detail-card">
@@ -737,7 +737,7 @@ button:active{transform:translateY(1px)}
 <div class="note detail-note">
 這裡列出所有 Log 實際有對應到的 RPM × TPS Map 格，包含樣本不足的格子。
 <b>不代表可以調整油圖。</b><br/>
-真正需要立即處理的調校建議只看上方「⛽ Fuel Map 修正建議」；「👀 觀望區」只提醒疑似需要關注的格，不建議現在修改；T_Eng ≥67°C 為採樣基礎；瞬態保留但降低權重；Fuel_CL / WBO2 依閉迴路模式使用，且只對應實際 Map 格。樣本數、停留時間、RPM/TPS 穩定度與 WBO2 Ready 會影響可信度，不再直接把可用資料整格剔除；|Fuel_CL| ≤3.0% 不列入修正範圍。
+真正需要立即處理的調校建議只看上方「⛽ Fuel Map 修正建議」；「👀 觀望區」只提醒疑似需要關注的格，不建議現在修改；T_Eng ≥67°C 為採樣基礎；瞬態保留但降低權重；Fuel_CL / WBO2 依閉迴路模式使用，且只對應實際 Map 格。樣本數、停留時間、RPM/TPS/AP 集中度與溫度／資料品質加權會影響可信度；WBO2 Ready 僅用於 OFF 開迴路有效資料，不再直接把可用資料整格剔除；|Fuel_CL| ≤3.0% 不列入修正範圍。
 </div>
 <div class="tablewrap"><table id="detail"></table></div>
 </details>
@@ -782,9 +782,9 @@ button:active{transform:translateY(1px)}
 </div></div>
 <div class="quality-grid">
 <div><b>①</b><span id="qualityLoopText">閉迴路 ON / OFF 依上方設定</span></div>
-<div><b>②</b><span>WBO2 Ready</span></div>
-<div><b>③</b><span>RPM / TPS 穩定</span></div>
-<div><b>④</b><span>多片段一致</span></div>
+<div><b>②</b><span>溫度／資料品質加權</span></div>
+<div><b>③</b><span>RPM / TPS / AP 集中度（強工況認證）</span></div>
+<div><b>④</b><span>片段方向一致／離散程度</span></div>
 </div>
 <div class="quality-warning">⚠️ 任一品質條件無法確認 → <strong>降低可信度，不急著修改 Map</strong></div>
 </section></div><footer>aRacer X / XX Log 分析建議｜CT125 分析工具｜本工具只提供分析與調校建議，不會寫入 ECU。實際騎乘爆震敏感度光譜獨立於 Fuel Map 修正，不代表已判定爆震。<div class="gaggle-credit">此分析程式為 Gaggle 發布</div></footer>
@@ -1208,7 +1208,7 @@ function correctionFromDeviation(errPct){
   const e=Number(errPct);
   if(!Number.isFinite(e))return null;
   if(Math.abs(e)<=cfg.clDeadband)return null;
-  if(Math.abs(e)>=20)return null;
+  if(Math.abs(e)>=11)return null;
   const target=Math.sign(e)*cfg.clDeadband;
   const base=1+e/100, desired=1+target/100;
   if(base<=0||desired<=0)return null;
@@ -1284,7 +1284,7 @@ function renderWorkList(items){
     </div>`;
   }).join("");
   return `<div class="work-progress"><span>修正進度</span><b>${doneCount} / ${valid.length}</b></div>
-  <div class="work-list">${body||'<div class="note">目前沒有需要修改的高可信度格。</div>'}</div>`;
+  <div class="work-list">${body||'<div class="note">目前沒有需要修改的最高級認證格。</div>'}</div>`;
 }
 function bindWorkList(){
   if(window.__workBound)return;
@@ -1391,15 +1391,15 @@ function strongAdoptionEvidence(c, value){
     return false;
   });
 
-  const concentrated5in10 = segs.some(seg=>{
-    if(seg.length<5) return false;
-    for(let i=0;i<=seg.length-5;i++){
-      const w=seg.slice(i,i+5);
-      const t0=timeValue(w[0]), t1=timeValue(w[4]);
-      if(t0!=null&&t1!=null&&t1>=t0&&t1-t0<=10&&axisConcentrated(w)) return true;
+  const concentrated5in10 = (() => {
+    const timed=rs.map((r,i)=>({r,t:timeValue(r),i})).filter(x=>x.t!=null).sort((a,b)=>a.t-b.t);
+    if(timed.length<5) return false;
+    for(let i=0;i<=timed.length-5;i++){
+      const w=timed.slice(i,i+5).map(x=>x.r);
+      if(timed[i+4].t-timed[i].t<=10&&axisConcentrated(w)) return true;
     }
     return false;
-  });
+  })();
 
   const dwell2 = segs.some(seg=>{
     if(seg.length<3 || !axisConcentrated(seg)) return false;
@@ -1416,9 +1416,10 @@ function strongAdoptionEvidence(c, value){
     }).filter(Number.isFinite);
     if(devs.length>=3){
       const sameDirection=devs.every(v=>v>=0)||devs.every(v=>v<=0);
-      const mean=devs.reduce((a,b)=>a+b,0)/devs.length;
+      // 「落差10%內」依我們定案範例，以修正百分點的絕對落差判定。
+      // 例如 +3.8%、+4.1%、+3.6% 的最大落差為 0.5 個百分點，應通過。
       const spread=Math.max(...devs)-Math.min(...devs);
-      const within10=spread<=Math.max(1,Math.abs(mean))*0.10;
+      const within10=spread<=10;
       repeated3=sameDirection&&within10;
     }
   }
@@ -1438,8 +1439,7 @@ function strongAdoptionEvidence(c, value){
 
 const strongAdoptionPolicy={
   direct:[
-    "≥3次連續採樣／約1秒內／RPM-TPS-AP集中 → 直接採用",
-    "≥5次採樣／約10秒內／RPM-TPS-AP集中 → 採用",
+    "≥3次採樣／10秒內／RPM-TPS-AP集中 → 最高級直接認證（若3次即在約1秒內，屬特別漂亮）",
     "≥3穩定片段／每段≥6次／三軸集中／方向一致／片段落差≤10% → 採用",
     "同一Map格穩定停留≥2秒／RPM-TPS-AP集中 → 採用"
   ],
@@ -1498,7 +1498,9 @@ function renderWatchList(arr){
     return Number.isFinite(d) &&
       Math.abs(d)>cfg.clDeadband &&
       Math.abs(d)<11 &&
+      c.quality!=="最高級直接認證" &&
       c.quality!=="高可信度" &&
+      c.strongAdoption!==true &&
       c.quality!=="數據不足" &&
       c.quality!=="極端偏差";
   }).sort((a,b)=>Math.abs(Number(b.deviation))-Math.abs(Number(a.deviation)));
@@ -1552,7 +1554,7 @@ function buildClosedLoop(){
   const q=qualityGateCell(c,r=>r.Fuel_CL,"on");
   const strong=markStrongAdoptionEvidence(c,r=>r.Fuel_CL);
   const quality=extreme?"極端偏差":((strong.adopt||q.quality==="高可信度")?"最高級直接認證":q.quality);
-  const action=Math.abs(cl)>cfg.clDeadband&&!extreme&&(quality==="高可信度"||strong.adopt);
+  const action=Math.abs(cl)>cfg.clDeadband&&!extreme&&quality==="最高級直接認證";
   return {...c,cl,m:q.m,segmentVals:(c.segments||[]).map(seg=>weightedMedian(seg.map(r=>({v:r.Fuel_CL,w:tempWeight(r.T_Eng)*analysisWeight(r)})))).filter(Number.isFinite),
     consistency:q.consistency,consistent:q.consistent,readyRate:q.readyRate,qualityScore:q.score,effectiveN:q.effectiveN,afrTarget,afr,afrErr,ap,temp,
     extreme,quality,action,fuelPct:corr?.fuelPct??0,targetErr:corr?.targetErr??null,deviation:cl};
@@ -1567,7 +1569,7 @@ arr.sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);
    <div class="stat">極端偏差<b>${arr.filter(c=>c.extreme).length}</b></div>
   
  </div>
- <div class="note" style="margin-top:9px"><strong>修改建議：</strong>只有高可信度或強工況直接採用、且偏差超過 ±${cfg.clDeadband.toFixed(1)}、未達 ±11% 的格才進入修改流程；±3% 內資料保留但不列入修改。≥11% 不直接修改，請再取得 Log。</div>
+ <div class="note" style="margin-top:9px"><strong>修改建議：</strong>只有最高級直接認證、且偏差超過 ±${cfg.clDeadband.toFixed(1)}、未達 ±11% 的格才進入修改流程；±3% 內資料保留但不列入修改。≥11% 不直接修改，請再取得 Log。</div>
  ${renderWorkList(recommend)}${renderWatchList(arr)}`;
 
  $("detail").innerHTML=`<thead><tr><th>RPM</th><th>TPS</th><th>有效數</th><th>Fuel_CL</th><th>AFR偏差</th><th>溫度</th><th>穩定次數</th><th>可信度</th></tr></thead><tbody>${
@@ -1638,7 +1640,7 @@ function buildOpenLoop(){
  if(window.refreshKnockSpectrum) window.refreshKnockSpectrum(hot);
 
  const arr=cells.map(c=>{
-  const rs=c.rs,corr=weightedMedian(rs.map(r=>({v:r._analysisCorr,w:tempWeight(r.T_Eng)})));
+  const rs=c.rs,corr=weightedMedian(rs.map(r=>({v:r._analysisCorr,w:tempWeight(r.T_Eng)*analysisWeight(r)})));
   const afrTarget=med(rs.map(r=>r.AFR_Target)),afr=med(rs.map(r=>r.AFR_WBO2));
   const afrErr=afr==null||afrTarget==null?null:(afr/afrTarget-1)*100;
   const ap=med(rs.map(r=>r.Cyl1_Eng_AP)),temp=med(rs.map(r=>r.T_Eng));
@@ -1647,7 +1649,7 @@ function buildOpenLoop(){
   const q=qualityGateCell(c,r=>r._analysisCorr,"off");
   const strong=markStrongAdoptionEvidence(c,r=>r._analysisCorr);
   const quality=extreme?"極端偏差":((strong.adopt||q.quality==="高可信度")?"最高級直接認證":q.quality);
-  const action=Math.abs(corr)>cfg.clDeadband&&!extreme&&(quality==="高可信度"||strong.adopt);
+  const action=Math.abs(corr)>cfg.clDeadband&&!extreme&&quality==="最高級直接認證";
   return {...c,cl:corr,m:q.m,segmentVals:(c.segments||[]).map(seg=>weightedMedian(seg.map(r=>({v:r._analysisCorr,w:tempWeight(r.T_Eng)*analysisWeight(r)})))).filter(Number.isFinite),
     consistency:q.consistency,consistent:q.consistent,readyRate:q.readyRate,afrTarget,afr,afrErr,ap,temp,
     extreme,quality,action,fuelPct:corrCalc?.fuelPct??0,targetErr:corrCalc?.targetErr??null,deviation:corr};
@@ -1661,7 +1663,7 @@ arr.sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);
    <div class="stat">數據不足<b>${arr.filter(c=>c.quality==="數據不足").length}</b></div>
    <div class="stat">極端偏差<b>${arr.filter(c=>c.extreme).length}</b></div>
  </div>
- <div class="note" style="margin-top:9px"><strong>修改建議：</strong>只有高可信度或強工況直接採用、且偏差超過 ±${cfg.clDeadband.toFixed(1)}、未達 ±11% 的格才進入修改流程；±3% 內資料保留但不列入修改。≥11% 不直接修改，請再取得 Log。</div>
+ <div class="note" style="margin-top:9px"><strong>修改建議：</strong>只有最高級直接認證、且偏差超過 ±${cfg.clDeadband.toFixed(1)}、未達 ±11% 的格才進入修改流程；±3% 內資料保留但不列入修改。≥11% 不直接修改，請再取得 Log。</div>
  ${renderWorkList(recommend)}${renderWatchList(arr)}`;
 
  $("detail").innerHTML=`<thead><tr><th>RPM</th><th>TPS</th><th>有效數</th><th>AFR 偏差</th><th>溫度</th><th>穩定次數</th><th>可信度</th></tr></thead><tbody>${
@@ -1728,13 +1730,14 @@ $("analyze").onclick=async()=>{
        const prepared=prepareClosedLoopRows(rr).filter(r=>Number(r.T_Eng)>=cfg.temp);
        const cells=stableMapGroups(prepared);
        for(const c of cells){
-         const rs=c.rs,cl=weightedMedian(rs.map(r=>({v:r.Fuel_CL,w:tempWeight(r.T_Eng)})));
+         const rs=c.rs,cl=weightedMedian(rs.map(r=>({v:r.Fuel_CL,w:tempWeight(r.T_Eng)*analysisWeight(r)})));
          const m=mad(rs.map(r=>r.Fuel_CL));
          const at=med(rs.map(r=>r.AFR_Target)),wb=med(rs.map(r=>r.AFR_WBO2));
          const err=(Number.isFinite(at)&&Number.isFinite(wb)&&at!==0)?(wb/at-1)*100:null;
          const q=qualityGateCell(c,r=>r.Fuel_CL,"on");
-         const quality=q.quality;
-         local.push({rpm:c.rpm,tps:c.tps,cl,m,afrTarget:at,afr:wb,afrErr:err,samples:rs.length,segments:c.segments.length,dwell:c.dwell,boundary:c.boundary,conflict:c.afrConflict,quality});
+         const strong=markStrongAdoptionEvidence(c,r=>r.Fuel_CL);
+         const quality=(strong.adopt||q.quality==="高可信度")?"最高級直接認證":q.quality;
+         local.push({rpm:c.rpm,tps:c.tps,cl,m,afrTarget:at,afr:wb,afrErr:err,samples:rs.length,segments:c.segments.length,dwell:c.dwell,boundary:c.boundary,conflict:c.afrConflict,quality,strongAdoption:strong.adopt,strongReasons:strong.reasons});
        }
      }
      per.push(local);
@@ -1746,7 +1749,7 @@ $("analyze").onclick=async()=>{
    return [...gm].map(([k,list])=>({rpm:list[0].rpm,tps:list[0].tps,
      cl:med(list.map(x=>x.cl)),samples:med(list.map(x=>x.samples)),dwell:med(list.map(x=>x.dwell)),
      afrTarget:med(list.map(x=>x.afrTarget)),afr:med(list.map(x=>x.afr)),afrErr:med(list.map(x=>x.afrErr)),
-     quality:list.some(x=>x.quality==="資料不足"||x.quality==="低可信度")?"低可信度":list.every(x=>x.quality==="高可信度")?"高可信度":"可參考",
+     quality:list.some(x=>x.quality==="資料不足"||x.quality==="低可信度")?"低可信度":list.every(x=>x.quality==="高可信度"||x.quality==="最高級直接認證")?"最高級直接認證":"可參考",
      boundary:list.some(x=>x.boundary),conflict:list.some(x=>x.conflict)}));
  }async function side(files){return getLoopMode()==="off"?sideOpenLoop(files):sideClosedLoop(files);}
 
@@ -1765,9 +1768,10 @@ async function sideOpenLoop(files){
          const at=med(rs.map(r=>r.AFR_Target)),wb=med(rs.map(r=>r.AFR_WBO2));
          const err=(Number.isFinite(at)&&Number.isFinite(wb)&&at!==0)?(wb/at-1)*100:null;
          const q=qualityGateCell(c,r=>r._analysisCorr,"off");
-         const quality=q.quality;
+         const strong=markStrongAdoptionEvidence(c,r=>r._analysisCorr);
+         const quality=(strong.adopt||q.quality==="高可信度")?"最高級直接認證":q.quality;
          local.push({rpm:c.rpm,tps:c.tps,cl:corr,m,afrTarget:at,afr:wb,afrErr:err,samples:rs.length,
-           segments:c.segments.length,dwell:c.dwell,boundary:c.boundary,quality});
+           segments:c.segments.length,dwell:c.dwell,boundary:c.boundary,quality,strongAdoption:strong.adopt,strongReasons:strong.reasons});
        }
      }
      per.push(local);
@@ -1779,7 +1783,7 @@ async function sideOpenLoop(files){
    return [...gm].map(([k,list])=>({rpm:list[0].rpm,tps:list[0].tps,
      cl:med(list.map(x=>x.cl)),samples:med(list.map(x=>x.samples)),dwell:med(list.map(x=>x.dwell)),
      afrTarget:med(list.map(x=>x.afrTarget)),afr:med(list.map(x=>x.afr)),afrErr:med(list.map(x=>x.afrErr)),
-     quality:list.some(x=>x.quality==="資料不足"||x.quality==="低可信度")?"低可信度":list.every(x=>x.quality==="高可信度")?"高可信度":"可參考",
+     quality:list.some(x=>x.quality==="資料不足"||x.quality==="低可信度")?"低可信度":list.every(x=>x.quality==="高可信度"||x.quality==="最高級直接認證")?"最高級直接認證":"可參考",
      boundary:list.some(x=>x.boundary),
      }));
  }
@@ -1790,11 +1794,11 @@ async function sideOpenLoop(files){
    if(!Number.isFinite(vb)||!Number.isFinite(va))return["🟡 無法比較","缺少可用的比較數值","warn"];
    const ab=Math.abs(vb),aa=Math.abs(va),improved=aa<ab-.05,ib=ab<=cfg.clDeadband,ia=aa<=cfg.clDeadband;
    const rev=vb!==0&&va!==0&&Math.sign(vb)!==Math.sign(va);
-   const strongA=a.quality==="高可信度";
-   const strongB=b.quality==="高可信度";
+   const strongA=a.quality==="高可信度"||a.quality==="最高級直接認證";
+   const strongB=b.quality==="高可信度"||b.quality==="最高級直接認證";
    if(rev&&!ia)return["🔴 可能過修","方向反轉且後 Log 仍超過 ±3.0%","bad"];
-   if(ia&&strongA)return["🟢 修正成功","後 Log 已進入 ±3.0%，且後 Log 為高可信度","good"];
-   if(ia&&!strongA)return["🟡 進入 ±3.0%，但證據不足","後 Log 未達高可信度","warn"];
+   if(ia&&strongA)return["🟢 修正成功","後 Log 已進入 ±3.0%，且後 Log 為最高級認證","good"];
+   if(ia&&!strongA)return["🟡 進入 ±3.0%，但證據不足","後 Log 未達最高級認證","warn"];
    if(improved&&strongA)return["🟡 有改善","更接近 0%，但仍超過 ±3.0%","warn"];
    if(improved&&!strongA)return["🟡 有改善，但證據不足","數值改善，但後 Log 未達高可信度","warn"];
    if(Math.abs(aa-ab)<=.05)return["🟡 幾乎不變","前後差異很小","warn"];
