@@ -417,7 +417,7 @@ button:active{transform:translateY(1px)}
 </style>
 <style>
 .load-spectrum-card{overflow:hidden}.spectrum-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:12px}.spectrum-head h2{margin:4px 0}.spectrum-sub{margin:0;color:#64748b;font-size:13px;line-height:1.55}.spectrum-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0 14px}.spectrum-stat{padding:12px 14px;border:1px solid #dbe3ee;border-radius:12px;background:#f8fafc}.spectrum-stat span{display:block;font-size:11px;color:#64748b;font-weight:800;margin-bottom:4px}.spectrum-stat b{font-size:18px;color:#0f172a}.spectrum-shell{position:relative;border:1px solid #dbe3ee;border-radius:16px;background:#07101b;padding:12px;overflow:hidden}.spectrum-canvas{display:block;width:100%;height:330px}.spectrum-tooltip{position:absolute;display:none;pointer-events:none;background:#0b1220;color:#fff;border:1px solid #334155;border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.6;box-shadow:0 10px 28px #0006;z-index:3}.spectrum-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;font-size:12px;font-weight:800}.spectrum-legend span{padding:6px 9px;border-radius:999px;background:#f8fafc;border:1px solid #e2e8f0}.rpm-load-box{margin-top:12px;border:1px solid #dbe3ee;border-radius:14px;padding:12px;background:#fff}.rpm-load-box h3{margin:0 0 8px;font-size:16px}.rpm-load-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.rpm-load-item{padding:9px 10px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;font-size:12px}.rpm-load-item b{display:block;font-size:13px;margin-bottom:3px}.rpm-load-item.mid{background:#fffbeb;border-color:#fde68a;color:#92400e}.rpm-load-item.high{background:#fff7ed;border-color:#fed7aa;color:#9a3412}.rpm-load-item.vhigh{background:#fef2f2;border-color:#fecaca;color:#991b1b}.spectrum-note{margin-top:10px;color:#64748b;font-size:12px;line-height:1.6}@media(max-width:800px){.spectrum-stats{grid-template-columns:1fr 1fr}.rpm-load-grid{grid-template-columns:1fr 1fr}.spectrum-canvas{height:280px}}@media(max-width:520px){.rpm-load-grid{grid-template-columns:1fr}.spectrum-canvas{height:250px}}
-</style><style>.load-spectrum-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0 14px}.load-spectrum-stat{padding:12px 14px;border:1px solid #dbe3ee;border-radius:12px;background:#f8fafc}.load-spectrum-stat span{display:block;font-size:11px;color:#64748b;font-weight:800;margin-bottom:4px}.load-spectrum-stat b{font-size:18px}.load-spectrum-chart{position:relative;border:1px solid #dbe3ee;border-radius:16px;background:#07101b;padding:8px;overflow:hidden}.load-spectrum-chart svg{display:block;width:100%;height:auto}.load-spectrum-ranges{margin-top:12px;border:1px solid #dbe3ee;border-radius:14px;padding:12px;background:#fff}.load-range-row{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid #eef2f7;font-size:12px}.load-range-row:last-child{border-bottom:0}.load-range-rpm{font-weight:800}.load-spectrum-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;font-size:12px;font-weight:800}.load-spectrum-legend span{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:999px;background:#f8fafc;border:1px solid #e2e8f0}.load-spectrum-legend i{width:10px;height:10px;border-radius:50%;display:inline-block}.lg-blue{background:#2563eb}.lg-cyan{background:#38bdf8}.lg-yellow{background:#facc15}.lg-orange{background:#f97316}.lg-red{background:#dc2626}.load-spectrum-tooltip{position:fixed;display:none;z-index:9999;background:#0b1220;color:#fff;border:1px solid #334155;border-radius:10px;padding:9px 11px;font-size:12px;line-height:1.5;box-shadow:0 10px 28px #0006;pointer-events:none}.load-spectrum-note{font-size:11px;line-height:1.55}@media(max-width:800px){.load-spectrum-summary{grid-template-columns:1fr 1fr}}@media(max-width:520px){.load-spectrum-summary{grid-template-columns:1fr 1fr}.load-range-row{display:block}.load-range-tag{display:block;margin-top:3px}}</style><style>
+</style><style>
 .page-nav{display:flex;gap:8px;margin:0 0 14px;padding:6px;background:#e5e7eb;border-radius:16px;position:sticky;top:8px;z-index:20;box-shadow:0 5px 16px rgba(15,23,42,.08)}
 .page-tab{flex:1;border:0;border-radius:12px;background:transparent;padding:10px 12px;color:#64748b;font-size:14px;font-weight:900;cursor:pointer;line-height:1.2}
 .page-tab small{display:block;margin-top:3px;font-size:10px;font-weight:700;color:#94a3b8}
@@ -557,6 +557,7 @@ button:active{transform:translateY(1px)}
 }
 </style>
 
+
 </head>
 <body>
 <div class="wrap">
@@ -580,7 +581,7 @@ button:active{transform:translateY(1px)}
 <strong id="loopModeTitle">閉迴路開啟｜Fuel_CL 主判定</strong>
 <span id="loopModeDesc">以 Fuel_CL 為核心</span>
 </div>
-</section><div class="mode-evidence-note" id="modeEvidenceNote">ON：Fuel_CL 為核心</div><div class="loop-source-note" id="loopSourceNote">迴路狀態判定來源：Fuel_CL 實際介入狀態；WBO2_AT_En 不作 ON/OFF 判定。</div><section class="card setup-card">
+</section><div class="mode-evidence-note" id="modeEvidenceNote">ON：Fuel_CL 為核心</div><div class="loop-source-note" id="loopSourceNote">迴路狀態判定來源：WBO2_AT_En；Fuel_CL 僅作 ON 修正訊號。</div><section class="card setup-card">
 <div class="section-head">
 <div>
 <div class="section-tag">SETUP</div>
@@ -679,6 +680,196 @@ button:active{transform:translateY(1px)}
 <div class="backtest-result" hidden="" id="backtestResult"></div>
 </section><div class="hidden" id="result">
 <section class="card"><div class="result-mode" id="resultMode">🔴 閉迴路 ON｜Fuel_CL 校正模式</div><div class="result-quality-note">修正建議只在品質條件通過後採用；資料不一致時先取得更多 Log。</div><h2>⑤ 本次 Log 總覽</h2><div class="stats" id="stats"></div></section>
+
+
+
+
+
+
+
+<style id="knock-3d-v41-css">
+.k3d-wrap{margin-top:18px}
+.k3d-desc{color:var(--muted);line-height:1.6;margin:6px 0 10px}
+.k3d-mobile-note{font-size:12px;padding:9px 11px;border-radius:10px;background:#f1f5f9;margin:8px 0;color:#334155}
+.k3d-toolbar{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:9px 0}
+.k3d-toolbar label{font-size:11px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.k3d-toolbar select{width:100%;border:1px solid var(--line);border-radius:9px;padding:8px;background:#fff;font-size:13px}
+.k3d-stage{position:relative;border:1px solid var(--line);border-radius:14px;background:#07101e;overflow:hidden;touch-action:none}
+.k3d-stage canvas{width:100%;height:440px;display:block;touch-action:none}
+.k3d-touch{position:absolute;left:10px;bottom:9px;font-size:10px;color:#cbd5e1;background:rgba(0,0,0,.38);padding:5px 7px;border-radius:7px;pointer-events:none}
+.k3d-summary{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:9px 0}
+.k3d-stat{border:1px solid var(--line);border-radius:10px;padding:9px;background:#fff}
+.k3d-stat span{font-size:10px;color:var(--muted)}
+.k3d-stat b{display:block;font-size:16px;margin-top:2px}
+.k3d-factor{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}
+.k3d-factor-card{border:1px solid var(--line);border-radius:10px;padding:9px;background:#fff}
+.k3d-factor-card b{font-size:15px}
+.k3d-factor-card small{display:block;color:var(--muted);margin-top:3px;line-height:1.35}
+.k3d-alert{margin-top:9px;padding:10px;border-radius:11px;font-size:12px;line-height:1.5}
+.k3d-alert.red{background:#fee2e2;border:1px solid #fecaca;color:#991b1b}
+.k3d-alert.orange{background:#ffedd5;border:1px solid #fed7aa;color:#9a3412}
+.k3d-alert.green{background:#dcfce7;border:1px solid #bbf7d0;color:#166534}
+.k3d-legend{display:flex;gap:8px;flex-wrap:wrap;font-size:10px;color:var(--muted);margin:8px 0}
+.k3d-legend span{display:flex;align-items:center;gap:4px}
+.k3d-dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.k3d-risk{margin-top:9px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:10px}
+.k3d-risk h3{margin:0 0 7px;font-size:15px}
+.k3d-table{width:100%;border-collapse:collapse;font-size:11px}
+.k3d-table th,.k3d-table td{padding:7px 4px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap}
+.k3d-table th{background:#f8fafc}
+.k3d-note{font-size:11px;color:var(--muted);line-height:1.55;margin-top:8px}
+.k3d-selected{margin-top:9px}
+@media(min-width:761px){
+ .k3d-toolbar{grid-template-columns:180px 180px}
+ .k3d-stage canvas{height:520px}
+ .k3d-summary{grid-template-columns:repeat(4,1fr)}
+}
+</style>
+
+<section class="card k3d-wrap" id="knockSensitivity3DV41">
+<h2>🔥 爆震敏感度 3D</h2>
+<p class="k3d-desc"><strong>RPM × AP × 點火角</strong>；TPS 用顏色，AFR 用驗證欄位。程式會把「空燃＋點火＋TPS＋AP」一起交叉檢查，找出值得注意的實際騎乘區。</p>
+<div class="k3d-mobile-note">📱 手機：單指拖曳旋轉、雙指縮放；點一下資料點查看完整條件。文字不疊在圖上，重點改放到下方卡片。</div>
+<div class="k3d-toolbar">
+<label>TPS 篩選<select id="k3dTpsFilter"><option value="all">全部</option><option value="0-40">0–40%</option><option value="40-60">40–60%</option><option value="60-80">60–80%</option><option value="80-101">80%+</option></select></label>
+<label>AP 篩選<select id="k3dApFilter"><option value="all">全部</option><option value="0-50">0–50%</option><option value="50-60">50–60%</option><option value="60-70">60–70%</option><option value="70-80">70–80%</option><option value="80-111">80%+</option></select></label>
+</div>
+<div id="k3dSummary" class="k3d-summary"></div>
+<div class="k3d-stage"><canvas id="k3dCanvas"></canvas><div class="k3d-touch">拖曳＝旋轉　雙指／滾輪＝縮放　點點＝查看</div></div>
+<div id="k3dSelected" class="k3d-selected"></div>
+<div class="k3d-legend">
+<span><i class="k3d-dot" style="background:#2563eb"></i>TPS低</span>
+<span><i class="k3d-dot" style="background:#f59e0b"></i>TPS中</span>
+<span><i class="k3d-dot" style="background:#ef4444"></i>TPS高</span>
+<span>紅色框＝需要注意</span>
+</div>
+<div class="k3d-risk"><h3>⚠️ 優先注意區</h3><div id="k3dRiskList">尚未分析 Log。</div>
+<div class="k3d-note">這是 Log 推估的「爆震敏感度／風險」，不是 Knock 診斷。沒有專用 Knock 訊號時，不宣稱已發生爆震。</div></div>
+</section>
+
+<script id="knock-3d-v41-js">
+(function(){
+"use strict";
+const $=id=>document.getElementById(id), N=v=>{const x=Number(v);return Number.isFinite(x)?x:null};
+function apOf(r){const a=N(r.Cyl1_Eng_AP),p=N(r.P_Atm);return a!==null&&p!==null&&p>0?a/p*100:null}
+function med(a){if(!a.length)return null;const x=a.slice().sort((a,b)=>a-b),k=x.length>>1;return x.length%2?x[k]:(x[k-1]+x[k])/2}
+function factorRisk(p){
+ let score=0, flags=[];
+ if(p.ap>80){score+=35;flags.push("AP極高")}
+ else if(p.ap>=70){score+=28;flags.push("AP高")}
+ else if(p.ap>60){score+=20;flags.push("AP中高")}
+ if(p.tps>=80){score+=18;flags.push("TPS高")}
+ else if(p.tps>=60){score+=14;flags.push("TPS偏高")}
+ else if(p.tps>=50)score+=8;
+ if(p.rpm>=3500&&p.rpm<=5000){score+=18;flags.push("RPM敏感區")}
+ else if(p.rpm>=3000&&p.rpm<=5500)score+=9;
+ if(p.sa>=30){score+=14;flags.push("點火提前較激進")}
+ else if(p.sa>=27){score+=9;flags.push("點火偏提前")}
+ else if(p.sa>=24)score+=4;
+ if(p.afrErr!==null){
+   const e=Math.abs(p.afrErr);
+   if(e>6){score+=14;flags.push("AFR偏差大")}
+   else if(e>3){score+=8;flags.push("AFR偏差>3%")}
+ }
+ return {score:Math.min(100,score),flags};
+}
+function prep(raw){
+ return (Array.isArray(raw)?raw:[]).map(r=>{
+  const rpm=N(r.RPM),tps=N(r.TPS),ap=apOf(r),sa=N(r.SA),afr=N(r.AFR_WBO2),tar=N(r.AFR_Target),temp=N(r.T_Eng);
+  if([rpm,tps,ap,sa].some(v=>v===null)||rpm<=0||tps<0||tps>100||ap<0||ap>110)return null;
+  if(temp!==null&&temp<67)return null;
+  if(Number(r.Dec_FC_En)>0||Number(r.Inj_Cut)>0)return null;
+  const ae=afr!==null&&tar!==null&&tar>0?(afr/target-1)*100:null;
+  const rr=factorRisk({rpm,tps,ap,sa,afrErr:ae});
+  return {rpm,tps,ap,sa,afrErr:ae,score:rr.score,flags:rr.flags};
+ }).filter(Boolean);
+}
+let rows=[],cam={yaw:-.72,pitch:.4,scale:1.0},drag=null,lastPts=[];
+function filters(){
+ const tf=$("k3dTpsFilter")?.value||"all",af=$("k3dApFilter")?.value||"all";
+ const ok=(v,s)=>s==="all"||(()=>{const [a,b]=s.split("-").map(Number);return v>=a&&v<b})();
+ return rows.filter(p=>ok(p.tps,tf)&&ok(p.ap,af));
+}
+function color(t){const q=Math.max(0,Math.min(1,t/100));return `rgb(${Math.round(37+202*q)},${Math.round(99-65*q)},${Math.round(235-190*q)})`}
+function project(p,c,W,H,mid){
+ let x=(p.rpm-mid.rpm),y=(p.ap-mid.ap),z=(p.sa-mid.sa)*110;
+ const cy=Math.cos(c.yaw),sy=Math.sin(c.yaw),cp=Math.cos(c.pitch),sp=Math.sin(c.pitch);
+ const x1=x*cy-z*sy,z1=x*sy+z*cy,y1=y*cp-z1*sp,z2=y*sp+z1*cp;
+ const sc=c.scale*Math.min(W/9000,H/120);return {x:W/2+x1*sc,y:H*.56-y1*sc,d:z2};
+}
+function draw(){
+ const can=$("k3dCanvas");if(!can)return;const box=can.getBoundingClientRect(),d=devicePixelRatio||1,W=box.width,H=box.height;
+ can.width=W*d;can.height=H*d;const g=can.getContext("2d");g.setTransform(d,0,0,d,0,0);g.clearRect(0,0,W,H);
+ const ps=filters();lastPts=ps;
+ if(!ps.length){g.fillStyle="#94a3b8";g.font="14px sans-serif";g.textAlign="center";g.fillText("沒有符合條件的 Log 資料",W/2,H/2);return}
+ const mid={rpm:ps.reduce((a,p)=>a+p.rpm,0)/ps.length,ap:ps.reduce((a,p)=>a+p.ap,0)/ps.length,sa:ps.reduce((a,p)=>a+p.sa,0)/ps.length};
+ // 3D axes
+ const o=project({rpm:mid.rpm,ap:0,sa:mid.sa},cam,W,H,mid);
+ const xr=project({rpm:mid.rpm+2500,ap:0,sa:mid.sa},cam,W,H,mid);
+ const ya=project({rpm:mid.rpm,ap:50,sa:mid.sa},cam,W,H,mid);
+ const za=project({rpm:mid.rpm,ap:0,sa:mid.sa+15},cam,W,H,mid);
+ g.strokeStyle="rgba(203,213,225,.55)";g.lineWidth=1;
+ [[o,xr],[o,ya],[o,za]].forEach(([a,b])=>{g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);g.stroke()});
+ g.fillStyle="#e2e8f0";g.font="11px sans-serif";g.textAlign="left";g.fillText("RPM",xr.x-25,xr.y-7);g.fillText("AP %",ya.x+4,ya.y);g.fillText("SA °",za.x+4,za.y);
+ const sorted=ps.slice().sort((a,b)=>project(a,cam,W,H,mid).d-project(b,cam,W,H,mid));
+ for(const p of sorted){
+   const q=project(p,cam,W,H,mid),rad=2.5+(p.score>=60?2.0:0);
+   g.globalAlpha=.65;g.fillStyle=color(p.tps);g.beginPath();g.arc(q.x,q.y,rad,0,Math.PI*2);g.fill();
+   if(p.score>=60){g.globalAlpha=1;g.strokeStyle=p.score>=75?"#fff":"#fbbf24";g.lineWidth=1.4;g.beginPath();g.arc(q.x,q.y,rad+2,0,Math.PI*2);g.stroke()}
+ }
+ g.globalAlpha=1;
+}
+function selectedCard(p){
+ if(!p)return "";
+ const level=p.score>=75?"red":p.score>=55?"orange":"green";
+ const afr=p.afrErr===null?"無 AFR/Target":`${p.afrErr>=0?"+":""}${p.afrErr.toFixed(1)}%`;
+ return `<div class="k3d-alert ${level}"><strong>${p.score>=75?"🔴 優先注意":p.score>=55?"🟠 值得注意":"🟢 一般"}</strong>　${p.flags.length?p.flags.join(" · "):"目前沒有明顯風險組合"}</div>
+ <div class="k3d-factor">
+ <div class="k3d-factor-card"><span>RPM</span><b>${p.rpm.toFixed(0)}</b><small>轉速</small></div>
+ <div class="k3d-factor-card"><span>AP</span><b>${p.ap.toFixed(1)}%</b><small>${p.ap>60?"中高負載以上":"非中高負載"}</small></div>
+ <div class="k3d-factor-card"><span>TPS</span><b>${p.tps.toFixed(1)}%</b><small>節氣門開度</small></div>
+ <div class="k3d-factor-card"><span>點火 SA</span><b>${p.sa.toFixed(1)}°</b><small>點火提前角</small></div>
+ <div class="k3d-factor-card"><span>WBO2 AFR 偏差</span><b>${afr}</b><small>${p.afrErr!==null&&Math.abs(p.afrErr)<=3?"在 ±3% 內":"需要交叉檢查"}</small></div>
+ <div class="k3d-factor-card"><span>敏感度</span><b>${p.score}/100</b><small>多因素推估</small></div>
+ </div>`;
+}
+function render(raw){
+ rows=prep(raw);const ps=filters(),sum=$("k3dSummary"),risk=$("k3dRiskList");
+ if(!ps.length){sum.innerHTML='<div class="k3d-stat"><span>有效資料</span><b>0</b></div><div class="k3d-stat"><span>AP &gt;60%</span><b>—</b></div><div class="k3d-stat"><span>最高敏感度</span><b>—</b></div><div class="k3d-stat"><span>高敏感度</span><b>0</b></div>';risk.textContent="尚無可用資料";draw();return}
+ const hi=ps.filter(p=>p.score>=60),max=Math.max(...ps.map(p=>p.score));
+ sum.innerHTML=`<div class="k3d-stat"><span>有效資料</span><b>${ps.length.toLocaleString()}</b></div><div class="k3d-stat"><span>AP &gt;60%</span><b>${(100*ps.filter(p=>p.ap>60).length/ps.length).toFixed(1)}%</b></div><div class="k3d-stat"><span>最高敏感度</span><b>${max}/100</b></div><div class="k3d-stat"><span>高敏感度</span><b>${hi.length.toLocaleString()}</b></div>`;
+ const bins=new Map();
+ hi.forEach(p=>{const k=`${Math.floor(p.rpm/500)*500}_${Math.floor(p.ap/10)*10}`;let b=bins.get(k);if(!b)b={rpm:Math.floor(p.rpm/500)*500,ap:Math.floor(p.ap/10)*10,tps:[],sa:[],ae:[],n:0,score:[]};b.tps.push(p.tps);b.sa.push(p.sa);if(p.afrErr!==null)b.ae.push(p.afrErr);b.score.push(p.score);b.n++;bins.set(k,b)});
+ const top=[...bins.values()].map(b=>({rpm:b.rpm,ap:b.ap,tps:med(b.tps),sa:med(b.sa),ae:med(b.ae),n:b.n,score:Math.round(med(b.score))})).sort((a,b)=>b.score-a.score||b.n-a.n).slice(0,8);
+ risk.innerHTML=top.length?`<div style="overflow:auto"><table class="k3d-table"><thead><tr><th>RPM</th><th>AP</th><th>TPS</th><th>SA</th><th>AFR偏差</th><th>敏感度</th><th>n</th></tr></thead><tbody>${top.map(x=>`<tr><td>${x.rpm}–${x.rpm+499}</td><td>${x.ap}–${x.ap+9}%</td><td>${x.tps.toFixed(0)}%</td><td>${x.sa.toFixed(1)}°</td><td>${x.ae===null?"—":(x.ae>=0?"+":"")+x.ae.toFixed(1)+"%"}</td><td>${x.score}</td><td>${x.n}</td></tr>`).join("")}</tbody></table></div>`:"沒有達到注意門檻的區域";
+ draw();
+}
+window.__renderKnockSensitivityV41=render;
+
+function pick(clientX,clientY){
+ const can=$("k3dCanvas"),box=can.getBoundingClientRect(),W=box.width,H=box.height,ps=filters();
+ if(!ps.length)return;
+ const mid={rpm:ps.reduce((a,p)=>a+p.rpm,0)/ps.length,ap:ps.reduce((a,p)=>a+p.ap,0)/ps.length,sa:ps.reduce((a,p)=>a+p.sa,0)/ps.length};
+ let best=null,bd=18;
+ ps.forEach(p=>{const q=project(p,cam,W,H,mid),dx=q.x-(clientX-box.left),dy=q.y-(clientY-box.top),dd=Math.hypot(dx,dy);if(dd<bd){bd=dd;best=p}});
+ const host=$("k3dSelected");host.innerHTML=best?selectedCard(best):'<div class="k3d-alert green">點選 3D 圖上的資料點，可查看 RPM／AP／TPS／點火／AFR 綜合驗證。</div>';
+}
+function wire(){
+ ["k3dTpsFilter","k3dApFilter"].forEach(id=>$(id)?.addEventListener("change",()=>render(rows)));
+ const c=$("k3dCanvas");if(!c)return;
+ let pinch=null;
+ c.addEventListener("pointerdown",e=>{c.setPointerCapture(e.pointerId);drag={x:e.clientX,y:e.clientY,yaw:cam.yaw,pitch:cam.pitch}});
+ c.addEventListener("pointermove",e=>{if(!drag)return;cam.yaw=drag.yaw+(e.clientX-drag.x)*.009;cam.pitch=Math.max(-1.1,Math.min(1.1,drag.pitch+(e.clientY-drag.y)*.007));draw()});
+ c.addEventListener("pointerup",()=>drag=null);c.addEventListener("pointercancel",()=>drag=null);
+ c.addEventListener("click",e=>pick(e.clientX,e.clientY));
+ c.addEventListener("wheel",e=>{e.preventDefault();cam.scale*=e.deltaY<0?1.08:.92;cam.scale=Math.max(.35,Math.min(3,cam.scale));draw()},{passive:false});
+ c.addEventListener("touchstart",e=>{if(e.touches.length===2)pinch=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY)},{passive:true});
+ c.addEventListener("touchmove",e=>{if(e.touches.length===2&&pinch){const now=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);cam.scale*=now/pinch;cam.scale=Math.max(.35,Math.min(3,cam.scale));pinch=now;draw()}},{passive:true});
+ c.addEventListener("touchend",()=>pinch=null);
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",wire);else wire();
+})();
+</script>
 
 <section class="knock-spectrum-wrap" id="knockSpectrum">
   <h2>🔥 實際騎乘爆震敏感度光譜</h2>
@@ -1468,48 +1659,43 @@ function afrValidationLabel(e){
   if(!Number.isFinite(e)) return "—";
   return Math.abs(e)<=3 ? `🟢 ${pct(e)}｜驗證良好` : `🟡 ${pct(e)}｜AFR 有偏差`;
 }
-function updateLoopModeUI(){const off=getLoopMode()==="off",b=$("loopModeBadge"),t=$("loopModeTitle"),d=$("loopModeDesc"),q=$("qualityLoopText"),n=$("modeEvidenceNote"),g=$("loopLogGuardNote");if(b){b.textContent=off?"🔵 CLOSED LOOP OFF":"🔴 CLOSED LOOP ON";b.style.background=off?"#2563eb":"";}if(t)t.textContent=off?"閉迴路關閉｜WBO2 / AFR Target 主判定":"閉迴路開啟｜Fuel_CL 主判定";if(d)d.textContent=off?"以 WBO2 實測 AFR 與 Target AFR 的差異為核心":"以 Fuel_CL 為核心";if(q)q.textContent=off?"閉迴路 OFF｜WBO2 / Target 主判定":"閉迴路 ON｜Fuel_CL 主判定";if(n){n.textContent=off?"OFF：以 WBO2 實際 AFR 與 Target AFR 為核心":"ON：Fuel_CL 為核心";}if(g)g.innerHTML=off?"<b>Log 防呆：</b>請投入正確的「關閉」閉迴路 Log；Fuel_CL 必須全程為 0 才可分析 OFF；整條 Log 的 Fuel_CL 全 0 才是 OFF；只要有有效非 0 就是 ON。ON Log 內即使 Fuel_CL 暫時為 0，也不代表關閉。":"<b>Log 防呆：</b>請投入正確的「開啟」閉迴路 Log；整條 Log 只要有有效非 0 Fuel_CL 就是 ON；ON Log 內的 Fuel_CL=0 仍保留為有效資料。同一份 Log 只要曾出現有效非 0 Fuel_CL，就視為 ON；ON Log 內的 0 仍完整保留，不切成 OFF 片段。";}
-/* CT125 rule: Fuel_CL is a loop-intervention indicator at the whole-Log level.
-   OFF = the entire Log has Fuel_CL == 0. ON = the Log contains any valid non-zero Fuel_CL.
-   A zero Fuel_CL inside an ON Log is valid evidence and must not be discarded.
-   The 100% operating-state concept is only for identifying intervention, never for compensation. */
+function updateLoopModeUI(){const off=getLoopMode()==="off",b=$("loopModeBadge"),t=$("loopModeTitle"),d=$("loopModeDesc"),q=$("qualityLoopText"),n=$("modeEvidenceNote"),g=$("loopLogGuardNote");if(b){b.textContent=off?"🔵 CLOSED LOOP OFF":"🔴 CLOSED LOOP ON";b.style.background=off?"#2563eb":"";}if(t)t.textContent=off?"閉迴路關閉｜WBO2 / AFR Target 主判定":"閉迴路開啟｜Fuel_CL 主判定";if(d)d.textContent=off?"以 WBO2 實測 AFR 與 Target AFR 的差異為核心":"以 Fuel_CL 為核心";if(q)q.textContent=off?"閉迴路 OFF｜WBO2 / Target 主判定":"閉迴路 ON｜Fuel_CL 主判定";if(n){n.textContent=off?"OFF：以 WBO2 實際 AFR 與 Target AFR 為核心":"ON：Fuel_CL 為核心";}if(g)g.innerHTML=off?"<b>Log 防呆：</b>請投入正確的「關閉」閉迴路 Log；WBO2_AT_En 必須全程為 0。Fuel_CL=0 才可進入 OFF 的校正資料。":"<b>Log 防呆：</b>請投入正確的「開啟」閉迴路 Log；WBO2_AT_En 必須全程為 1。ON Log 內的 Fuel_CL=0 仍保留為有效資料。";}
+/* CT125 rule: WBO2_AT_En is the whole-Log ON/OFF guard.
+   Fuel_CL remains the primary correction signal when ON.
+   A zero Fuel_CL inside an ON Log is valid evidence and must not be discarded. */
 function detectLoopState(parsedRows){
-  // Fuel_CL 是唯一的閉迴路介入狀態來源。
-  // WBO2_AT_En 不是本工具的 ON/OFF 判定欄位；它可作資料欄位，但不能拿來否定 Fuel_CL 實際介入。
-  const cl=parsedRows.map(r=>Number(r.Fuel_CL)).filter(Number.isFinite);
-  if(!cl.length)return {ok:false,state:null,reason:"Log 缺少 Fuel_CL，無法判斷閉迴路狀態"};
-  let on=0,off=0;
-  for(const v of cl){
-    if(Math.abs(v) < 1e-12) off++;
-    else on++;
-  }
-  const state=on>0?"on":off>0?"off":null;
-  return {
-    ok:!!state,state,on,off,ambiguous:0,total:cl.length,
-    activeRate:on/cl.length,inactiveRate:off/cl.length,
-    source:"Fuel_CL"
-  };
+  // WBO2_AT_En 決定 Log 是 ON 還是 OFF；Fuel_CL 不用來判斷狀態。
+  // ON Log 即使 Fuel_CL=0 仍是有效資料，因為此時可能只是 ECU 當下沒有需要補償。
+  if(!Array.isArray(parsedRows)||!parsedRows.length)return {ok:false,state:null,reason:"Log 沒有資料，無法判斷閉迴路狀態"};
+  const at=parsedRows.map(r=>Number(r.WBO2_AT_En));
+  if(at.some(v=>!Number.isFinite(v)))return {ok:false,state:null,reason:"Log 缺少 WBO2_AT_En，無法進行 ON/OFF 防呆"};
+  const bad=at.some(v=>v!==0&&v!==1);
+  if(bad)return {ok:false,state:null,reason:"WBO2_AT_En 含有非 0/1 值，無法安全判斷 ON/OFF"};
+  const on=at.filter(v=>v===1).length, off=at.filter(v=>v===0).length;
+  const state=on===at.length?"on":off===at.length?"off":"mixed";
+  return {ok:state!=="mixed",state,on,off,ambiguous:state==="mixed"?1:0,total:at.length,activeRate:on/at.length,inactiveRate:off/at.length,source:"WBO2_AT_En"};
 }
 
 function validateLoopLogGuard(parsedRows,mode,label="Log"){
   const d=detectLoopState(parsedRows);
-  if(!d.ok)throw new Error(`${label}：${d.reason}。`);
-  const requestedOk=mode==="on" ? d.on>0 : (d.on===0 && d.off>0);
-  if(!requestedOk){
-    const actual=d.state==="on"?"開啟":d.state==="off"?"關閉":"含有 0 與非 0 Fuel_CL（依規則判定為開啟）";
-    throw new Error(`${label}：目前選擇「${mode==="on"?"開啟":"關閉"}」，但 Log 實際狀態為「${actual}」。${mode==="off"?"關閉閉迴路必須整條 Log 的 Fuel_CL 全為 0。":"開啟閉迴路只要 Log 中存在有效非 0 Fuel_CL 即成立；Log 內的 0 不代表關閉。"}`);
+  if(!d.ok){
+    if(d.state==="mixed")throw new Error(`${label}：WBO2_AT_En 在同一份 Log 內同時出現 0 與 1，無法安全判定。請改用單一迴路狀態的 Log。`);
+    throw new Error(`${label}：${d.reason}。`);
   }
-  return true;
+  const requestedOk=mode==="on"?d.state==="on":d.state==="off";
+  if(!requestedOk){
+    const actual=d.state==="on"?"開啟":d.state==="off"?"關閉":"混合";
+    throw new Error(`${label}：目前選擇「${mode==="on"?"開啟":"關閉"}」，但 Log 的 WBO2_AT_En 實際狀態為「${actual}」。${mode==="off"?"OFF 必須整條 Log 的 WBO2_AT_En 全為 0。":"ON 必須整條 Log 的 WBO2_AT_En 全為 1；Fuel_CL=0 仍可保留分析。"}`);
+  }
 }
-function build(){updateLoopModeUI();const off=getLoopMode()==="off";const rm=$("resultMode");if(rm)rm.textContent=off?"🔵 閉迴路 OFF｜WBO2 / Target 校正模式":"🔴 閉迴路 ON｜Fuel_CL 校正模式";return off?buildOpenLoop():buildClosedLoop();}
+
+function build(){if(window.__renderKnockSensitivityV41)window.__renderKnockSensitivityV41(window.__ctLogRows||[]);updateLoopModeUI();const off=getLoopMode()==="off";const rm=$("resultMode");if(rm)rm.textContent=off?"🔵 閉迴路 OFF｜WBO2 / Target 校正模式":"🔴 閉迴路 ON｜Fuel_CL 校正模式";return off?buildOpenLoop():buildClosedLoop();}
 
 function loadRatio(r){const ap=Number(r.Cyl1_Eng_AP),patm=Number(r.P_Atm);return Number.isFinite(ap)&&Number.isFinite(patm)&&patm>0?ap/patm*100:null}
-function prepareLoadSpectrumRows(rawRows){markTransient(rawRows);const out=[];for(const r of rawRows){if(r._transient||Number(r.Dec_FC_En)>0||Number(r.Inj_Cut)>0)continue;if(!Number.isFinite(r.T_Eng)||r.T_Eng<cfg.temp||!Number.isFinite(r.RPM)||r.RPM<=0)continue;const q=loadRatio(r);if(!Number.isFinite(q))continue;r._loadRatio=q;out.push(r)}return out}
-function loadBand(v){if(v<30)return{name:'低負載',cls:'low',color:'#2563eb'};if(v<51)return{name:'中低負載',cls:'midlow',color:'#0ea5e9'};if(v<71)return{name:'中高負載',cls:'mid',color:'#eab308'};if(v<86)return{name:'高負載',cls:'high',color:'#f97316'};return{name:'很高負載',cls:'vhigh',color:'#ef4444'}}
-function summarizeLoadByRpm(rs){const step=200,b=new Map();for(const r of rs){const k=Math.floor(r.RPM/step)*step;if(!b.has(k))b.set(k,[]);b.get(k).push(r._loadRatio)}return [...b].map(([rpm,v])=>({rpm,load:med(v),n:v.length})).filter(x=>Number.isFinite(x.load)).sort((a,b)=>a.rpm-b.rpm)}
-function contiguousRanges(items){const g=items.filter(x=>x.n>=10&&x.load>=51).map(x=>x.rpm);if(!g.length)return[];const out=[];let a=g[0],p=g[0];for(let i=1;i<g.length;i++){if(g[i]-p<=200){p=g[i];continue}out.push([a,p+199]);a=p=g[i]}out.push([a,p+199]);return out}
-function drawLoadSpectrum(bins){const c=$("loadSpectrumCanvas"),tip=$("loadSpectrumTip");if(!c||!bins.length)return;const dpr=devicePixelRatio||1,rr=c.getBoundingClientRect(),W=Math.max(320,rr.width),H=rr.height;c.width=W*dpr;c.height=H*dpr;const x0=50,x1=W-18,y0=18,y1=H-38,pw=x1-x0,ph=y1-y0,ctx=c.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);ctx.fillStyle='#07101b';ctx.fillRect(0,0,W,H);const minR=bins[0].rpm,maxR=bins[bins.length-1].rpm+199,X=v=>x0+(v-minR)/Math.max(1,maxR-minR)*pw,Y=v=>y1-Math.max(0,Math.min(100,v))/100*ph;for(const z of [[0,30,'#0b2f67'],[30,51,'#075985'],[51,71,'#6b4f00'],[71,86,'#7c2d12'],[86,100,'#7f1d1d']]){ctx.fillStyle=z[2];ctx.globalAlpha=.72;ctx.fillRect(x0,Y(z[1]),pw,Y(z[0])-Y(z[1]))}ctx.globalAlpha=1;ctx.font='11px sans-serif';for(const v of [0,30,51,70,85,100]){ctx.strokeStyle='#334155';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x0,Y(v));ctx.lineTo(x1,Y(v));ctx.stroke();ctx.fillStyle='#cbd5e1';ctx.fillText(v+'%',8,Y(v)+4)}ctx.strokeStyle='#fde047';ctx.setLineDash([6,5]);ctx.beginPath();ctx.moveTo(x0,Y(51));ctx.lineTo(x1,Y(51));ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#fde047';ctx.font='bold 11px sans-serif';ctx.fillText('51% 中高負載',x1-105,Y(51)-7);for(let i=0;i<=6;i++){const rv=minR+(maxR-minR)*i/6,xx=X(rv);ctx.strokeStyle='#1e293b';ctx.beginPath();ctx.moveTo(xx,y0);ctx.lineTo(xx,y1);ctx.stroke();ctx.fillStyle='#cbd5e1';ctx.fillText(Math.round(rv).toLocaleString(),xx-15,H-12)}for(let i=1;i<bins.length;i++){const a=bins[i-1],b=bins[i];if(b.rpm-a.rpm>400)continue;ctx.beginPath();ctx.moveTo(X(a.rpm+100),Y(a.load));ctx.lineTo(X(b.rpm+100),Y(b.load));ctx.strokeStyle=loadBand((a.load+b.load)/2).color;ctx.lineWidth=3;ctx.stroke()}for(const q of bins){ctx.beginPath();ctx.arc(X(q.rpm+100),Y(q.load),3,0,Math.PI*2);ctx.fillStyle=loadBand(q.load).color;ctx.fill()}c.onmousemove=e=>{const mx=e.clientX-c.getBoundingClientRect().left,rv=minR+(mx-x0)/pw*(maxR-minR);let best=bins[0],bd=1e99;for(const q of bins){const d=Math.abs(q.rpm+100-rv);if(d<bd){bd=d;best=q}}const band=loadBand(best.load);tip.style.display='block';tip.style.left=Math.min(W-210,Math.max(8,mx+12))+'px';tip.style.top=Math.max(8,Y(best.load)-55)+'px';tip.innerHTML=`<b>RPM：${best.rpm.toLocaleString()}～${(best.rpm+199).toLocaleString()}</b><br>AP 負載率：${best.load.toFixed(1)}%<br>有效數：${best.n.toLocaleString()}<br><strong>${band.name}</strong>`};c.onmouseleave=()=>tip.style.display='none'}
-function renderLoadSpectrum(rawRows){const host=$("loadSpectrum");if(!host)return;const rs=prepareLoadSpectrumRows(rawRows),bins=summarizeLoadByRpm(rs),ranges=contiguousRanges(bins);if(!rs.length){host.innerHTML='<div class="alert yellow">⚠️ 找不到符合溫度、斷油與 AP / P_Atm 條件的負載資料。</div>';return}const maxLoad=Math.max(...rs.map(r=>r._loadRatio)),maxAp=Math.max(...rs.map(r=>Number(r.Cyl1_Eng_AP)).filter(Number.isFinite)),n51=rs.filter(r=>r._loadRatio>=51).length;const rangeText=ranges.length?ranges.map(x=>`${x[0].toLocaleString()}～${x[1].toLocaleString()} RPM`).join('、'):'—';host.innerHTML=`<div class="spectrum-stats"><div class="spectrum-stat"><span>最高負載率</span><b>${maxLoad.toFixed(1)}%</b></div><div class="spectrum-stat"><span>中高負載 RPM（≥51%）</span><b>${rangeText}</b></div><div class="spectrum-stat"><span>AP 最高值</span><b>${maxAp.toFixed(1)} kPa</b></div><div class="spectrum-stat"><span>≥51% 有效資料</span><b>${n51.toLocaleString()} 筆</b></div></div><div class="spectrum-shell"><canvas id="loadSpectrumCanvas" class="spectrum-canvas"></canvas><div id="loadSpectrumTip" class="spectrum-tooltip"></div></div><div class="spectrum-legend"><span style="color:#2563eb">🔵 &lt;30% 低負載</span><span style="color:#0284c7">🔵 30～50% 中低負載</span><span style="color:#a16207">🟡 51～70% 中高負載</span><span style="color:#c2410c">🟠 71～85% 高負載</span><span style="color:#b91c1c">🔴 ≥86% 很高負載</span></div><div class="rpm-load-box"><h3>哪些轉數有中高負載？</h3><div class="rpm-load-grid">${bins.filter(x=>x.n>=10&&x.load>=51).map(x=>{const b=loadBand(x.load);return `<div class="rpm-load-item ${b.cls}"><b>${x.rpm.toLocaleString()}～${(x.rpm+199).toLocaleString()} RPM</b>${b.name} · ${x.load.toFixed(1)}%</div>`}).join('')||'<div class="note">本次 Log 沒有達到「≥51% 且有效數 ≥10」的 RPM 區間。</div>'}</div></div><div class="spectrum-note">負載率＝AP / P_Atm × 100%；51% 以上定義為本工具的「中高負載」門檻。此光譜只分析 Log 負載覆蓋，<strong>不參與 Fuel Map 修正</strong>。每個 200 RPM 區間以有效資料中位數判定，避免單一尖峰誤判整個轉速區。</div>`;requestAnimationFrame(()=>drawLoadSpectrum(bins))}
+
+
+
+
 
 function buildOpenLoop(){
  const androidMode=$("logPlatformSelect")?.value==="android";
@@ -2027,5 +2213,7 @@ if(loopModeSelect){
   cases.forEach(c=>{if(f(c[0],c[1])!==c[2])throw new Error("Fuel_CL closed-loop self-check failed");});
 })();
 </script>
+
+
 
 </body></html>
