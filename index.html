@@ -1559,7 +1559,6 @@ $("analyze").onclick=async()=>{
   window.__ctCompleted=new Set();
   window.__ctLogRows=rows;
   build();
-  if(window.refreshKnockSpectrum) window.refreshKnockSpectrum(hot);
   $("result").scrollIntoView({behavior:"smooth"});
  }catch(e){
   console.error(e);
