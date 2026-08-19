@@ -498,6 +498,15 @@ button:active{transform:translateY(1px)}
 }
 </style>
 
+
+<style id="fuel-map-loop-note-v46-css">
+.fuel-map-core-note{margin-top:10px;padding:16px 18px;border:1px solid #e5e7eb;border-radius:14px;background:#fff;line-height:1.55}
+.fuel-map-core-note h3{margin:0 0 10px;font-size:18px}
+.loop-note{padding:11px 12px;border-radius:10px;margin-top:7px;font-size:14px}
+.loop-note-on{background:#fff7ed;border:1px solid #fed7aa}
+.loop-note-off{background:#eff6ff;border:1px solid #bfdbfe}
+.fuel-map-note-common{margin-top:9px;color:#64748b;font-size:13px}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -704,8 +713,20 @@ button:active{transform:translateY(1px)}
 })();
 </script>
 <section class="card"><h2>⛽ Fuel Map 修正建議</h2>
-<div class="alert yellow"><b>核心：Fuel_CL</b><br/>
-Fuel_CL 的穩定統計值直接作為該 Map 格的修正依據；AFR_Target / AFR_WBO2 只用來驗證。最終顯示的 RPM × TPS 必須是目前所選系列 App 實際存在的格。</div>
+<div class="fuel-map-core-note">
+  <h3>🎯 Fuel Map 修正依據</h3>
+  <div class="loop-note loop-note-on">
+    <strong>🔴 開閉迴路 ON｜核心：Fuel_CL</strong><br>
+    Fuel_CL 的穩定統計值直接作為該 Map 格的主要修正依據；AFR_Target / AFR_WBO2 僅用於交叉驗證，不取代 Fuel_CL。
+  </div>
+  <div class="loop-note loop-note-off">
+    <strong>🔵 關閉迴路 OFF｜核心：WBO2 AFR / AFR Target</strong><br>
+    以 WBO2 實測 AFR 與 AFR_Target 的偏差作為主要修正依據；Fuel_CL 不參與 OFF 修正，僅作資料狀態參考。
+  </div>
+  <div class="fuel-map-note-common">
+    最終顯示的 RPM × TPS 必須是目前所選系列 App 實際存在的格。
+  </div>
+</div>
 <div id="fuel"></div><div class="note" style="margin-top:8px">
 <strong>可信度分級：</strong>有效資料先保留，不再要求同一 Map 格連續 3 筆才建立 cell；≥30 筆＋分布集中＋方向一致 → 高可信度；≥15 筆 → 可參考。單一長而穩定片段也可達高可信度；多片段不是必要條件。WBO2 Ready、Map 邊界等輔助條件不足時優先降級，不直接刪除高品質資料。
 </div>
@@ -1496,7 +1517,7 @@ function validateLoopLogGuard(parsedRows,mode,label="Log"){
   }
   return true;
 }
-function build(){updateLoopModeUI();const off=getLoopMode()==="off";const rm=$("resultMode");if(rm)rm.textContent=off?"🔵 閉迴路 OFF｜WBO2 / Target 校正模式":"🔴 閉迴路 ON｜Fuel_CL 校正模式";return off?buildOpenLoop():buildClosedLoop();}
+function build(){if(window.__updateFuelMapCoreNote)window.__updateFuelMapCoreNote();updateLoopModeUI();const off=getLoopMode()==="off";const rm=$("resultMode");if(rm)rm.textContent=off?"🔵 閉迴路 OFF｜WBO2 / Target 校正模式":"🔴 閉迴路 ON｜Fuel_CL 校正模式";return off?buildOpenLoop():buildClosedLoop();}
 
 function loadRatio(r){const ap=Number(r.Cyl1_Eng_AP),patm=Number(r.P_Atm);return Number.isFinite(ap)&&Number.isFinite(patm)&&patm>0?ap/patm*100:null}
 function prepareLoadSpectrumRows(rawRows){markTransient(rawRows);const out=[];for(const r of rawRows){if(r._transient||Number(r.Dec_FC_En)>0||Number(r.Inj_Cut)>0)continue;if(!Number.isFinite(r.T_Eng)||r.T_Eng<cfg.temp||!Number.isFinite(r.RPM)||r.RPM<=0)continue;const q=loadRatio(r);if(!Number.isFinite(q))continue;r._loadRatio=q;out.push(r)}return out}
@@ -1807,4 +1828,19 @@ if(loopModeSelect){
 })();
 </script>
 
+
+<script id="fuel-map-loop-note-v46-js">
+(function(){
+  function updateFuelMapCoreNote(){
+    var on=document.querySelector(".loop-note-on"), off=document.querySelector(".loop-note-off");
+    var mode=(typeof getLoopMode==="function")?getLoopMode():null;
+    if(!on||!off)return;
+    on.style.display=mode==="on"?"block":"none";
+    off.style.display=mode==="off"?"block":"none";
+  }
+  window.__updateFuelMapCoreNote=updateFuelMapCoreNote;
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",updateFuelMapCoreNote);
+  else updateFuelMapCoreNote();
+})();
+</script>
 </body></html>
