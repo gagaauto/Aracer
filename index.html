@@ -1818,6 +1818,7 @@ async function sideOpenLoop(files){
      const b=await side([...before.files]),a=await side([...after.files]);
      const bm=new Map(b.map(x=>[x.rpm+"|"+x.tps,x])),am=new Map(a.map(x=>[x.rpm+"|"+x.tps,x]));
      const compareMode=getLoopMode();
+     const label=compareMode==="on"?"Fuel_CL":"AFR 偏差";
      const keys=[...bm.keys()].filter(k=>am.has(k)).map(k=>{const [rpm,tps]=k.split("|").map(Number);return{k,rpm,tps}}).sort((x,y)=>x.rpm-y.rpm||x.tps-y.tps);
      let good=0,warn=0,bad=0;
      const rows=keys.map(x=>{
@@ -1826,7 +1827,6 @@ async function sideOpenLoop(files){
        const notes=[];if(bb.dwell<1||aa.dwell<1)notes.push("停留不足");if(bb.boundary||aa.boundary)notes.push("接近Map邊界");if(bb.conflict||aa.conflict)notes.push("CL/WBO2方向衝突");
        const bv=compareMode==="on"?bb.cl:bb.afrErr, av=compareMode==="on"?aa.cl:aa.afrErr;
        const fmt=v=>Number.isFinite(v)?`${v>0?"+":""}${v.toFixed(2)}%`:"—";
-       const label=compareMode==="on"?"Fuel_CL":"AFR 偏差";
        return `<tr><td>${x.rpm}</td><td>${x.tps}%</td><td>${fmt(bb.afrTarget)} / ${fmt(aa.afrTarget)}</td><td>${fmt(bb.afr)} / ${fmt(aa.afr)}</td><td>${fmt(bv)}</td><td>${fmt(av)}</td><td>${Number.isFinite(bv)&&Number.isFinite(av)?fmt(av-bv):"—"}</td><td>${bb.samples}/${aa.samples}</td><td>${bb.quality||"資料不足"} / ${aa.quality||"資料不足"}</td><td class="${s[2]}"><strong>${s[0]}</strong><br><span>${s[1]}${notes.length?"<br>⚠️ "+notes.join("；"):""}</span></td></tr>`;
      }).join("");
      result.innerHTML=`<div class="bt-head"><strong>前後對比完成</strong><span>兩組 Log 各自獨立處理，再比較共同實際 Map 格</span></div>
