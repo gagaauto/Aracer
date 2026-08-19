@@ -520,12 +520,6 @@ button:active{transform:translateY(1px)}
 }
 </style>
 
-<style id="remove-duplicate-fuel-table-v32">
-/* UI-only: the old duplicate table below the observation area is removed from view.
-   The actionable modification results are already displayed above. */
-#fuelTable{display:none!important}
-</style>
-
 </head>
 <body>
 <div class="wrap">
@@ -680,7 +674,7 @@ button:active{transform:translateY(1px)}
 <section class="card"><h2>⛽ Fuel Map 修正建議</h2>
 <div class="alert yellow"><b>核心：Fuel_CL</b><br/>
 Fuel_CL 的穩定統計值直接作為該 Map 格的修正依據；AFR_Target / AFR_WBO2 只用來驗證。最終顯示的 RPM × TPS 必須是目前所選系列 App 實際存在的格。</div>
-<div id="fuel"></div><div class="tablewrap"><table id="fuelTable"></table></div><div class="note" style="margin-top:8px">
+<div id="fuel"></div><div class="note" style="margin-top:8px">
 <strong>可信度分級：</strong>有效資料先保留，不再要求同一 Map 格連續 3 筆才建立 cell；≥30 筆＋分布集中＋方向一致 → 高可信度；≥15 筆 → 可參考。單一長而穩定片段也可達高可信度；多片段不是必要條件。WBO2 Ready、Map 邊界等輔助條件不足時優先降級，不直接刪除高品質資料。
 </div>
 </section>
@@ -1425,12 +1419,6 @@ arr.sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);
  <div class="note" style="margin-top:9px"><strong>修改建議：</strong>只有高可信度且偏差超過 ±${cfg.clDeadband.toFixed(1)}、未達 ±20% 的格才進入修改流程；±3% 內資料保留但不列入修改。≥20% 不直接修改，請再取得 Log。</div>
  ${renderWorkList(recommend)}${renderWatchList(arr)}`;
 
- $("fuelTable").innerHTML=`<thead><tr><th>RPM</th><th>TPS</th><th>有效數</th><th>Fuel_CL</th><th>修正方向</th><th>AFR Target</th><th>WBO2</th><th>AFR 驗證</th><th>可信度</th></tr></thead><tbody>${
- (recommend.map(c=>`<tr><td><strong>${c.rpm}</strong></td><td><strong>${c.tps}%</strong></td><td>${c.rs.length}</td>
- <td class="${c.cl>0?"red":c.cl<0?"green":""}">${pct(c.cl)}</td>
- <td>🛠️ ${c.fuelPct>=0?"增加":"減少"}</td>
- <td>${fmt(c.afrTarget)}</td><td>${fmt(c.afr)}</td><td>高可信度</td></tr>`).join("") || '<tr><td colspan="8">目前沒有需要修改的高可信度格。</td></tr>')}</tbody>`;
-
  $("detail").innerHTML=`<thead><tr><th>RPM</th><th>TPS</th><th>有效數</th><th>Fuel_CL</th><th>AFR偏差</th><th>溫度</th><th>穩定次數</th><th>可信度</th></tr></thead><tbody>${
  arr.map(c=>`<tr><td>${c.rpm}</td><td>${c.tps}%</td><td>${c.rs.length}</td><td>${pct(c.cl)}</td><td>${c.afrErr==null?"—":pct(c.afrErr)}</td><td>${fmt(c.temp,1)}°C</td><td>${c.segments.length}</td><td>${c.quality}</td></tr>`).join("")}</tbody>`;
 
@@ -1523,12 +1511,6 @@ arr.sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);
  </div>
  <div class="note" style="margin-top:9px"><strong>修改建議：</strong>只有高可信度且偏差超過 ±${cfg.clDeadband.toFixed(1)}、未達 ±20% 的格才進入修改流程；±3% 內資料保留但不列入修改。≥20% 不直接修改，請再取得 Log。</div>
  ${renderWorkList(recommend)}${renderWatchList(arr)}`;
-
- $("fuelTable").innerHTML=`<thead><tr><th>RPM</th><th>TPS</th><th>有效數</th><th>AFR 偏差</th><th>修正方向</th><th>AFR Target</th><th>WBO2</th><th>AFR 驗證</th><th>可信度</th></tr></thead><tbody>${
- (recommend.map(c=>`<tr><td><strong>${c.rpm}</strong></td><td><strong>${c.tps}%</strong></td><td>${c.rs.length}</td>
- <td class="${c.cl>0?"red":c.cl<0?"green":""}">${pct(c.cl)}</td>
- <td>🛠️ ${c.fuelPct>=0?"增加":"減少"}</td>
- <td>${fmt(c.afrTarget)}</td><td>${fmt(c.afr)}</td><td>高可信度</td></tr>`).join("") || '<tr><td colspan="8">目前沒有需要修改的高可信度格。</td></tr>')}</tbody>`;
 
  $("detail").innerHTML=`<thead><tr><th>RPM</th><th>TPS</th><th>有效數</th><th>AFR 偏差</th><th>溫度</th><th>穩定次數</th><th>可信度</th></tr></thead><tbody>${
  arr.map(c=>`<tr><td>${c.rpm}</td><td>${c.tps}%</td><td>${c.rs.length}</td><td>${pct(c.cl)}</td><td>${fmt(c.temp,1)}°C</td><td>${c.segments.length}</td><td>${c.quality}</td></tr>`).join("")}</tbody>`;
