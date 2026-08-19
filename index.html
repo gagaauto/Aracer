@@ -1315,6 +1315,7 @@ function buildClosedLoop(){
   ["瞬態／斷油低權重",rows.filter(r=>r._transient).length.toLocaleString()],["Log 格式",androidMode?"Android aRacer":"Apple"]
  ].map(x=>`<div class="stat">${x[0]}<b>${x[1]}</b></div>`).join("");
  renderLoadSpectrum(rows);
+ if(window.refreshKnockSpectrum) window.refreshKnockSpectrum(rows);
 
  const arr=cells.map(c=>{
   const rs=c.rs,cl=weightedMedian(rs.map(r=>({v:r.Fuel_CL,w:tempWeight(r.T_Eng)*analysisWeight(r)})));
@@ -1414,6 +1415,7 @@ function buildOpenLoop(){
   ["瞬態／斷油低權重",rows.filter(r=>r._transient).length.toLocaleString()],["Log 格式",androidMode?"Android aRacer":"Apple"]
  ].map(x=>`<div class="stat">${x[0]}<b>${x[1]}</b></div>`).join("");
  renderLoadSpectrum(rows);
+ if(window.refreshKnockSpectrum) window.refreshKnockSpectrum(rows);
 
  const arr=cells.map(c=>{
   const rs=c.rs,corr=weightedMedian(rs.map(r=>({v:r._analysisCorr,w:tempWeight(r.T_Eng)})));
@@ -1481,7 +1483,9 @@ $("analyze").onclick=async()=>{
   if(!rows.length)throw new Error("沒有讀到有效 Log 資料。");
   $("status").textContent=`完成：${rows.length.toLocaleString()} 筆原始資料。`;
   window.__ctCompleted=new Set();
+  window.__ctLogRows=rows;
   build();
+  if(window.refreshKnockSpectrum) window.refreshKnockSpectrum(rows);
   $("result").scrollIntoView({behavior:"smooth"});
  }catch(e){
   console.error(e);
@@ -1683,10 +1687,10 @@ if(loopModeSelect){
     const pts=[];
     for(const r of rows){
       const rpm=getField(r,['RPM','rpm']);
-      const ap=getField(r,['AP','ap','MAP','Map']);
-      const tps=getField(r,['TPS','tps']);
-      const ign=getField(r,['Ignition','Ign','ADV','Advance','SparkAdvance','點火角']);
-      const afr=getField(r,['AFR','AFR_WBO2','WBO2','afr']);
+      const ap=getField(r,['Cyl1_Eng_AP','AP','ap','MAP','Map']);
+      const tps=getField(r,['TPS_Percent','TPS','tps']);
+      const ign=getField(r,['SA','Ignition','Ign','ADV','Advance','SparkAdvance','點火角']);
+      const afr=getField(r,['AFR_WBO2','AFR','WBO2','afr']);
       const target=getField(r,['AFR_Target','TargetAFR','Target','target']);
       if(rpm===null||ap===null)continue;
 
@@ -1768,19 +1772,15 @@ if(loopModeSelect){
   }
 
   // Hook into common analysis-result stores when available.
-  function refresh(){
-    const rows =
-      window.currentLogRows ||
-      window.analysisRows ||
-      window.logRows ||
-      window.filteredRows ||
-      [];
-    drawKnockSpectrum(rows);
+  function refresh(sourceRows){
+    const data = Array.isArray(sourceRows) ? sourceRows : (window.__ctLogRows || []);
+    drawKnockSpectrum(data);
   }
   window.renderKnockSpectrum=drawKnockSpectrum;
-  window.addEventListener("resize",refresh);
-  document.addEventListener("analysisComplete",refresh);
-  setTimeout(refresh,300);
+  window.refreshKnockSpectrum=refresh;
+  window.addEventListener("resize",()=>refresh());
+  document.addEventListener("analysisComplete",()=>refresh());
+  setTimeout(()=>refresh(),300);
 })();
 </script>
 
