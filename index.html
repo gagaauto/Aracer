@@ -520,6 +520,31 @@ button:active{transform:translateY(1px)}
 }
 </style>
 
+
+<style id="remove-duplicate-watch-ui-v34">
+/* UI ONLY — 使用者端不顯示觀望區下方舊的重複 Fuel Map 資料表。
+   上方有效修改區／觀望區已經是唯一顯示結果；分析計算仍保留。 */
+#fuelTable,
+#fuelTableWrap,
+.fuel-table-legacy,
+.legacy-fuel-table,
+#fuelTable + .note {
+  display: none !important;
+}
+</style>
+
+
+<style id="hide-legacy-map-detail-v35">
+/* UI ONLY:
+   The actionable result is already shown above.
+   Hide the legacy Map 原始分析資料 / duplicate RPM-TPS-Fuel_CL table
+   so users do not re-read the same cell twice.
+   No analysis data or calculation is deleted. */
+#result .detail-card{
+  display:none !important;
+}
+</style>
+
 </head>
 <body>
 <div class="wrap">
@@ -1947,6 +1972,23 @@ if(loopModeSelect){
     const dir = c >= 0 ? '增加' : '減少';
     return `建議${dir}燃油約 ${Math.abs(c).toFixed(1)}% → 預計修正後約 ${target.toFixed(1)}% 偏差（進入 ±3% 允許範圍）`;
   };
+})();
+</script>
+
+
+<script id="remove-duplicate-watch-runtime-v34">
+(function(){
+  function hideDuplicateFuelTable(){
+    var t=document.getElementById('fuelTable');
+    if(t){
+      t.style.display='none';
+      var w=t.closest('.tablewrap');
+      if(w) w.style.display='none';
+    }
+  }
+  document.addEventListener('DOMContentLoaded', hideDuplicateFuelTable);
+  var obs=new MutationObserver(hideDuplicateFuelTable);
+  obs.observe(document.documentElement,{childList:true,subtree:true});
 })();
 </script>
 
