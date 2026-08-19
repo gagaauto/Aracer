@@ -3,7 +3,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
-<meta content="#111827" name="theme-color"/><title>CT181 X / XX Log 分析工具｜雙頁定案版</title>
+<meta content="#111827" name="theme-color"/><title>CT125 X / XX Log 分析工具｜雙頁定案版</title>
 <style>
 :root{--bg:#f3f4f6;--card:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;--blue:#2563eb;--green:#15803d;--yellow:#a16207;--red:#b91c1c;--orange:#c2410c}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif}
@@ -50,7 +50,18 @@ button:active{transform:translateY(1px)}
 .detail-card details[open] summary::after{content:"－"}
 .detail-card summary span{font-size:12px;font-weight:600;color:#64748b;margin-left:8px}
 .detail-note{margin:12px 0 10px}
-.sample-rule-box{margin-top:9px;padding:10px 12px;border:1px solid rgba(255,255,255,.16);border-radius:10px;line-height:1.65;background:rgba(255,255,255,.035)}.upload-box{padding:18px;border:2px dashed #cbd5e1;border-radius:16px;text-align:center}.upload-title{font-weight:700;margin-bottom:12px}.file-name{margin-top:10px;font-size:.95em}.upload-box input[type=file]{display:none}.upload-box .btn{display:inline-block;padding:10px 16px;border-radius:10px;background:#eaf2ff;cursor:pointer}</style>
+.sample-rule-box{margin-top:9px;padding:10px 12px;border:1px solid rgba(255,255,255,.16);border-radius:10px;line-height:1.65;background:rgba(255,255,255,.035)}.upload-box{padding:18px;border:2px dashed #cbd5e1;border-radius:16px;text-align:center}.upload-title{font-weight:700;margin-bottom:12px}.file-name{margin-top:10px;font-size:.95em}.upload-box input[type=file]{display:none}.upload-box .btn{display:inline-block;padding:10px 16px;border-radius:10px;background:#eaf2ff;cursor:pointer}
+.watch-card{margin-top:14px;border:1px solid #f3c66b;background:#fffaf0;border-radius:14px;padding:14px}
+.watch-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+.watch-head h3{margin:0;font-size:1.05rem}
+.watch-head .watch-count{font-weight:800}
+.watch-sub{font-size:.9rem;color:#6b7280;margin:0 0 10px}
+.watch-list{display:grid;gap:8px}
+.watch-item{display:grid;grid-template-columns:1.1fr .8fr .8fr 1fr 1.5fr;gap:8px;align-items:center;padding:10px 12px;background:#fff;border:1px solid #f0dfb0;border-radius:10px}
+.watch-item strong{font-weight:800}
+.watch-note{font-size:.82rem;color:#6b7280}
+@media(max-width:720px){.watch-item{grid-template-columns:1fr 1fr}.watch-note{grid-column:1/-1}}
+</style>
 <style>
 .format-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}
 .format-grid label{display:block;margin-bottom:6px;font-size:12px;font-weight:800;color:#64748b}
@@ -430,7 +441,7 @@ button:active{transform:translateY(1px)}
 <div class="wrap">
 <section class="hero">
 <div class="hero-content">
-<div class="hero-kicker">CT181 · aRacer X / XX LOG ANALYZER</div>
+<div class="hero-kicker">CT125 · aRacer X / XX LOG ANALYZER</div>
 <h1>X / XX Log 分析建議</h1>
 <div class="sub">CT125 分析工具｜依目前選定的 X / XX 系列與 Apple / Android App 實際 Fuel Map 格點採樣，不跨系列套用。</div>
 </div>
@@ -446,9 +457,9 @@ button:active{transform:translateY(1px)}
 <div class="cl-on-badge" id="loopModeBadge">🔴 CLOSED LOOP ON</div>
 <div class="cl-on-copy">
 <strong id="loopModeTitle">閉迴路開啟｜Fuel_CL 主判定</strong>
-<span id="loopModeDesc">Fuel_CL 主修正 · WBO2 / AFR Target 交叉驗證</span>
+<span id="loopModeDesc">以 Fuel_CL 為核心</span>
 </div>
-</section><div class="mode-evidence-note" id="modeEvidenceNote">ON：Fuel_CL 主判定 · WBO2 / AFR Target 交叉驗證</div><section class="card setup-card">
+</section><div class="mode-evidence-note" id="modeEvidenceNote">ON：Fuel_CL 為核心</div><section class="card setup-card">
 <div class="section-head">
 <div>
 <div class="section-tag">SETUP</div>
@@ -490,7 +501,7 @@ button:active{transform:translateY(1px)}
 </div>
 </div>
 <div class="setup-warning" id="setupHint">
-    ⚠️ 請先完成以上三項設定，再上傳 Log。
+    ⚠️ 請先完成以上四項設定，再上傳 Log。
   </div>
 </section><section class="card upload-card" id="uploadSection">
 <div class="section-head upload-head">
@@ -546,7 +557,7 @@ button:active{transform:translateY(1px)}
 <button class="analyze-btn compare-btn" id="runBacktest" type="button">開始前後對比</button>
 <div class="backtest-result" hidden="" id="backtestResult"></div>
 </section><div class="hidden" id="result">
-<section class="card"><div class="result-mode">🔴 閉迴路 ON｜Fuel_CL 校正模式</div><div class="result-quality-note">修正建議只在品質條件通過後採用；資料不一致時先取得更多 Log。</div><h2>⑤ 本次 Log 總覽</h2><div class="stats" id="stats"></div></section>
+<section class="card"><div class="result-mode" id="resultMode">🔴 閉迴路 ON｜Fuel_CL 校正模式</div><div class="result-quality-note">修正建議只在品質條件通過後採用；資料不一致時先取得更多 Log。</div><h2>⑤ 本次 Log 總覽</h2><div class="stats" id="stats"></div></section>
 <section class="card load-spectrum-card" id="loadSpectrumSection"><div class="spectrum-head"><div><div class="section-tag">LOAD SPECTRUM</div><h2>📊 Log 負載光譜儀</h2><p class="spectrum-sub">X 軸＝RPM｜Y 軸＝AP 負載率（Cyl1_Eng_AP / P_Atm × 100%）。只分析 Log 負載，不參與 Fuel Map 修正。</p></div></div><div id="loadSpectrum"></div></section>
 <section class="card"><h2>⛽ Fuel Map 修正建議</h2>
 <div class="alert yellow"><b>核心：Fuel_CL</b><br/>
@@ -561,7 +572,7 @@ Fuel_CL 的穩定統計值直接作為該 Map 格的修正依據；AFR_Target / 
 <div class="note detail-note">
 這裡列出所有 Log 實際有對應到的 RPM × TPS Map 格，包含樣本不足的格子。
 <b>不代表可以調整油圖。</b><br/>
-真正的調校建議只看上方「⛽ Fuel Map 修正建議」；硬條件為 T_Eng ≥67°C、排除瞬態、Fuel_CL 有效且對應實際 Map 格。樣本數、停留時間、RPM/TPS 穩定度與 WBO2 Ready 會影響可信度，不再直接把可用資料整格剔除；|Fuel_CL| ≤3.0% 不列入修正範圍。
+真正需要立即處理的調校建議只看上方「⛽ Fuel Map 修正建議」；「👀 觀望區」只提醒疑似需要關注的格，不建議現在修改；T_Eng ≥67°C 為採樣基礎；瞬態保留但降低權重；Fuel_CL / WBO2 依閉迴路模式使用，且只對應實際 Map 格。樣本數、停留時間、RPM/TPS 穩定度與 WBO2 Ready 會影響可信度，不再直接把可用資料整格剔除；|Fuel_CL| ≤3.0% 不列入修正範圍。
 </div>
 <div class="tablewrap"><table id="detail"></table></div>
 </details>
@@ -592,7 +603,7 @@ Fuel_CL 的穩定統計值直接作為該 Map 格的修正依據；AFR_Target / 
 <div class="rule-item"><b>⏱️ 穩定</b><strong>穩定後採樣</strong><span>依可信度判定</span></div>
 <div class="rule-item"><b>🧭 Map</b><strong>只用真實格</strong><span>X / XX 分開</span></div>
 </div>
-<div class="rule-details-inline"><div class="note compact-note"><strong>ON：</strong> Fuel_CL 主修正；WBO2 / AFR Target 交叉驗證。Fuel_CL 只要有任何有效非 0 響應，即判定為 ON。<br/><strong>OFF：</strong> WBO2＝實測 AFR；AFR Target＝目標 AFR；用 <code>(WBO2 / Target − 1) × 100%</code> 判定。Fuel_CL 不參與 OFF 修正；但 OFF 防呆仍直接檢查 Fuel_CL：全 0 才是 OFF。<br/><strong>溫度：</strong> ≥67°C 採樣；80～110°C 最高優先；&gt;110°C 降低優先。ON / OFF 同步。<br/><strong>防誤修：</strong> 跨片段方向不一致或離群值只降低可信度；|AFR 偏差| ≥20%→🚨 偏差異常大，請再取得 Log。高品質資料不因單一輔助條件直接消失。<br/><strong>結果：</strong> 🛠️ 建議修改　👀 建議觀望　⚠️ 數據不足　🚨 偏差異常。<br/><strong>有效數：</strong> 通過採樣條件後實際納入分析的資料筆數；穩定次數另計。<br/><strong>修正：</strong> 直接顯示建議當下油量增加／減少百分比；|偏差| ≤3.0% 不修；高可信度且超過 ±3% 才進主修改；輸入目前油圖值後自動計算修正後參考值，按「我已完成此格」自動進下一格。</div></div></div></details>
+<div class="rule-details-inline"><div class="note compact-note"><strong>ON：</strong> Fuel_CL 主修正；WBO2 / AFR Target 交叉驗證。Fuel_CL 有效非 0 響應代表 ON；全 0 代表 OFF。<br/><strong>OFF：</strong> WBO2＝實測 AFR；AFR Target＝目標 AFR；用 <code>(WBO2 / Target − 1) × 100%</code> 判定。Fuel_CL 不參與 OFF 修正；但 OFF：Fuel_CL 未介入時才進入 OFF 分析。<br/><strong>溫度：</strong> ≥67°C 採樣；80～110°C 最高優先；&gt;110°C 降低優先。ON / OFF 同步。<br/><strong>防誤修：</strong> 跨片段方向不一致或離群值只降低可信度；|AFR 偏差| ≥20%→🚨 偏差異常大，請再取得 Log。高品質資料不因單一輔助條件直接消失。<br/><strong>結果：</strong> 🛠️ 建議修改　👀 建議觀望　⚠️ 數據不足　🚨 偏差異常。<br/><strong>有效數：</strong> 通過採樣條件後實際納入分析的資料筆數；瞬態仍保留但降低權重，穩定次數另計。<br/><strong>修正：</strong> 直接顯示建議當下油量增加／減少百分比；|偏差| ≤3.0% 不修；高可信度且超過 ±3% 才進主修改；輸入目前油圖值後自動計算修正後參考值，按「我已完成此格」自動進下一格。</div></div></div></details>
 </section><section class="card quality-card">
 <div class="section-head"><div>
 <div class="section-tag">QUALITY GATE</div>
@@ -846,22 +857,45 @@ function weightedMedian(values){
  for(const x of a){acc+=x.w;if(acc>=total/2)return x.v}
  return a[a.length-1].v;
 }
+function weightedMAD(values){
+ const center=weightedMedian(values);
+ if(center==null)return null;
+ return weightedMedian(values
+   .filter(x=>x&&Number.isFinite(x.v)&&Number.isFinite(x.w)&&x.w>0)
+   .map(x=>({v:Math.abs(x.v-center),w:x.w})));
+}
+function analysisWeight(r){
+ if(r&&Number.isFinite(r._analysisWeight))return r._analysisWeight;
+ return r&&r._transient?0.20:1;
+}
 function markTransient(rows){
- let last=null, holdUntil=-Infinity, lastFile=null;
+ let last=null, holdUntil=-Infinity, lastFile=null, holdReason="";
  for(const r of rows){
    const file=r._file||"";
-   if(lastFile!==null && file!==lastFile){ last=null; holdUntil=-Infinity; }
+   if(lastFile!==null && file!==lastFile){ last=null; holdUntil=-Infinity; holdReason=""; }
    const tm=Number(r.Time), rpm=Number(r.RPM), tps=Number(r.TPS_Percent);
-   let transient=false;
-   if(Number(r.Dec_FC_En)>0 || Number(r.Inj_Cut)>0) transient=true;
+   let transient=false, reason="";
+   if(Number(r.Dec_FC_En)>0 || Number(r.Inj_Cut)>0){
+     transient=true; reason="cut";
+   }
    if(last&&Number.isFinite(tm)&&Number.isFinite(last.t)&&tm>last.t){
      const dt=tm-last.t;
      const tpsRate=Math.abs(tps-last.tps)/dt;
      const rpmRate=Math.abs(rpm-last.rpm)/dt;
-     if(tpsRate>=cfg.transientTpsRate||rpmRate>=cfg.transientRpmRate)transient=true;
+     if(tpsRate>=cfg.transientTpsRate||rpmRate>=cfg.transientRpmRate){
+       transient=true; reason="rate";
+     }
    }
-   if(transient)holdUntil=Math.max(holdUntil,Number.isFinite(tm)?tm+cfg.transientHoldSec:Infinity);
-   r._transient=transient || (Number.isFinite(tm)&&tm<holdUntil);
+   if(transient){
+     holdUntil=Math.max(holdUntil,Number.isFinite(tm)?tm+cfg.transientHoldSec:Infinity);
+     holdReason=reason||"rate";
+   }
+   const held=Number.isFinite(tm)&&tm<holdUntil;
+   r._transient=transient||held;
+   r._transientReason=transient?reason:(held?holdReason:"");
+   // Transient information is retained. Only explicit fuel/injection cut is treated
+   // as near-zero influence; ordinary transient/hold samples remain as low-weight evidence.
+   r._analysisWeight=(r._transientReason==="cut")?0.05:(r._transient?0.20:1);
    last={t:tm,rpm,tps}; lastFile=file;
  }
  return rows;
@@ -869,24 +903,24 @@ function markTransient(rows){
 
 
 function prepareClosedLoopRows(rawRows){
- // ON：只採用 Fuel_CL 實際介入的資料。WBO2_AT_En 是 AutoTune 狀態，不是 WB O2 CL 開關。
+ // ON：保留所有 Fuel_CL 有效樣本；瞬態不再直接刪除，只降低權重。
  markTransient(rawRows);
  const out=[];
  for(const r of rawRows){
-   if(r._transient) continue;
    if(!Number.isFinite(r.Fuel_CL)) continue;
-   if(r.Fuel_CL===0) continue;
+   // ON：Fuel_CL 有效介入時才進入 ON 修正。
+   if(Number(r.Fuel_CL)===0) continue;
+   if(!Number.isFinite(r.T_Eng)||r.T_Eng<cfg.temp) continue;
    out.push(r);
  }
  return out;
 }
 
 function prepareOpenLoopRows(rawRows){
-  // OFF：只採用 Fuel_CL 未介入的資料，避免把任何閉迴路修正過的樣本拿來當 Base Map 依據。
+  // OFF：保留 Fuel_CL=0、WBO2 Ready、AFR 有效的樣本；瞬態只降權。
   markTransient(rawRows);
   const out=[];
   for(const r of rawRows){
-    if(r._transient) continue;
     if(Number(r.Fuel_CL)!==0) continue;
     if(!Number.isFinite(r.T_Eng)||r.T_Eng<cfg.temp) continue;
     if(!Number.isFinite(r.AFR_WBO2)||!Number.isFinite(r.AFR_Target)||r.AFR_Target<=0) continue;
@@ -897,6 +931,7 @@ function prepareOpenLoopRows(rawRows){
   }
   return out;
 }
+
 
 function stableMapGroups(validRows){
  const platform=$("logPlatformSelect")?.value||"", series=$("ecuSeriesSelect")?.value||"";
@@ -961,7 +996,6 @@ function stableMapGroups(validRows){
  };
 
  for(const r of validRows){
-   if(r._transient){flush();continue;}
    const rp=gridCellByMidpoint(r.RPM,map.rpm);
    const tp=gridCellByMidpoint(r.TPS_Percent,map.tps);
    if(rp==null||tp==null){flush();continue;}
@@ -969,7 +1003,7 @@ function stableMapGroups(validRows){
    if(cellKey!==currentKey){
      flush(); currentKey=cellKey; currentRows=[];
    }
-   // 不以固定連續筆數建立 cell；transient 仍由既有瞬態防呆處理。
+   // 不以固定連續筆數建立 cell；transient 不再直接刪除：保留資料但降低權重；明確斷油／噴油切斷僅保留極低權重。
    r._rp=rp; r._tp=tp; currentRows.push(r);
  }
  flush();
@@ -979,10 +1013,19 @@ function stableMapGroups(validRows){
 function cellGroups(validRows){ return stableMapGroups(validRows); }
 
 
+function isMainRepairCell(c){
+  return !!c &&
+    c.quality==="高可信度" &&
+    !c.extreme &&
+    Number.isFinite(Number(c.deviation)) &&
+    Math.abs(Number(c.deviation))>cfg.clDeadband &&
+    Math.abs(Number(c.deviation))<20;
+}
 function correctionFromDeviation(errPct){
   const e=Number(errPct);
   if(!Number.isFinite(e))return null;
-  if(Math.abs(e)<=cfg.clDeadband)return {fuelPct:0,targetErr:e};
+  if(Math.abs(e)<=cfg.clDeadband)return null;
+  if(Math.abs(e)>=20)return null;
   const target=Math.sign(e)*cfg.clDeadband;
   const base=1+e/100, desired=1+target/100;
   if(base<=0||desired<=0)return null;
@@ -1035,8 +1078,7 @@ function bindWorkList(){
 }
 function renderWorkList(items){
   window.__ctCompleted=window.__ctCompleted||new Set();
-  const valid=items
-    .filter(c=>c.quality==="高可信度"&&!c.extreme&&Math.abs(c.deviation)>cfg.clDeadband)
+  const valid=items.filter(isMainRepairCell)
     .sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);
   const doneCount=valid.filter(c=>window.__ctCompleted.has(c.rpm+"|"+c.tps)).length;
   const body=valid.map((c,i)=>{
@@ -1126,36 +1168,84 @@ function bindMapValueInputs(){
 }
 function prepareWorkMap(items){
   window.__ctWorkMap=new Map();
-  items.filter(c=>c.quality==="高可信度"&&!c.extreme&&Math.abs(c.deviation)>cfg.clDeadband)
+  items.filter(isMainRepairCell)
     .forEach(c=>window.__ctWorkMap.set(c.rpm+"|"+c.tps,c));
 }
 
 function qualityGateCell(c, value, mode){
   const rs=c.rs||[];
-  const n=rs.length;
-  const m=mad(rs.map(r=>value(r)));
-  const segVals=(c.segments||[]).map(seg=>med(seg.map(r=>value(r)))).filter(Number.isFinite);
+  const vals=rs.map(r=>({v:value(r),w:tempWeight(r.T_Eng)*analysisWeight(r)}))
+    .filter(x=>Number.isFinite(x.v)&&x.w>0);
+  const rawN=rs.length;
+  const effectiveN=vals.reduce((s,x)=>s+x.w,0);
+  const center=weightedMedian(vals);
+  const m=weightedMAD(vals);
+  const segVals=(c.segments||[]).map(seg=>{
+    const sv=seg.map(r=>({v:value(r),w:tempWeight(r.T_Eng)*analysisWeight(r)}))
+      .filter(x=>Number.isFinite(x.v)&&x.w>0);
+    return weightedMedian(sv);
+  }).filter(Number.isFinite);
   const sig=segVals.filter(v=>Math.abs(v)>cfg.clDeadband);
   const consistency=sig.length<2?1:Math.max(
     sig.filter(v=>v>0).length/sig.length,
     sig.filter(v=>v<0).length/sig.length
   );
-  const consistent=sig.length<2 || sig.every(v=>Math.sign(v)===Math.sign(sig[0]));
-  const readyVals=rs.map(r=>Number(r.WBO2_Ready)).filter(Number.isFinite);
-  const readyKnown=readyVals.length>0;
-  const readyRate=readyKnown?readyVals.filter(v=>v===1).length/readyVals.length:null;
-  const stabilityOk=Number.isFinite(c.stabilityPct)?c.stabilityPct<=15:true;
-
-  // 真正的「資料刪除」只發生在硬性無效條件；其餘只影響可信度。
+  const readyPairs=rs.map(r=>({v:Number(r.WBO2_Ready),w:tempWeight(r.T_Eng)*analysisWeight(r)}))
+    .filter(x=>Number.isFinite(x.v)&&x.w>0);
+  const readyKnown=readyPairs.length>0;
+  const readyRate=readyKnown
+    ? readyPairs.reduce((sum,x)=>sum+(x.v===1?x.w:0),0)/readyPairs.reduce((sum,x)=>sum+x.w,0)
+    : null;
+  const tempPairs=vals;
+  const avgTempWeight=tempPairs.length?tempPairs.reduce((a,b)=>a+b.w,0)/tempPairs.length:0;
+  const stabilityPct=Number.isFinite(c.stabilityPct)?c.stabilityPct:null;
   let quality="數據不足";
-  if(n>=15 && consistency>=0.6 && (readyRate==null || readyRate>=0.7)){
-    quality="可參考";
+  if(effectiveN>=8)quality="低可信度";
+  if(effectiveN>=15)quality="可參考";
+  // No legacy total-score gate: confidence is based on interpretable evidence.
+  const concentrated=Number.isFinite(m)&&m<=8;
+  if(effectiveN>=30&&concentrated&&consistency>=0.7)quality="高可信度";
+  return {quality,m,consistency,consistent:consistency>=0.8,readyRate,readyKnown,
+    stabilityOk:stabilityPct==null||stabilityPct<=15,rawN,effectiveN,avgTempWeight,center,score:null};
+}
+
+
+function renderWatchList(arr){
+  const watch=arr.filter(c=>{
+    const d=Number(c.deviation);
+    return Number.isFinite(d) &&
+      Math.abs(d)>cfg.clDeadband &&
+      Math.abs(d)<20 &&
+      c.quality!=="高可信度" &&
+      c.quality!=="數據不足" &&
+      c.quality!=="極端偏差";
+  }).sort((a,b)=>Math.abs(Number(b.deviation))-Math.abs(Number(a.deviation)));
+
+  if(!watch.length){
+    return `<section class="watch-card">
+      <div class="watch-head"><h3>👀 觀望區</h3><span class="watch-count">0 格</span></div>
+      <p class="watch-sub">目前沒有「偏差超過 ±3% 但證據尚不足」的格子。</p>
+    </section>`;
   }
-  // 高品質保護：有效數足夠、分布集中、方向一致時，不因片段數、Map 邊界等輔助條件被踢出。
-  if(n>=30 && m!=null && m<=5 && consistency>=0.8 && (readyRate==null || readyRate>=0.7)){
-    quality="高可信度";
-  }
-  return {quality,m,consistency,consistent,readyRate,readyKnown,stabilityOk};
+
+  const rows=watch.map(c=>{
+    const reason=c.quality==="可參考"
+      ?"資料已有一定參考價值，但尚未達主修改可信度。"
+      :"資料偏少或穩定度不足，建議累積更多 Log。";
+    return `<div class="watch-item">
+      <div><strong>${c.rpm} RPM / TPS ${c.tps}%</strong></div>
+      <div>偏差 <strong>${pct(c.deviation)}</strong></div>
+      <div>有效數 <strong>${c.rs.length}</strong></div>
+      <div>可信度 <strong>${c.quality}</strong></div>
+      <div class="watch-note">${reason}</div>
+    </div>`;
+  }).join("");
+
+  return `<section class="watch-card">
+    <div class="watch-head"><h3>👀 觀望區</h3><span class="watch-count">${watch.length} 格</span></div>
+    <p class="watch-sub">這些格已經看到偏差超過 ±3%，但目前證據還不足以叫你修改。先保留；取得更多 Log、片段或更穩定資料後再判斷。</p>
+    <div class="watch-list">${rows}</div>
+  </section>`;
 }
 
 function buildClosedLoop(){
@@ -1165,12 +1255,12 @@ function buildClosedLoop(){
   ["Log 檔案",new Set(rows.map(r=>r._file)).size],["原始樣本",rows.length.toLocaleString()],
   ["CL 有效資料",prepared.length.toLocaleString()],["T_Eng ≥67°C",hot.length.toLocaleString()],
 ["已對應 Map 格",cells.length],
-  ["瞬態／斷油排除",rows.filter(r=>r._transient).length.toLocaleString()],["Log 格式",androidMode?"Android aRacer":"Apple"]
+  ["瞬態／斷油低權重",rows.filter(r=>r._transient).length.toLocaleString()],["Log 格式",androidMode?"Android aRacer":"Apple"]
  ].map(x=>`<div class="stat">${x[0]}<b>${x[1]}</b></div>`).join("");
  renderLoadSpectrum(rows);
 
  const arr=cells.map(c=>{
-  const rs=c.rs,cl=weightedMedian(rs.map(r=>({v:r.Fuel_CL,w:tempWeight(r.T_Eng)})));
+  const rs=c.rs,cl=weightedMedian(rs.map(r=>({v:r.Fuel_CL,w:tempWeight(r.T_Eng)*analysisWeight(r)})));
   const afrTarget=med(rs.map(r=>r.AFR_Target)),afr=med(rs.map(r=>r.AFR_WBO2));
   const afrErr=afr==null||afrTarget==null?null:(afr/afrTarget-1)*100;
   const ap=med(rs.map(r=>r.Cyl1_Eng_AP)),temp=med(rs.map(r=>r.T_Eng));
@@ -1179,21 +1269,22 @@ function buildClosedLoop(){
   const q=qualityGateCell(c,r=>r.Fuel_CL,"on");
   const quality=extreme?"極端偏差":q.quality;
   const action=Math.abs(cl)>cfg.clDeadband&&!extreme&&quality==="高可信度";
-  return {...c,cl,m:q.m,segmentVals:(c.segments||[]).map(seg=>med(seg.map(r=>r.Fuel_CL))).filter(Number.isFinite),
-    consistency:q.consistency,consistent:q.consistent,readyRate:q.readyRate,afrTarget,afr,afrErr,ap,temp,
+  return {...c,cl,m:q.m,segmentVals:(c.segments||[]).map(seg=>weightedMedian(seg.map(r=>({v:r.Fuel_CL,w:tempWeight(r.T_Eng)*analysisWeight(r)})))).filter(Number.isFinite),
+    consistency:q.consistency,consistent:q.consistent,readyRate:q.readyRate,qualityScore:q.score,effectiveN:q.effectiveN,afrTarget,afr,afrErr,ap,temp,
     extreme,quality,action,fuelPct:corr?.fuelPct??0,deviation:cl};
 });
 arr.sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);
- const recommend=arr.filter(c=>c.quality==="高可信度"&&!c.extreme&&Math.abs(c.deviation)>cfg.clDeadband);
+ const recommend=arr.filter(isMainRepairCell);
 
  $("fuel").innerHTML=`<div class="stats">
    <div class="stat">建議修改<b>${recommend.length}</b></div>
+   <div class="stat">±3% 內不修<b>${arr.filter(c=>!c.extreme&&Number.isFinite(c.deviation)&&Math.abs(c.deviation)<=cfg.clDeadband).length}</b></div>
    <div class="stat">數據不足<b>${arr.filter(c=>c.quality==="數據不足").length}</b></div>
    <div class="stat">極端偏差<b>${arr.filter(c=>c.extreme).length}</b></div>
   
  </div>
- <div class="note" style="margin-top:9px"><strong>修改建議：</strong>以 Fuel_CL 實際修正量反推當下油量調整，使 CL 進入 ±${cfg.clDeadband.toFixed(1)} 內。≥20% 不直接修改，請再取得 Log。</div>
- ${renderWorkList(recommend)}`;
+ <div class="note" style="margin-top:9px"><strong>修改建議：</strong>只有高可信度且偏差超過 ±${cfg.clDeadband.toFixed(1)}、未達 ±20% 的格才進入修改流程；±3% 內資料保留但不列入修改。≥20% 不直接修改，請再取得 Log。</div>
+ ${renderWorkList(recommend)}${renderWatchList(arr)}`;
 
  $("fuelTable").innerHTML=`<thead><tr><th>RPM</th><th>TPS</th><th>有效數</th><th>Fuel_CL</th><th>建議燃油</th><th>AFR Target</th><th>WBO2</th><th>可信度</th></tr></thead><tbody>${
  (recommend.map(c=>`<tr><td><strong>${c.rpm}</strong></td><td><strong>${c.tps}%</strong></td><td>${c.rs.length}</td>
@@ -1208,15 +1299,23 @@ arr.sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);
  $("result").classList.remove("hidden");
 }
 function getLoopMode(){return $("loopModeSelect")?.value==="off"?"off":"on";}
-function updateLoopModeUI(){const off=getLoopMode()==="off",b=$("loopModeBadge"),t=$("loopModeTitle"),d=$("loopModeDesc"),q=$("qualityLoopText"),n=$("modeEvidenceNote"),g=$("loopLogGuardNote");if(b){b.textContent=off?"🔵 CLOSED LOOP OFF":"🔴 CLOSED LOOP ON";b.style.background=off?"#2563eb":"";}if(t)t.textContent=off?"閉迴路關閉｜WBO2 / AFR Target 主判定":"閉迴路開啟｜Fuel_CL 主判定";if(d)d.textContent=off?"WBO2 實測 AFR → AFR Target · Fuel_CL 不參與修正":"Fuel_CL 主修正 · WBO2 / AFR Target 交叉驗證";if(q)q.textContent=off?"閉迴路 OFF｜WBO2 / Target 主判定":"閉迴路 ON｜Fuel_CL 主判定";if(n)n.textContent=off?"OFF：WBO2 / Target 主判定 · Fuel_CL 不參與修正":"ON：Fuel_CL 主判定 · WBO2 / AFR Target 交叉驗證";if(g)g.innerHTML=off?"<b>Log 防呆：</b>請投入正確的「關閉」閉迴路 Log；Fuel_CL 必須全程為 0 才可分析 OFF；只要出現任何有效非 0 響應，就判定為 ON。":"<b>Log 防呆：</b>請投入正確的「開啟」閉迴路 Log；Fuel_CL 只要出現任何有效非 0 響應，就判定為 ON；全 0 才是 OFF。 同一份 Log 可包含前段 0、後段非 0；分析時依實際有效 Fuel_CL 分段，ON 只納入非 0 片段。";}
+function updateLoopModeUI(){const off=getLoopMode()==="off",b=$("loopModeBadge"),t=$("loopModeTitle"),d=$("loopModeDesc"),q=$("qualityLoopText"),n=$("modeEvidenceNote"),g=$("loopLogGuardNote");if(b){b.textContent=off?"🔵 CLOSED LOOP OFF":"🔴 CLOSED LOOP ON";b.style.background=off?"#2563eb":"";}if(t)t.textContent=off?"閉迴路關閉｜WBO2 / AFR Target 主判定":"閉迴路開啟｜Fuel_CL 主判定";if(d)d.textContent=off?"以 WBO2 實測 AFR 與 Target AFR 的差異為核心":"以 Fuel_CL 為核心";if(q)q.textContent=off?"閉迴路 OFF｜WBO2 / Target 主判定":"閉迴路 ON｜Fuel_CL 主判定";if(n){n.textContent=off?"OFF：以 WBO2 實際 AFR 與 Target AFR 為核心":"ON：Fuel_CL 為核心";}if(g)g.innerHTML=off?"<b>Log 防呆：</b>請投入正確的「關閉」閉迴路 Log；Fuel_CL 必須全程為 0 才可分析 OFF；Fuel_CL 約 100%（允許正常波動）才代表 ON。":"<b>Log 防呆：</b>請投入正確的「開啟」閉迴路 Log；Fuel_CL 有效非 0 響應代表 ON；全 0 才是 OFF。同一份 Log 可包含前段 0、後段約 100%；分析時依實際 Fuel_CL 狀態分段，ON 只納入約 100% 片段。";}
+/* CT125 rule: Fuel_CL state detection uses the 0% OFF / ~100% ON operating state.
+   The 100% reference is ONLY for identifying loop intervention; it is NOT subtracted from
+   Fuel_CL for compensation. Once ON is established, Fuel_CL's actual correction value is
+   used by the ON correction pipeline. */
 function detectLoopState(parsedRows){
   const cl=parsedRows.map(r=>Number(r.Fuel_CL)).filter(Number.isFinite);
   if(!cl.length)return {ok:false,state:null,reason:"Log 缺少 Fuel_CL，無法判斷閉迴路狀態"};
-  const active=cl.filter(v=>Number.isFinite(v)&&v!==0).length;
-  const inactive=cl.length-active;
-  // 最終規則：Fuel_CL 全部為 0 = OFF；只要出現任何有效非 0 響應 = ON。
-  const state=active===0?"off":"on";
-  return {ok:true,state,active,inactive,total:cl.length,activeRate:active/cl.length,inactiveRate:inactive/cl.length};
+  let on=0,off=0,ambiguous=0;
+  for(const v of cl){
+    const d0=Math.abs(v), d100=Math.abs(v-100);
+    if(d100<d0){ on++; }
+    else if(d0<d100){ off++; }
+    else { ambiguous++; }
+  }
+  const state=on===0&&off>0?"off":on>0&&off===0?"on":on>0&&off>0?"mixed":null;
+  return {ok:!!state,state,on,off,ambiguous,total:cl.length,activeRate:on/cl.length,inactiveRate:off/cl.length};
 }
 function validateLoopLogGuard(parsedRows,mode,label="Log"){
   const d=detectLoopState(parsedRows);
@@ -1228,7 +1327,7 @@ function validateLoopLogGuard(parsedRows,mode,label="Log"){
   }
   return true;
 }
-function build(){updateLoopModeUI();return getLoopMode()==="off"?buildOpenLoop():buildClosedLoop();}
+function build(){updateLoopModeUI();const off=getLoopMode()==="off";const rm=$("resultMode");if(rm)rm.textContent=off?"🔵 閉迴路 OFF｜WBO2 / Target 校正模式":"🔴 閉迴路 ON｜Fuel_CL 校正模式";return off?buildOpenLoop():buildClosedLoop();}
 
 function loadRatio(r){const ap=Number(r.Cyl1_Eng_AP),patm=Number(r.P_Atm);return Number.isFinite(ap)&&Number.isFinite(patm)&&patm>0?ap/patm*100:null}
 function prepareLoadSpectrumRows(rawRows){markTransient(rawRows);const out=[];for(const r of rawRows){if(r._transient||Number(r.Dec_FC_En)>0||Number(r.Inj_Cut)>0)continue;if(!Number.isFinite(r.T_Eng)||r.T_Eng<cfg.temp||!Number.isFinite(r.RPM)||r.RPM<=0)continue;const q=loadRatio(r);if(!Number.isFinite(q))continue;r._loadRatio=q;out.push(r)}return out}
@@ -1245,7 +1344,7 @@ function buildOpenLoop(){
   ["Log 檔案",new Set(rows.map(r=>r._file)).size],["原始樣本",rows.length.toLocaleString()],
   ["WBO2 有效資料",prepared.length.toLocaleString()],["T_Eng ≥67°C",hot.length.toLocaleString()],
 ["已對應 Map 格",cells.length],
-  ["瞬態／斷油排除",rows.filter(r=>r._transient).length.toLocaleString()],["Log 格式",androidMode?"Android aRacer":"Apple"]
+  ["瞬態／斷油低權重",rows.filter(r=>r._transient).length.toLocaleString()],["Log 格式",androidMode?"Android aRacer":"Apple"]
  ].map(x=>`<div class="stat">${x[0]}<b>${x[1]}</b></div>`).join("");
  renderLoadSpectrum(rows);
 
@@ -1259,20 +1358,21 @@ function buildOpenLoop(){
   const q=qualityGateCell(c,r=>r._analysisCorr,"off");
   const quality=extreme?"極端偏差":q.quality;
   const action=Math.abs(corr)>cfg.clDeadband&&!extreme&&quality==="高可信度";
-  return {...c,cl:corr,m:q.m,segmentVals:(c.segments||[]).map(seg=>med(seg.map(r=>r._analysisCorr))).filter(Number.isFinite),
+  return {...c,cl:corr,m:q.m,segmentVals:(c.segments||[]).map(seg=>weightedMedian(seg.map(r=>({v:r._analysisCorr,w:tempWeight(r.T_Eng)*analysisWeight(r)})))).filter(Number.isFinite),
     consistency:q.consistency,consistent:q.consistent,readyRate:q.readyRate,afrTarget,afr,afrErr,ap,temp,
     extreme,quality,action,fuelPct:corrCalc?.fuelPct??0,deviation:corr};
 });
 arr.sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);
- const recommend=arr.filter(c=>c.quality==="高可信度"&&!c.extreme&&Math.abs(c.deviation)>cfg.clDeadband);
+ const recommend=arr.filter(isMainRepairCell);
 
  $("fuel").innerHTML=`<div class="stats">
    <div class="stat">建議修改<b>${recommend.length}</b></div>
+   <div class="stat">±3% 內不修<b>${arr.filter(c=>!c.extreme&&Number.isFinite(c.deviation)&&Math.abs(c.deviation)<=cfg.clDeadband).length}</b></div>
    <div class="stat">數據不足<b>${arr.filter(c=>c.quality==="數據不足").length}</b></div>
    <div class="stat">極端偏差<b>${arr.filter(c=>c.extreme).length}</b></div>
  </div>
- <div class="note" style="margin-top:9px"><strong>修改建議：</strong>WBO2 / AFR Target 算出 AFR 偏差，再反推當下油量調整，使偏差進入 ±${cfg.clDeadband.toFixed(1)} 內。≥20% 不直接修改，請再取得 Log。</div>
- ${renderWorkList(recommend)}`;
+ <div class="note" style="margin-top:9px"><strong>修改建議：</strong>只有高可信度且偏差超過 ±${cfg.clDeadband.toFixed(1)}、未達 ±20% 的格才進入修改流程；±3% 內資料保留但不列入修改。≥20% 不直接修改，請再取得 Log。</div>
+ ${renderWorkList(recommend)}${renderWatchList(arr)}`;
 
  $("fuelTable").innerHTML=`<thead><tr><th>RPM</th><th>TPS</th><th>有效數</th><th>AFR 偏差</th><th>建議燃油</th><th>AFR Target</th><th>WBO2</th><th>可信度</th></tr></thead><tbody>${
  (recommend.map(c=>`<tr><td><strong>${c.rpm}</strong></td><td><strong>${c.tps}%</strong></td><td>${c.rs.length}</td>
@@ -1370,7 +1470,7 @@ async function sideOpenLoop(files){
        const cells=stableMapGroups(prepared);
        for(const c of cells){
          const rs=c.rs;
-         const corr=weightedMedian(rs.map(r=>({v:r._analysisCorr,w:tempWeight(r.T_Eng)})));
+         const corr=weightedMedian(rs.map(r=>({v:r._analysisCorr,w:tempWeight(r.T_Eng)*analysisWeight(r)})));
          const m=mad(rs.map(r=>r._analysisCorr));
          const at=med(rs.map(r=>r.AFR_Target)),wb=med(rs.map(r=>r.AFR_WBO2));
          const err=(Number.isFinite(at)&&Number.isFinite(wb))?wb-at:null;
@@ -1392,14 +1492,20 @@ async function sideOpenLoop(files){
      boundary:list.some(x=>x.boundary),
      }));
  }
- function outcome(b,a){
-   if(b.quality==="低可信度"||a.quality==="低可信度")return["🟡 可信度不足","前／後至少一側品質不足","warn"];
-   const ab=Math.abs(b.cl),aa=Math.abs(a.cl),improved=aa<ab-.05,ib=ab<=cfg.clDeadband,ia=aa<=cfg.clDeadband;
-   const rev=b.cl!==0&&a.cl!==0&&Math.sign(b.cl)!==Math.sign(a.cl);
-   if(rev&&!ia)return["🔴 可能過修","方向反轉且仍超過 ±3.0%","bad"];
-   if(ia&&improved)return["🟢 修正成功","已進入 ±3.0% 內","good"];
-   if(ib&&ia)return["🟢 維持穩定","前後皆在 ±3.0% 內","good"];
-   if(improved)return["🟡 有改善","更接近 0%，但仍超過 ±3.0%","warn"];
+ function outcome(b,a,mode){
+   if(!b||!a)return["🟡 無法比較","缺少前／後 Log 資料","warn"];
+   const vb=mode==="on"?Number(b.cl):Number(b.afrErr);
+   const va=mode==="on"?Number(a.cl):Number(a.afrErr);
+   if(!Number.isFinite(vb)||!Number.isFinite(va))return["🟡 無法比較","缺少可用的比較數值","warn"];
+   const ab=Math.abs(vb),aa=Math.abs(va),improved=aa<ab-.05,ib=ab<=cfg.clDeadband,ia=aa<=cfg.clDeadband;
+   const rev=vb!==0&&va!==0&&Math.sign(vb)!==Math.sign(va);
+   const strongA=a.quality==="高可信度";
+   const strongB=b.quality==="高可信度";
+   if(rev&&!ia)return["🔴 可能過修","方向反轉且後 Log 仍超過 ±3.0%","bad"];
+   if(ia&&strongA)return["🟢 修正成功","後 Log 已進入 ±3.0%，且後 Log 為高可信度","good"];
+   if(ia&&!strongA)return["🟡 進入 ±3.0%，但證據不足","後 Log 未達高可信度","warn"];
+   if(improved&&strongA)return["🟡 有改善","更接近 0%，但仍超過 ±3.0%","warn"];
+   if(improved&&!strongA)return["🟡 有改善，但證據不足","數值改善，但後 Log 未達高可信度","warn"];
    if(Math.abs(aa-ab)<=.05)return["🟡 幾乎不變","前後差異很小","warn"];
    return["🔴 沒有改善","修正後沒有更接近 0%","bad"];
  }
@@ -1410,18 +1516,22 @@ async function sideOpenLoop(files){
    try{
      const b=await side([...before.files]),a=await side([...after.files]);
      const bm=new Map(b.map(x=>[x.rpm+"|"+x.tps,x])),am=new Map(a.map(x=>[x.rpm+"|"+x.tps,x]));
+     const compareMode=getLoopMode();
      const keys=[...bm.keys()].filter(k=>am.has(k)).map(k=>{const [rpm,tps]=k.split("|").map(Number);return{k,rpm,tps}}).sort((x,y)=>x.rpm-y.rpm||x.tps-y.tps);
      let good=0,warn=0,bad=0;
      const rows=keys.map(x=>{
-       const bb=bm.get(x.k),aa=am.get(x.k),s=outcome(bb,aa);
+       const bb=bm.get(x.k),aa=am.get(x.k),s=outcome(bb,aa,compareMode);
        if(s[2]==="good")good++;else if(s[2]==="warn")warn++;else bad++;
        const notes=[];if(bb.dwell<1||aa.dwell<1)notes.push("停留不足");if(bb.boundary||aa.boundary)notes.push("接近Map邊界");if(bb.conflict||aa.conflict)notes.push("CL/WBO2方向衝突");
-       return `<tr><td>${x.rpm}</td><td>${x.tps}%</td><td>${pct(bb.cl)}</td><td>${pct(aa.cl)}</td><td>${pct(aa.cl-bb.cl)}</td><td>${bb.samples}/${aa.samples}</td><td>${bb.dwell.toFixed(2)}s/${aa.dwell.toFixed(2)}s</td><td class="${s[2]}"><strong>${s[0]}</strong><br><span>${s[1]}${notes.length?"<br>⚠️ "+notes.join("；"):""}</span></td></tr>`;
+       const bv=compareMode==="on"?bb.cl:bb.afrErr, av=compareMode==="on"?aa.cl:aa.afrErr;
+       const fmt=v=>Number.isFinite(v)?`${v>0?"+":""}${v.toFixed(2)}%`:"—";
+       const label=compareMode==="on"?"Fuel_CL":"AFR 偏差";
+       return `<tr><td>${x.rpm}</td><td>${x.tps}%</td><td>${fmt(bv)}</td><td>${fmt(av)}</td><td>${Number.isFinite(bv)&&Number.isFinite(av)?fmt(av-bv):"—"}</td><td>${bb.samples}/${aa.samples}</td><td>${bb.quality||"資料不足"} / ${aa.quality||"資料不足"}</td><td class="${s[2]}"><strong>${s[0]}</strong><br><span>${s[1]}${notes.length?"<br>⚠️ "+notes.join("；"):""}</span></td></tr>`;
      }).join("");
      result.innerHTML=`<div class="bt-head"><strong>前後對比完成</strong><span>兩組 Log 各自獨立處理，再比較共同實際 Map 格</span></div>
-     <div class="bt-stats"><div><small>共同 Map 格</small><b>${keys.length}</b></div><div><small>🟢 改善／穩定</small><b>${good}</b></div><div><small>🟡 需觀察</small><b>${warn}</b></div><div><small>🔴 未改善／過修</small><b>${bad}</b></div></div>
-     <div class="bt-note"><strong>回測不改 Map。</strong> 停留時間、Map 邊界、CL／WBO2 衝突只作可信度警告；不自動平滑、不猜測缺失格點。</div>
-     <div class="compare-table-wrap"><table class="compare-table"><thead><tr><th>RPM</th><th>TPS</th><th>前 CL</th><th>後 CL</th><th>變化</th><th>有效數 前/後</th><th>結果</th></tr></thead><tbody>${rows||'<tr><td colspan="8">沒有共同且可比較的 Map 格。</td></tr>'}</tbody></table></div>`;
+     <div class="bt-stats"><div><small>共同 Map 格</small><b>${keys.length}</b></div><div><small>🟢 改善／成功</small><b>${good}</b></div><div><small>🟡 需觀察</small><b>${warn}</b></div><div><small>🔴 未改善／過修</small><b>${bad}</b></div></div>
+     <div class="bt-note"><strong>本次比較基準：${compareMode==="on"?"Fuel_CL":"WBO2 AFR 偏差（AFR−Target）"}。</strong> 前後 Log 各自獨立判定可信度；不以單純數值變小就判定修正成功。回測不改 Map，不猜測缺失格點。</div>
+     <div class="compare-table-wrap"><table class="compare-table"><thead><tr><th>RPM</th><th>TPS</th><th>前 ${label}</th><th>後 ${label}</th><th>變化</th><th>有效數 前/後</th><th>可信度 前/後</th><th>結果</th></tr></thead><tbody>${rows||'<tr><td colspan="8">沒有共同且可比較的 Map 格。</td></tr>'}</tbody></table></div>`;
    }catch(e){console.error(e);result.innerHTML='<div class="bt-warning">⚠️ 前後對比失敗：'+esc(e.message)+'</div>';}
    finally{btn.disabled=false;btn.textContent="開始前後對比";}
  });
@@ -1438,7 +1548,7 @@ if(loopModeSelect){
   const pages=[...document.querySelectorAll('.app-page')];
   function showPage(n){tabs.forEach(t=>t.classList.toggle('active',t.dataset.page===String(n)));pages.forEach(p=>p.classList.toggle('active',p.dataset.pagePanel===String(n)));window.scrollTo({top:0,behavior:'smooth'});}
   tabs.forEach(t=>t.addEventListener('click',()=>showPage(t.dataset.page)));
-  window.showCT181Page=showPage;
+  window.showCT125Page=showPage;
 })();
 </script>
 <style id="final-workflow-fix-v2">
