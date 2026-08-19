@@ -465,6 +465,18 @@ button:active{transform:translateY(1px)}
 .knock-spectrum-wrap .knock-risk{margin-top:8px}
 </style>
 
+
+<style>
+.tps-visible-legend{
+  margin-top:12px;padding:12px 14px;border:1px solid #e2e6eb;border-radius:12px;
+  background:#f8fafc;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;
+  color:#334155;font-size:.88rem;line-height:1.45
+}
+.tps-visible-legend strong{width:100%;font-size:.95rem;color:#0f172a}
+.tps-legend-item{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.tps-visible-legend small{width:100%;color:#64748b}
+</style>
+
 </head>
 <body>
 <div class="wrap">
@@ -598,7 +610,16 @@ button:active{transform:translateY(1px)}
   <div class="knock-spectrum-grid">
     <div>
       <canvas class="knock-canvas" id="knockSpectrumCanvas"></canvas>
-      <div class="knock-note">
+      
+      <div class="tps-visible-legend">
+        <strong>TPS 開度也直接顯示在光譜上</strong>
+        <span class="tps-legend-item"><i style="width:8px;height:8px;border-radius:50%;background:#2563eb;display:inline-block"></i> 0–30%</span>
+        <span class="tps-legend-item"><i style="width:12px;height:12px;border-radius:50%;background:#22c55e;display:inline-block"></i> 30–50%</span>
+        <span class="tps-legend-item"><i style="width:16px;height:16px;border-radius:50%;background:#facc15;display:inline-block"></i> 50–70%</span>
+        <span class="tps-legend-item"><i style="width:20px;height:20px;border-radius:50%;background:#ef4444;display:inline-block"></i> 70–100%</span>
+        <small>點越大＝TPS 越大；外框顏色＝TPS；點的填色＝RPM × AP × TPS 綜合風險。</small>
+      </div>
+<div class="knock-note">
         ⚠️ 這不是爆震診斷器。沒有直接爆震證據時，只提醒「爆震敏感／值得檢查」，
         不宣稱該區一定發生爆震。
       </div>
@@ -1794,11 +1815,23 @@ if(loopModeSelect){
       return `<line x1="${sx(r)}" y1="${T}" x2="${sx(r)}" y2="${T+ph}" stroke="#edf0f4"/><text x="${sx(r)}" y="${H-18}" text-anchor="middle" font-size="13" fill="#697386">${Math.round(r).toLocaleString()}</text>`;
     }).join('');
 
-    const colors=['#64748b','#2563eb','#f59e0b','#dc2626'];
+    const riskColors=['#64748b','#2563eb','#f59e0b','#dc2626'];
+    function tpsColor(tps){
+      if(tps===null)return '#94a3b8';
+      if(tps<30)return '#2563eb';
+      if(tps<50)return '#22c55e';
+      if(tps<70)return '#facc15';
+      if(tps<85)return '#f97316';
+      return '#ef4444';
+    }
     const dots=pts.map(p=>{
-      const rr=p.risk===3?5.6:p.risk===2?5:p.risk===1?4.3:3.4;
-      const opacity=p.risk===3?.78:p.risk===2?.70:p.risk===1?.62:.48;
-      return `<circle cx="${sx(p.rpm).toFixed(1)}" cy="${sy(p.ap).toFixed(1)}" r="${rr}" fill="${colors[p.risk]}" opacity="${opacity}" stroke="${colors[p.risk]}" stroke-width=".5"/>`;
+      const t=(p.tps===null?0:Math.max(0,Math.min(100,p.tps)));
+      // TPS is now visibly encoded by BOTH point size and outline color.
+      const rr=3.0 + t*0.035 + (p.risk===3?1.4:p.risk===2?.9:p.risk===1?.4:0);
+      const opacity=p.risk===3?.84:p.risk===2?.76:p.risk===1?.68:.54;
+      const tc=tpsColor(p.tps);
+      const title=`RPM ${Math.round(p.rpm)} / AP ${p.ap.toFixed(1)}% / TPS ${p.tps===null?'N/A':p.tps.toFixed(1)+'%'} / 風險 ${p.risk}`;
+      return `<circle cx="${sx(p.rpm).toFixed(1)}" cy="${sy(p.ap).toFixed(1)}" r="${rr.toFixed(2)}" fill="${riskColors[p.risk]}" opacity="${opacity}" stroke="${tc}" stroke-width="${p.tps===null?1.2:(1.2+t/70).toFixed(2)}"><title>${title}</title></circle>`;
     }).join('');
 
     // Focus region: 3500–5000 RPM / AP >=65%, with TPS >=30% treated as extra evidence.
@@ -1823,6 +1856,12 @@ if(loopModeSelect){
 
     const counts=[0,0,0,0];
     pts.forEach(p=>counts[p.risk]++);
+    const tpsVals=pts.map(p=>p.tps).filter(v=>v!==null);
+    const tpsStats=tpsVals.length
+      ? `TPS 實際資料 ${tpsVals.length.toLocaleString()} 筆｜範圍 ${Math.min(...tpsVals).toFixed(0)}–${Math.max(...tpsVals).toFixed(0)}%`
+      : 'Log 未提供可用 TPS';
+    const tpsLegend=document.querySelector('.tps-visible-legend small');
+    if(tpsLegend)tpsLegend.textContent=`${tpsStats}。點越大＝TPS 越大；外框顏色＝TPS；填色＝RPM × AP × TPS 綜合風險。`;
     if(legend){
       const labels=[
         `低風險：負載／轉速／TPS 組合沒有形成明顯敏感條件。（${counts[0].toLocaleString()} 筆）`,
