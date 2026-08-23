@@ -555,14 +555,7 @@ button:active{transform:translateY(1px)}
 <option value="xx">XX 系列（SuperXX / MiniXX）</option>
 </select>
 </div>
-<div>
-<label>引擎版本</label>
-<select id="profile">
-<option value="">請先選擇</option>
-<option value="ct125_2v">CT125 2V</option>
-<option value="ct125_4v">CT125 4V（待擴充）</option>
-</select>
-</div>
+
 <div>
 <label>閉迴路狀態</label>
 <select id="loopModeSelect">
@@ -572,7 +565,7 @@ button:active{transform:translateY(1px)}
 </div>
 </div>
 <div class="setup-warning" id="setupHint">
-    ⚠️ 請先完成以上四項設定，再上傳 Log。
+    ⚠️ 請先完成以上三項設定，再上傳 Log。
   </div>
 </section><section class="card upload-card" id="uploadSection">
 <div class="section-head upload-head">
@@ -728,7 +721,7 @@ button:active{transform:translateY(1px)}
   </div>
 </div>
 <div id="fuel"></div><div class="note" style="margin-top:8px">
-<strong>可信度分級：</strong>有效資料先保留，不再要求同一 Map 格連續 3 筆才建立 cell；effectiveN ≥12＋品質條件達標，或下列強工況條件任一達標 → 最高級直接認證；effectiveN 6～<12＋品質條件達標 → 可參考；effectiveN <6 → 數據不足。強工況認證條件：≥3次連續／約1秒內或≥5次／10秒內，且 RPM/TPS/AP 集中約±15%；≥3穩定片段且每段≥6次並方向一致且落差≤10%、或同一 Map 格穩定停留≥2秒且三軸集中。WBO2 Ready 僅作 OFF 開迴路的資料有效性條件。
+<strong>可信度分級：</strong>有效資料先保留，不再要求同一 Map 格連續 3 筆才建立 cell；effectiveN ≥12＋品質條件達標，或下列強工況條件任一達標 → 最高級直接認證；effectiveN 6～<12＋品質條件達標 → 可參考；effectiveN <6 → 數據不足。強工況認證條件：≥3次連續／約1秒內或≥5次／10秒內，且 RPM/TPS/AP 集中約±10%；≥3穩定片段且每段≥6次並方向一致且落差≤10%、或同一 Map 格穩定停留≥2秒且三軸集中。WBO2 Ready 僅作 OFF 開迴路的資料有效性條件。
 </div>
 </section>
 <section class="card detail-card">
@@ -770,9 +763,9 @@ button:active{transform:translateY(1px)}
 <strong>④ 可信度：</strong>effectiveN &lt;6 → <strong>數據不足</strong>；6≤effectiveN&lt;12 且品質條件達標 → <strong>可參考</strong>；effectiveN≥12 且品質條件達標 → <strong>高可信度</strong>。品質條件包含 weighted MAD ≤8 且跨片段方向一致度 ≥0.7。另有強工況證據可直接提升為「最高級直接認證」。
 <br><br>
 <strong>⑤ 強工況認證：</strong>程式目前實際採用任一條件即可取得 strong adoption：<br>
-・3 次連續資料在約 1 秒內，且 RPM／TPS／AP 三軸各自集中於中位數 ±15%；<br>
-・5 次資料在約 10 秒內，且三軸集中 ±15%；<br>
-・同一 Map 格穩定停留 ≥2 秒且三軸集中 ±15%；<br>
+・3 次連續資料在約 1 秒內，且 RPM／TPS／AP 三軸各自集中於中位數 ±10%；<br>
+・5 次資料在約 10 秒內，且三軸集中 ±10%；<br>
+・同一 Map 格穩定停留 ≥2 秒且三軸集中 ±10%；<br>
 ・≥3 個穩定片段，每段 ≥6 次、三軸集中、方向一致、片段偏差最大落差 ≤10 個百分點。<br>
 強工況「採用」代表取得進入修正統計／修改判定的資格，不代表直接寫入 ECU。
 <br><br>
@@ -827,7 +820,7 @@ let rows=[];
 
 function updateLogSystemConfirm(){
  const box=$("logSystemConfirm"),p=$("confirmPlatform"),e=$("confirmEngine"),pa=$("confirmParser"),m=$("confirmMap"),st=$("confirmStatus");
- const platform=$("logPlatformSelect")?.value||"", series=$("ecuSeriesSelect")?.value||"", engine=$("profile")?.value||"";
+ const platform=$("logPlatformSelect")?.value||"", series=$("ecuSeriesSelect")?.value||"";
  const ptxt=platform==="android"?"🤖 Android aRacer Log":platform==="apple"?"🍎 Apple Log":"尚未選擇";
  const stxt=series==="x"?"X 系列（SuperX / MiniX）":series==="xx"?"XX 系列（SuperXX / MiniXX）":"尚未選擇";
  if(p)p.textContent=ptxt;
@@ -850,9 +843,7 @@ function validateSelection(){
  const platform=$("logPlatformSelect")?.value||"", series=$("ecuSeriesSelect")?.value||"", engine=$("profile")?.value||"";
  if(!platform){alert("請先選擇 Log 系統：Apple Log 或 Android aRacer Log。");return false;}
  if(!series){alert("請先選擇 ECU 系列：X 系列或 XX 系列。");return false;}
- if(!engine){alert("請先選擇引擎版本：CT125 2V 或 CT125 4V。");return false;}
- if(engine==="ct125_4v"){alert("CT125 4V 目前為待擴充版本，尚未開放分析。");return false;}
- if(!$("loopModeSelect")?.value){alert("請先選擇閉迴路狀態。");return false;}
+if(!$("loopModeSelect")?.value){alert("請先選擇閉迴路狀態。");return false;}
  return true;
 }
 
@@ -1370,7 +1361,7 @@ function strongAdoptionEvidence(c, value){
       const v=rows.map(r=>Number(r[k])).filter(Number.isFinite).sort((a,b)=>a-b);
       if(v.length<3) return false;
       const med=v[Math.floor(v.length/2)];
-      const tol=Math.max(1,Math.abs(med)*0.15);
+      const tol=Math.max(1,Math.abs(med)*0.10);
       return v.every(x=>Math.abs(x-med)<=tol);
     });
   };
@@ -1444,9 +1435,9 @@ function strongAdoptionEvidence(c, value){
 
 const strongAdoptionPolicy={
   direct:[
-    "≥3次採樣／10秒內／RPM-TPS-AP集中 → 最高級直接認證（若3次即在約1秒內，屬特別漂亮）",
+    "≥3次採樣／10秒內／RPM-TPS-AP集中±10% → 最高級直接認證（若3次即在約1秒內，屬特別漂亮）",
     "≥3穩定片段／每段≥6次／三軸集中／方向一致／片段落差≤10% → 採用",
-    "同一Map格穩定停留≥2秒／RPM-TPS-AP集中 → 採用"
+    "同一Map格穩定停留≥2秒／RPM-TPS-AP集中±10% → 採用"
   ],
   meaning:"採用＝進入修正統計／修改判定；不直接寫入ECU Map"
 };
@@ -1681,7 +1672,6 @@ const $=id=>document.getElementById(id);
 
 $("logPlatformSelect").addEventListener("change",()=>updateLogSystemConfirm());
 $("ecuSeriesSelect").addEventListener("change",()=>updateLogSystemConfirm());
-$("profile").addEventListener("change",()=>updateLogSystemConfirm());
 $("logs").addEventListener("change",()=>{
  const fs=[...$("logs").files];
  $("status").textContent=fs.length?`已選擇 ${fs.length} 個檔案：`+fs.map(f=>f.name).join("、"):"尚未選擇 Log";
