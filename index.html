@@ -812,7 +812,7 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 <div class="temp-priority-legend"><span>🟢 80～110°C 偏好區</span><span>🟠 67～79°C 降權</span><span>⚠️ &gt;110°C 平滑降權</span></div>
 <div class="rule-item"><b>📈 不修</b><strong>±3.0% 內不列入修改</strong><span>實際門檻：cfg.clDeadband = 3.0</span></div>
 <div class="rule-item"><b>🚨 極端</b><strong>≥11% 不直接修改</strong><span>請重新取得 Log；目前程式門檻固定為 11%</span></div>
-<div class="rule-item"><b>🧭 Map</b><strong>只套用目前選定系列的真實格點</strong><span>X：20×17；XX：33×25，不跨系列</span></div>
+<div class="rule-item"><b>🧭 Map</b><strong>只套用目前選定系列的真實格點</strong><span>X：14×17；XX：31×25，不跨系列</span></div>
 </div>
 <div class="rule-details-inline"><div class="note compact-note">
 <strong>① ON／OFF 實際判定：</strong><br>
@@ -840,7 +840,7 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 <div class="section-head"><div><div class="section-tag">QUALITY GATE</div><h2>防失準</h2><p class="section-sub">品質不足時降低可信度，不急著修改；強工況證據只提升進入修正判定的資格。</p></div></div>
 <div class="quality-grid"><div><b>①</b><span>整條 Log Fuel_CL 判定 ON / OFF</span></div><div><b>②</b><span>溫度權重＋瞬態／資料品質權重</span></div><div><b>③</b><span>weighted MAD ≤8＋方向一致度 ≥0.7</span></div><div><b>④</b><span>強工況：RPM / TPS / AP 集中 ±10%</span></div></div>
 <div class="quality-warning">⚠️ <strong>高可信度正常修正；中等證據半量試修；不足資料保留觀望。</strong> 不把所有條件疊成硬門檻，也不讓短短三筆直接取得最高級。</div>
-<div class="note" style="margin-top:10px"><strong>程式參數快照：</strong> T_Eng ≥67°C｜核心溫區 80～110°C｜溫度權重中心 95°C｜TPS 瞬態 ≥12%/s｜RPM 瞬態 ≥600 rpm/s｜transient hold 0.8 s｜不修 ±3.0%｜極端 ≥11%｜effectiveN：6 / 12｜Map：X 20×17、XX 33×25。</div>
+<div class="note" style="margin-top:10px"><strong>程式參數快照：</strong> T_Eng ≥67°C｜核心溫區 80～110°C｜溫度權重中心 95°C｜TPS 瞬態 ≥12%/s｜RPM 瞬態 ≥600 rpm/s｜transient hold 0.8 s｜不修 ±3.0%｜極端 ≥11%｜effectiveN：6 / 12｜Map：X 14×17、XX 31×25。</div>
 </section></div>
 <footer>aRacer X / XX Log 分析建議｜CT125 分析工具｜本工具只提供分析與調校建議，不會寫入 ECU。實際騎乘爆震敏感度光譜獨立於 Fuel Map 修正，不代表已判定爆震。<div class="gaggle-credit">此分析程式為 Gaggle 發布</div></footer>
 </div>
@@ -857,11 +857,11 @@ let selectedLogPlatform="";
 // X：SuperX / MiniX；XX：SuperXX / MiniXX。
 // Log 系統（Apple / Android）只決定各自 Parser；ECU 系列決定各自真實 Map。
 // 任何 Log × ECU 組合若沒有對應 Map，禁止 fallback，直接停止分析。
-const X_RPM_GRID=[800,1600,2400,3200,4000,4800,5600,6400,7200,8000,8800,9600,10400,11200,12000,12800,13600,14400,15200,16000];
-// aRacer X Tune 實際 20×17 Fuel Adj：TPS 17 格。
+const X_RPM_GRID=[800,1600,2400,3200,4000,4800,5600,6400,7200,8000,8800,9600,10400,11200];
+// aRacer X Tune 實際 14×17 Fuel Adj：RPM 14 格、TPS 17 格。
 const X_TPS_GRID=[0,2,4,6,8,10,15,20,25,30,40,50,60,70,80,90,100];
 
-const XX_RPM_GRID=[400,800,1200,1600,2000,2400,2800,3200,3600,4000,4400,4800,5200,5600,6000,6400,6800,7200,7600,8000,8400,8800,9200,9600,9800,10000,10200,10400,10600,10800,11000,11200,11400];
+const XX_RPM_GRID=[400,800,1200,1600,2000,2400,2800,3200,3600,4000,4400,4800,5200,5600,6000,6400,6800,7200,7600,8000,8400,8800,9200,9600,9800,10000,10200,10400,10600,10800,11000];
 const XX_TPS_GRID=[0,2,4,6,8,10,12,14,16,18,20,21,23,25,27,29,37,45,53,61,68,76,84,92,100];
 
 const MAPS={
@@ -882,9 +882,9 @@ let rows=[];
 
 // 只對使用者已用實際 Log 確認的 Hardware ID 做硬性防呆；未知 ID 不猜測。
 const ECU_HARDWARE_IDS=Object.freeze({
- "36B36011SCBX0":Object.freeze({model:"MiniX",series:"x",map:"20×17"}),
- "B6B36011SAAAX0":Object.freeze({model:"MiniXX",series:"xx",map:"33×25"}),
- "31B36011SCBB0":Object.freeze({model:"SuperX",series:"x",map:"20×17"})
+ "36B36011SCBX0":Object.freeze({model:"MiniX",series:"x",map:"14×17"}),
+ "B6B36011SAAAX0":Object.freeze({model:"MiniXX",series:"xx",map:"31×25"}),
+ "31B36011SCBB0":Object.freeze({model:"SuperX",series:"x",map:"14×17"})
 });
 let hardwareScanToken=0;
 function normalizeHardwareId(v){return String(v||"").replace(/[^a-z0-9]/gi,"").toUpperCase()}
@@ -897,13 +897,13 @@ function parseLogMeta(text){
  const hardwareId=normalizeHardwareId(hw);
  return {hardwareRaw:hw,hardwareId,ecuSn:normalizeHardwareId(ecu),tableId:table,known:ECU_HARDWARE_IDS[hardwareId]||null};
 }
-function seriesText(series){return series==="xx"?"XX 33×25":"X 20×17"}
+function seriesText(series){return series==="xx"?"XX 31×25":"X 14×17"}
 function validateHardwareSeries(meta,name="Log"){
  const selected=$("ecuSeriesSelect")?.value||"",known=meta?.known||null;
  if(known&&selected&&selected!==known.series){
    throw new Error(`${name}：Hardware ID ${meta.hardwareRaw||meta.hardwareId} 已確認為 ${known.model}（${seriesText(known.series)}），但目前選擇的是 ${seriesText(selected)}。為避免套錯油圖已停止分析。`);
  }
- if(!known&&meta?.hardwareId&&selected==="xx")return {model:"SuperXX（手動確認）",series:"xx",map:"33×25",provisional:true};
+ if(!known&&meta?.hardwareId&&selected==="xx")return {model:"SuperXX（手動確認）",series:"xx",map:"31×25",provisional:true};
  return known;
 }
 function validateHardwareBatch(metas,name="同批 Log"){
@@ -934,7 +934,7 @@ async function scanHardwareFiles(files){
      if(status){status.className=`hardware-status ${unknown?"warn":"ok"}`;status.textContent=`${unknown?"⚠️":"✅"} Hardware ID ${id} → ${info.model}（${seriesText(info.series)}），已自動選擇${unknown?`；另有 ${unknown} 份未收錄 ID 需人工確認`:""}。`}
    }else{
      const ids=[...new Set(metas.map(m=>m.hardwareRaw||m.hardwareId).filter(Boolean))];
-     if(status){status.className="hardware-status warn";status.textContent=`⚠️ ${ids.length?`Hardware ID ${ids.join("、")} 尚未收錄`:"Log 未提供可辨識的 Hardware ID"}；不會自動猜測。若為 SuperXX，請手動選擇 XX 33×25，分析時會標示「SuperXX（手動確認）」。`}
+     if(status){status.className="hardware-status warn";status.textContent=`⚠️ ${ids.length?`Hardware ID ${ids.join("、")} 尚未收錄`:"Log 未提供可辨識的 Hardware ID"}；不會自動猜測。若為 SuperXX，請手動選擇 XX 31×25，分析時會標示「SuperXX（手動確認）」。`}
    }
  }catch(e){if(token===hardwareScanToken&&status){status.className="hardware-status error";status.textContent="⛔ Hardware ID 讀取失敗："+e.message}}
 }
@@ -950,10 +950,10 @@ function updateLogSystemConfirm(){
  if(e)e.textContent="CT125 2V";
  if(pa)pa.textContent=(platform&&series)?ptxt+" × "+stxt+" 專屬 Parser":"尚未啟用";
  if(m)m.textContent=(platform&&series)?
-   ptxt+" × "+stxt+" 的實際 Map（"+(series==="x"?"20×17":"33×25")+"）":"尚未啟用";
+   ptxt+" × "+stxt+" 的實際 Map（"+(series==="x"?"14×17":"31×25")+"）":"尚未啟用";
  if(platform&&series){
    if(st)st.textContent="🟢 已選定："+ptxt+" → "+stxt+" → CT125 2V；僅使用該組專屬格式與 Map。";
-   if(hint){hint.textContent=`✅ 設定完成：${platform==="android"?"Android":"Apple"} × ${series.toUpperCase()} ${series==="x"?"20×17":"33×25"} × Closed Loop ${getLoopMode().toUpperCase()}。可以上傳 Log。`;hint.classList.add("ready")}
+   if(hint){hint.textContent=`✅ 設定完成：${platform==="android"?"Android":"Apple"} × ${series.toUpperCase()} ${series==="x"?"14×17":"31×25"} × Closed Loop ${getLoopMode().toUpperCase()}。可以上傳 Log。`;hint.classList.add("ready")}
    box?.classList.add("ok");box?.classList.remove("warn");
  }else{
    if(st)st.textContent="請先完成 Log 系統與 ECU 系列選擇。";
@@ -1455,7 +1455,7 @@ function renderWorkList(items){
       <button type="button" class="work-action" data-work-action="${done?"undo":"done"}" ${!done&&!inputReady?"disabled":""}>${done?"✓ 已完成":inputReady?"我已完成此格":"先輸入目前油圖"}</button>
     </div>`;
   }).join("");
-  const platform=$("logPlatformSelect")?.value==="android"?"Android":"Apple",series=$("ecuSeriesSelect")?.value==="xx"?"XX 33×25":"X 20×17",mode=getLoopMode().toUpperCase();
+  const platform=$("logPlatformSelect")?.value==="android"?"Android":"Apple",series=$("ecuSeriesSelect")?.value==="xx"?"XX 31×25":"X 14×17",mode=getLoopMode().toUpperCase();
   return `<div class="work-context"><div><strong>${platform}｜${series}｜Closed Loop ${mode}</strong><span id="workRestoreNote">${window.__ctProgressRestored?"已恢復上次進度":"進度會自動保存在此瀏覽器"}</span></div><b data-progress-count>${doneCount} / ${valid.length}</b></div>
   <div class="work-toolbar"><div class="work-filters"><button type="button" class="active" data-work-filter="all">全部</button><button type="button" data-work-filter="pending">尚未完成</button><button type="button" data-work-filter="direct">正常修正</button><button type="button" data-work-filter="trial">半量試修</button></div><div class="work-tools"><button type="button" data-work-nav="next">下一個未完成</button><button type="button" class="danger" data-work-reset>重設進度</button></div></div>
   ${renderWorkMiniMap(valid)}
