@@ -3,7 +3,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
-<meta content="#07101d" name="theme-color"/><meta content="yes" name="apple-mobile-web-app-capable"/><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/><title>CT125 X / XX Log 分析工具｜Safe v2.3.2 Candidate</title>
+<meta content="#07101d" name="theme-color"/><meta content="yes" name="apple-mobile-web-app-capable"/><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/><title>CT125 X / XX Log 分析工具｜Safe v2.3.3</title>
 <style>
 :root{--bg:#f3f4f6;--card:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;--blue:#2563eb;--green:#15803d;--yellow:#a16207;--red:#b91c1c;--orange:#c2410c}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif}
@@ -575,7 +575,7 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 <div class="wrap">
 <section class="hero">
 <div class="hero-content">
-<div class="hero-kicker">CT125 · aRacer X / XX LOG ANALYZER · SAFE v2.3.2 CANDIDATE</div>
+<div class="hero-kicker">CT125 · aRacer X / XX LOG ANALYZER · SAFE v2.3.3</div>
 <h1>X / XX Log 分析建議</h1>
 <div class="sub">CT125 分析工具｜依目前選定的 X / XX 系列與 Apple / Android App 實際 Fuel Map 格點採樣，不跨系列套用。</div>
 </div>
@@ -877,7 +877,7 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 <div class="section-head"><div><div class="section-tag">QUALITY GATE</div><h2>防失準</h2><p class="section-sub">品質不足時降低可信度，不急著修改；強工況證據只提升進入修正判定的資格。</p></div></div>
 <div class="quality-grid"><div><b>①</b><span>整條 Log Fuel_CL 判定 ON / OFF</span></div><div><b>②</b><span>溫度權重＋瞬態／資料品質權重</span></div><div><b>③</b><span>weighted MAD ≤8＋方向一致度 ≥0.7</span></div><div><b>④</b><span>單一Log直接修正：RPM波動≤15%最佳；15～25%仍可用</span></div></div>
 <div class="quality-warning">⚠️ <strong>高可信度正常修正；中等證據半量；較少但可重複驗證者25%保守試修；互相衝突才觀望。</strong> 不把所有條件疊成硬門檻，也不讓短短三筆直接取得最高級。</div>
-<div class="note" style="margin-top:10px"><strong>程式參數快照：</strong> T_Eng 為軟權重參考｜核心溫區 80～110°C｜熱機趨勢納入權重｜TPS 瞬態 ≥12%/s｜RPM 瞬態 ≥600 rpm/s｜transient hold 0.8 s｜不修 ±3.0%｜極端 ≥11%｜100 ms標準加權證據量：3 / 6 / 12｜segment：effectiveN≥4有效、≥6強證據、≥2段只作獨立重複參考｜Map：X 14×17、XX 31×25。Safe v2.3.2：同一檔案會先以檔案身分攔截，再以解壓後 SHA-256 與完整核心序列做第二、第三層防呆；正規化部分相似只提醒、不刪資料。OFF WBO2 lag 會參考 Target AFR、Fuel PW 與 Injector Duty 的階躍並驗證 AFR 反應相關性，未達門檻即沿用 RPM＋AP 動態 delay。CI 採獨立 visit bootstrap，只有跨 Log 且方向穩定才標示可信；whole-map inverse 保留作同批資料平滑趨勢，不視為外部驗證。</div>
+<div class="note" style="margin-top:10px"><strong>程式參數快照：</strong> T_Eng 為軟權重參考｜核心溫區 80～110°C｜熱機趨勢納入權重｜TPS 瞬態 ≥12%/s｜RPM 瞬態 ≥600 rpm/s｜transient hold 0.8 s｜不修 ±3.0%｜極端 ≥11%｜100 ms標準加權證據量：3 / 6 / 12｜segment：effectiveN≥4有效、≥6強證據、≥2段只作獨立重複參考｜Map：X 14×17、XX 31×25。Safe v2.3.3：同一檔案會先以檔案身分攔截，再以解壓後 SHA-256 與完整核心序列做第二、第三層防呆；正規化部分相似只提醒、不刪資料；WBO2 AFR ≥23.5 在 ON／OFF 都列為感知器異常，只隔離該時段；AFR 17～18 只有在 TPS 全收，並同時有斷油旗標，或無噴油且 RPM 明確下降時才視為收油，其餘保留為真實偏稀候選。OFF WBO2 lag 會參考 Target AFR、Fuel PW 與 Injector Duty 的階躍並驗證 AFR 反應相關性，未達門檻即沿用 RPM＋AP 動態 delay。CI 採獨立 visit bootstrap，只有跨 Log 且方向穩定才標示可信；whole-map inverse 保留作同批資料平滑趨勢，不視為外部驗證。</div>
 </section></div>
 <footer>aRacer X / XX Log 分析建議｜CT125 分析工具｜本工具只提供分析與調校建議，不會寫入 ECU。實際騎乘負載圖以真實點火格顯示 RPM／TPS／AP／SA，只供使用者自行參照，不提供點火角增減建議。<div class="gaggle-credit">此分析程式為 Gaggle 發布</div></footer>
 </div>
@@ -913,14 +913,14 @@ const cfg={
  clDeadband:3.0,clPerCell:0.8,clStateEpsilon:0,
  transientTpsRate:12,transientRpmRate:600,transientHoldSec:0.8,minDwellSec:0,
  tempCoreLow:80,tempCoreHigh:110,tempEdgeLowWeight:0.5,tempHotWeight:0.5,
- trialScale:0.50,cautiousScale:0.25,afrLeanPeg:17.8,minTrialEffectiveN:6,minDirectEffectiveN:12,singleLogDirectMinSeconds:1.5,
+ trialScale:0.50,cautiousScale:0.25,afrLeanPeg:17,minTrialEffectiveN:6,minDirectEffectiveN:12,singleLogDirectMinSeconds:1.5,
  evidenceIntervalMs:100,wbo2DelayMinMs:120,wbo2DelayMaxMs:450,wbo2TargetSettleMs:700,wbo2AlignmentMaxMs:220,
  // Safe v2.3: uncertain evidence is retained as advisory; only validated evidence may raise trust.
  wbo2AutoLagMinEvents:6,wbo2AutoLagMinConfidence:0.65,
  fingerprintWindowRows:24,fingerprintStrideRows:4,fingerprintMinContiguousWindows:8,fingerprintMinCoverage:0.60,
  ciBootstrapIterations:200,ciVisitSeparationMs:8000,ciVisitMinDurationMs:800,ciReliableUnits:6,ciReliableSingleFileUnits:8,
  inverseSmoothRatio:0.06,inverseRidgeRatio:0.004,inverseMinRows:60,inverseMinSupport:4.5,
- wbo2OverrunLow:17.5,wbo2OverrunHigh:18.5,wbo2Fault:23.5
+ wbo2OverrunLow:17,wbo2OverrunHigh:18.5,wbo2Fault:23.5
 };
 let rows=[];
 
@@ -1000,7 +1000,8 @@ async function scanHardwareFiles(files){
      if(state.state&&state.state!==selectedMode)error=`選擇為 ${selectedMode.toUpperCase()}，此 Log 實際為 ${state.state.toUpperCase()}`;
     }catch(e){error=e.message}
     const model=meta.known?.model||(meta.hardwareId&&selectedSeries==="xx"?"SuperXX（手動確認）":"未確認"),map=seriesValue?seriesText(seriesValue):"尚未選擇";
-    return `<div class="log-preflight-item ${error?"error":""}"><div class="log-preflight-name">${esc(entry.name)}</div><div class="log-preflight-tags"><span>${platform==="apple"?"🍎 Apple":platform==="android"?"🤖 Android":"⚠️ 格式未知"}</span><span>${esc(model)}</span><span>${esc(map)}</span><span>Closed Loop ${esc(loop)}</span></div><div class="log-preflight-metrics"><div>原始筆數<b>${parsed.length.toLocaleString()}</b></div><div>可用筆數<b>${usable.toLocaleString()}</b></div><div>Hardware ID<b>${esc(meta.hardwareRaw||meta.hardwareId||"—")}</b></div><div>ECU SN<b>${esc(meta.ecuSn||"—")}</b></div><div>Table ID<b>${esc(meta.tableId||"—")}</b></div><div>WBO2 對齊超距<b>${alignmentRejected.toLocaleString()}</b></div><div>AFR 18 收油<b>${afr18.toLocaleString()}</b></div><div>AFR 24 異常<b>${afr24.toLocaleString()}</b></div></div>${error?`<div class="log-preflight-error">⚠️ ${esc(error)}</div>`:""}</div>`;
+    const sensorWarning=afr24?`<div class="log-preflight-error">🔴 WBO2 感知器健康警告：偵測到 ${afr24.toLocaleString()} 筆 AFR 約 24 異常值。可能與感知器污染／老化、線路短路或控制器狀態有關；異常時段已隔離，請檢查感知器良率。</div>`:"";
+    return `<div class="log-preflight-item ${error||afr24?"error":""}"><div class="log-preflight-name">${esc(entry.name)}</div><div class="log-preflight-tags"><span>${platform==="apple"?"🍎 Apple":platform==="android"?"🤖 Android":"⚠️ 格式未知"}</span><span>${esc(model)}</span><span>${esc(map)}</span><span>Closed Loop ${esc(loop)}</span></div><div class="log-preflight-metrics"><div>原始筆數<b>${parsed.length.toLocaleString()}</b></div><div>可用筆數<b>${usable.toLocaleString()}</b></div><div>Hardware ID<b>${esc(meta.hardwareRaw||meta.hardwareId||"—")}</b></div><div>ECU SN<b>${esc(meta.ecuSn||"—")}</b></div><div>Table ID<b>${esc(meta.tableId||"—")}</b></div><div>WBO2 對齊超距<b>${alignmentRejected.toLocaleString()}</b></div><div>AFR 17～18 確認收油<b>${afr18.toLocaleString()}</b></div><div>AFR 24 異常<b>${afr24.toLocaleString()}</b></div></div>${sensorWarning}${error?`<div class="log-preflight-error">⚠️ ${esc(error)}</div>`:""}</div>`;
    }).join("");
    const dup=unique.duplicates.length?`<div class="log-preflight-alert">已依原始內容 SHA-256 排除 <b>${unique.duplicates.length}</b> 份完全相同 Log：${unique.duplicates.map(x=>`${esc(x.duplicate)} → 保留 ${esc(x.kept)}`).join("、")}。完全重複資料不會重複加權。</div>`:"";
    const similar=unique.similarities?.length?`<div class="log-preflight-alert">⚠️ 發現 <b>${unique.similarities.length}</b> 組核心序列高度相似：${unique.similarities.map(x=>`${esc(x.similar)} ↔ ${esc(x.matched)}`).join("、")}。可能是重新匯出，也可能是重現工況；資料全部保留，請人工核對。</div>`:"";
@@ -1139,6 +1140,16 @@ function injectionActive(r){
   if(r)r._invalidInjection=!active;
   return active;
 }
+function isWbo2LeanBand(afr){const x=Number(afr);return Number.isFinite(x)&&x>=cfg.wbo2OverrunLow&&x<=cfg.wbo2OverrunHigh}
+function isVerifiedDecelLean(r,afr=r?.AFR_WBO2){
+  if(!isWbo2LeanBand(afr)||Number(r?.TPS_Percent)>2.5)return false;
+  const cut=Number(r?.Dec_FC_En)>0||Number(r?.Inj_Cut)>0,pw=Number(r?.Cyl1_Comn_FuelPW),duty=Number(r?.Cyl1_Injector_Period_Rate);
+  const noFuel=(Number.isFinite(pw)&&pw<=0)||(Number.isFinite(duty)&&duty<=0);
+  const rpmRate=Number(r?._rpmRatePerSec),rpmDropping=Number.isFinite(rpmRate)&&rpmRate<=-120;
+  // TPS 全收仍不足以證明收油：斷油旗標可直接確認；否則必須同時無噴油且 RPM 明確下降。
+  return cut||(noFuel&&rpmDropping);
+}
+function isFueledLeanCandidate(r,afr=r?.AFR_WBO2){return isWbo2LeanBand(afr)&&Number(r?.TPS_Percent)<=2.5&&!isVerifiedDecelLean(r,afr)&&injectionActive(r)}
 
 function validateLogHeader(header,name){
  const h=new Set(header||[]);
@@ -1534,7 +1545,8 @@ function alignOpenLoopWbo2(rawRows){
     r._analysisAFR=afr;r._wbo2ReadyAligned=ready;r._wbo2AlignmentRejected=false;
     r._wbo2HealthWeight=Number.isFinite(src?._wbo2HealthWeight)?src._wbo2HealthWeight:1;
     r._wbo2Stuck=!!src?._wbo2Stuck;r._wbo2ReadyUnstable=!!src?._wbo2ReadyUnstable;
-     r._wbo2Overrun=afr!==null&&afr>=cfg.wbo2OverrunLow&&afr<=cfg.wbo2OverrunHigh&&Number.isFinite(tps)&&tps<=2.5;
+     r._wbo2Overrun=afr!==null&&isVerifiedDecelLean(r,afr);
+     r._wbo2FueledLean=afr!==null&&isFueledLeanCandidate(r,afr);
      r._wbo2Fault=afr!==null&&afr>=cfg.wbo2Fault;
      r._wbo2NotReady=ready!==1;
    }
@@ -1587,14 +1599,14 @@ function markTransient(rows){
    const file=r._file||"";
    if(lastFile!==null && file!==lastFile){ last=null; holdUntil=-Infinity; holdReason=""; }
    const tmRaw=Number(r.Time), tm=Number.isFinite(tmRaw)?tmRaw/1000:null, rpm=Number(r.RPM), tps=Number(r.TPS_Percent);
-   let transient=false, reason="";
+   let transient=false, reason="";r._rpmRatePerSec=null;
    if(Number(r.Dec_FC_En)>0 || Number(r.Inj_Cut)>0){
      transient=true; reason="cut";
    }
    if(last&&Number.isFinite(tm)&&Number.isFinite(last.t)&&tm>last.t){
      const dt=tm-last.t;
      const tpsRate=Math.abs(tps-last.tps)/dt;
-     const rpmRate=Math.abs(rpm-last.rpm)/dt;
+     const rpmSignedRate=(rpm-last.rpm)/dt,rpmRate=Math.abs(rpmSignedRate);r._rpmRatePerSec=Number.isFinite(rpmSignedRate)?rpmSignedRate:null;
      if(tpsRate>=cfg.transientTpsRate||rpmRate>=cfg.transientRpmRate){
        transient=true; reason="rate";
      }
@@ -1634,9 +1646,15 @@ function prepareClosedLoopRows(rawRows){
  markTemporalQuality(rawRows);markTransient(rawRows);
  const out=[];
   for(const r of rawRows){
+    const rawAfr=validNum(r.AFR_WBO2)?r.AFR_WBO2:null,tps=Number(r.TPS_Percent);
+    // 實車確認：WBO2 約 24 是寬域空燃比訊號異常；ON/OFF 都只保留故障統計，不得當成有效 Fuel 證據。
+    r._wbo2Fault=rawAfr!==null&&rawAfr>=cfg.wbo2Fault;
+    r._wbo2Overrun=rawAfr!==null&&isVerifiedDecelLean(r,rawAfr);
+    r._wbo2FueledLean=rawAfr!==null&&isFueledLeanCandidate(r,rawAfr);
     if(!Number.isFinite(r.Fuel_CL)) continue;
     if(!Number.isFinite(r.T_Eng)||tempWeight(r.T_Eng)<=0) continue;
     if(!injectionActive(r)) continue;
+    if(r._wbo2Fault) continue;
     // Fuel_CL=0 且 WBO2 卡在極稀端時不當成「完全不需修正」，但仍保留少量證據。
     if(Math.abs(r.Fuel_CL)<1e-12&&validNum(r.AFR_WBO2)&&r.AFR_WBO2>=cfg.afrLeanPeg){
       // 只改基礎權重；時間、溫度與感知器品質會在analysisWeight中各乘一次。
@@ -2267,12 +2285,20 @@ function renderConflictDetails(arr){
  return `<details class="conflict-card"><summary><span>⚠️ 跨 Log 方向衝突：${conflicts.length} 格（不建議修改）</span><small>展開查看每份 Log 的實際偏差</small></summary><div class="conflict-list">${items}</div></details>`;
 }
 
+function renderWbo2SensorWarning(rawRows){
+ const fault=(rawRows||[]).filter(r=>r._wbo2Fault),count=fault.length;
+ if(!count)return "";
+ const files=new Set(fault.map(r=>r._file).filter(Boolean)).size,rate=(count/Math.max(1,rawRows.length)*100).toFixed(1);
+ return `<div class="alert red"><strong>🔴 WBO2 感知器健康警告</strong><br>偵測到 <b>${count.toLocaleString()}</b> 筆 AFR 約 24 異常值（${rate}%／${files} 份 Log）。可能與感知器污染／老化、線路短路或 WBO2 控制器狀態有關。異常時段已隔離，不參與 Fuel Map 修正；其他正常資料仍保留。請先檢查感知器良率與線路，再依正常區段判斷。</div>`;
+}
+
 function buildClosedLoop(){
  const androidMode=$("logPlatformSelect")?.value==="android";
  const prepared=prepareClosedLoopRows(rows),hot=prepared.filter(warmValid),cells=cellGroups(hot),inverse=solveWholeMap(hot,"on");
  $("stats").innerHTML=[
   ["Log 檔案",new Set(rows.map(r=>r._file)).size],["原始樣本",rows.length.toLocaleString()],
   ["CL 參與修正",prepared.length.toLocaleString()],["溫度／狀態降權",prepared.filter(r=>tempWeight(r.T_Eng)<.75||analysisWeight(r)<.75).length.toLocaleString()],
+["AFR 24／WBO2異常",rows.filter(r=>r._wbo2Fault).length.toLocaleString()],
 ["已對應 Map 格",cells.length],
   ["瞬態／斷油低權重",rows.filter(r=>r._transient).length.toLocaleString()],["Log 格式",androidMode?"Android aRacer":"Apple"],
   ["ECU 辨識",[...new Set(rows.map(r=>r._ecuModel).filter(Boolean))].join("、")||"未知"]
@@ -2304,7 +2330,7 @@ function buildClosedLoop(){
 arr.sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);addNeighborEvidence(arr);
  const recommend=arr.filter(isMainRepairCell);
 
-  $("fuel").innerHTML=`<div class="stats">
+  $("fuel").innerHTML=`${renderWbo2SensorWarning(rows)}<div class="stats">
    <div class="stat">建議修改<b>${recommend.length}</b></div>
    <div class="stat">正常修正<b>${recommend.filter(c=>c.recommendTier==="direct").length}</b></div>
    <div class="stat">半量試修<b>${recommend.filter(c=>c.recommendTier==="trial").length}</b></div>
@@ -2377,7 +2403,7 @@ function buildOpenLoop(){
  const prepared=prepareOpenLoopRows(rows),hot=prepared.filter(warmValidOpen),cells=cellGroups(hot),inverse=solveWholeMap(hot,"off");
  $("stats").innerHTML=[
   ["Log 檔案",new Set(rows.map(r=>r._file)).size],["原始樣本",rows.length.toLocaleString()],
-  ["WBO2 參與修正",prepared.length.toLocaleString()],["Auto lag 採用",new Set(rows.filter(r=>r._wbo2AutoLagAccepted).map(r=>r._file)).size],["WBO2 對齊超距",rows.filter(r=>r._wbo2AlignmentRejected).length.toLocaleString()],["AFR 18 正常鬆油門",rows.filter(r=>r._wbo2Overrun).length.toLocaleString()],
+  ["WBO2 參與修正",prepared.length.toLocaleString()],["Auto lag 採用",new Set(rows.filter(r=>r._wbo2AutoLagAccepted).map(r=>r._file)).size],["WBO2 對齊超距",rows.filter(r=>r._wbo2AlignmentRejected).length.toLocaleString()],["AFR 17～18 確認收油",rows.filter(r=>r._wbo2Overrun).length.toLocaleString()],["AFR 17～18 保留偏稀",rows.filter(r=>r._wbo2FueledLean).length.toLocaleString()],
 ["AFR 24／WBO2異常",rows.filter(r=>r._wbo2Fault).length.toLocaleString()],["WBO2狀態降權",rows.filter(r=>r._wbo2Stuck||r._wbo2ReadyUnstable).length.toLocaleString()],["Target切換降權",rows.filter(r=>r._targetChanging).length.toLocaleString()],
 ["已對應 Map 格",cells.length],
   ["瞬態／斷油低權重",rows.filter(r=>r._transient).length.toLocaleString()],["Log 格式",androidMode?"Android aRacer":"Apple"],
@@ -2407,7 +2433,7 @@ function buildOpenLoop(){
 arr.sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);addNeighborEvidence(arr);
  const recommend=arr.filter(isMainRepairCell);
 
-  $("fuel").innerHTML=`<div class="stats">
+  $("fuel").innerHTML=`${renderWbo2SensorWarning(rows)}<div class="stats">
    <div class="stat">建議修改<b>${recommend.length}</b></div>
    <div class="stat">正常修正<b>${recommend.filter(c=>c.recommendTier==="direct").length}</b></div>
    <div class="stat">半量試修<b>${recommend.filter(c=>c.recommendTier==="trial").length}</b></div>
@@ -2416,7 +2442,7 @@ arr.sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);addNeighborEvidence(arr);
    <div class="stat">數據不足<b>${arr.filter(c=>c.quality==="數據不足").length}</b></div>
    <div class="stat">極端偏差<b>${arr.filter(c=>c.extreme).length}</b></div>
  </div>
- <div class="note" style="margin-top:9px"><strong>最大化保留可信資料：</strong>高可信度正常修正；中等證據採 50%；較少但重複同方向且工況穩定者採 25%。OFF 模式會自動補償 WBO2 延遲；AFR 18 全放油門與 AFR 24 異常只分流該時段，不報廢整份 Log。</div>
+ <div class="note" style="margin-top:9px"><strong>最大化保留可信資料：</strong>高可信度正常修正；中等證據採 50%；較少但重複同方向且工況穩定者採 25%。OFF 模式會自動補償 WBO2 延遲；AFR 17～18 必須同時符合低 TPS 與斷油旗標，或無噴油且 RPM 明確下降，才分流為收油，其餘保留為偏稀候選；AFR 24 異常只隔離該時段，不報廢整份 Log。</div>
  ${renderAdvancedSummary(arr,inverse,"off")}${renderConflictDetails(arr)}${renderWorkList(recommend)}${renderWatchList(arr)}`;
 
  $("detail").innerHTML=`<thead><tr><th>RPM</th><th>TPS</th><th>有效數</th><th>AFR 偏差</th><th>CI (advisory)</th><th>Inverse (advisory)</th><th>P10～P90</th><th>MAD</th><th>Log同方向</th><th>溫度</th><th>穩定次數</th><th>可信度</th></tr></thead><tbody>${
@@ -2578,13 +2604,13 @@ async function sideOpenLoop(files,loadedUnique=null){
        const fmtPct=v=>Number.isFinite(v)?`${v>0?"+":""}${v.toFixed(2)}%`:"—",fmtAfr=v=>Number.isFinite(v)?v.toFixed(2):"—";
        return `<tr><td>${x.rpm}</td><td>${x.tps}%</td><td>${fmtAfr(bb.afrTarget)} / ${fmtAfr(aa.afrTarget)}</td><td>${fmtAfr(bb.afr)} / ${fmtAfr(aa.afr)}</td><td>${fmtPct(bv)}</td><td>${fmtPct(av)}</td><td>${Number.isFinite(bv)&&Number.isFinite(av)?fmtPct(av-bv):"—"}</td><td>${bb.samples}/${aa.samples}</td><td>${bb.quality||"數據不足"} / ${aa.quality||"數據不足"}</td><td class="${s[2]}"><strong>${s[0]}</strong><br><span>${s[1]}${notes.length?"<br>⚠️ "+notes.join("；"):""}</span></td></tr>`;
      }).join("");
-     result.innerHTML=`<div class="bt-head"><strong>前後工況對比完成｜Safe v2.3.2</strong><span>兩組 Log 各自獨立處理，再比較共同實際 Map 格</span></div>
+     result.innerHTML=`<div class="bt-head"><strong>前後工況對比完成｜Safe v2.3.3</strong><span>兩組 Log 各自獨立處理，再比較共同實際 Map 格</span></div>
      ${pairCheck.identityWarning?`<div class="bt-warning">${esc(pairCheck.identityWarning)}</div>`:""}
      ${pairCheck.similarityWarning?`<div class="bt-warning">${esc(pairCheck.similarityWarning)}</div>`:""}
      <div class="bt-stats"><div><small>共同 Map 格</small><b>${keys.length}</b></div><div><small>🟢 良好／改善</small><b>${good}</b></div><div><small>🟡 需觀察</small><b>${warn}</b></div><div><small>🔴 工況變差</small><b>${bad}</b></div></div>
      <div class="bt-note"><strong>本次比較基準：${compareMode==="on"?"Fuel_CL":"逐筆 WBO2 / Target 偏差"}。</strong> 這裡只比較相同 Map 格的前後騎乘工況，不驗證實際油圖修改內容。兩組已檢查 ECU 身分；同一 File 物件、解壓內容 SHA-256 相同或完整分析欄位序列相同都會停止。只有部分正規化序列相似時僅提示並保留。Table ID 允許不同。跨 Log 正負衝突時不判定改善。加權證據量以標準 100 ms 為時間基準；AFR Target / WBO2 中位數僅為參考。</div>
      <div class="compare-table-wrap"><table class="compare-table"><thead><tr><th>RPM</th><th>TPS</th><th>Target AFR 前/後</th><th>WBO2 AFR 前/後</th><th>前 ${label}</th><th>後 ${label}</th><th>變化</th><th>有效數 前/後</th><th>可信度 前/後</th><th>結果</th></tr></thead><tbody>${rows||'<tr><td colspan="10">沒有共同且可比較的 Map 格。</td></tr>'}</tbody></table></div>`;
-   }catch(e){console.error(e);result.innerHTML='<div class="bt-warning">⛔ Safe v2.3.2 工況對比已停止：'+esc(e.message)+'</div>';}
+   }catch(e){console.error(e);result.innerHTML='<div class="bt-warning">⛔ Safe v2.3.3 工況對比已停止：'+esc(e.message)+'</div>';}
    finally{btn.disabled=false;btn.textContent="開始工況對比";}
  });
 })();
