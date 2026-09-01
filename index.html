@@ -3,7 +3,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
-<meta content="#07101d" name="theme-color"/><meta content="yes" name="apple-mobile-web-app-capable"/><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/><title>CT125 X / XX Log 分析工具｜Safe v2.3.1 Candidate</title>
+<meta content="#07101d" name="theme-color"/><meta content="yes" name="apple-mobile-web-app-capable"/><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/><title>CT125 X / XX Log 分析工具｜Safe v2.3.2 Candidate</title>
 <style>
 :root{--bg:#f3f4f6;--card:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;--blue:#2563eb;--green:#15803d;--yellow:#a16207;--red:#b91c1c;--orange:#c2410c}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif}
@@ -575,7 +575,7 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 <div class="wrap">
 <section class="hero">
 <div class="hero-content">
-<div class="hero-kicker">CT125 · aRacer X / XX LOG ANALYZER · SAFE v2.3.1 CANDIDATE</div>
+<div class="hero-kicker">CT125 · aRacer X / XX LOG ANALYZER · SAFE v2.3.2 CANDIDATE</div>
 <h1>X / XX Log 分析建議</h1>
 <div class="sub">CT125 分析工具｜依目前選定的 X / XX 系列與 Apple / Android App 實際 Fuel Map 格點採樣，不跨系列套用。</div>
 </div>
@@ -877,7 +877,7 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 <div class="section-head"><div><div class="section-tag">QUALITY GATE</div><h2>防失準</h2><p class="section-sub">品質不足時降低可信度，不急著修改；強工況證據只提升進入修正判定的資格。</p></div></div>
 <div class="quality-grid"><div><b>①</b><span>整條 Log Fuel_CL 判定 ON / OFF</span></div><div><b>②</b><span>溫度權重＋瞬態／資料品質權重</span></div><div><b>③</b><span>weighted MAD ≤8＋方向一致度 ≥0.7</span></div><div><b>④</b><span>單一Log直接修正：RPM波動≤15%最佳；15～25%仍可用</span></div></div>
 <div class="quality-warning">⚠️ <strong>高可信度正常修正；中等證據半量；較少但可重複驗證者25%保守試修；互相衝突才觀望。</strong> 不把所有條件疊成硬門檻，也不讓短短三筆直接取得最高級。</div>
-<div class="note" style="margin-top:10px"><strong>程式參數快照：</strong> T_Eng 為軟權重參考｜核心溫區 80～110°C｜熱機趨勢納入權重｜TPS 瞬態 ≥12%/s｜RPM 瞬態 ≥600 rpm/s｜transient hold 0.8 s｜不修 ±3.0%｜極端 ≥11%｜100 ms標準加權證據量：3 / 6 / 12｜segment：effectiveN≥4有效、≥6強證據、≥2段只作獨立重複參考｜Map：X 14×17、XX 31×25。Safe v2.3.1：原始 SHA-256 相同才自動去重；正規化 fingerprint 僅提醒疑似同一趟，不刪資料。OFF WBO2 lag 會參考 Target AFR、Fuel PW 與 Injector Duty 的階躍並驗證 AFR 反應相關性，未達門檻即沿用 RPM＋AP 動態 delay。CI 採獨立 visit bootstrap，只有跨 Log 且方向穩定才標示可信；whole-map inverse 保留作同批資料平滑趨勢，不視為外部驗證。</div>
+<div class="note" style="margin-top:10px"><strong>程式參數快照：</strong> T_Eng 為軟權重參考｜核心溫區 80～110°C｜熱機趨勢納入權重｜TPS 瞬態 ≥12%/s｜RPM 瞬態 ≥600 rpm/s｜transient hold 0.8 s｜不修 ±3.0%｜極端 ≥11%｜100 ms標準加權證據量：3 / 6 / 12｜segment：effectiveN≥4有效、≥6強證據、≥2段只作獨立重複參考｜Map：X 14×17、XX 31×25。Safe v2.3.2：同一檔案會先以檔案身分攔截，再以解壓後 SHA-256 與完整核心序列做第二、第三層防呆；正規化部分相似只提醒、不刪資料。OFF WBO2 lag 會參考 Target AFR、Fuel PW 與 Injector Duty 的階躍並驗證 AFR 反應相關性，未達門檻即沿用 RPM＋AP 動態 delay。CI 採獨立 visit bootstrap，只有跨 Log 且方向穩定才標示可信；whole-map inverse 保留作同批資料平滑趨勢，不視為外部驗證。</div>
 </section></div>
 <footer>aRacer X / XX Log 分析建議｜CT125 分析工具｜本工具只提供分析與調校建議，不會寫入 ECU。實際騎乘負載圖以真實點火格顯示 RPM／TPS／AP／SA，只供使用者自行參照，不提供點火角增減建議。<div class="gaggle-credit">此分析程式為 Gaggle 發布</div></footer>
 </div>
@@ -1068,6 +1068,20 @@ function backtestOutcome(b,a){
  if(Math.abs(aa-ab)<=.05)return["🟡 幾乎不變","前後差異很小","warn"];
  return["🔴 工況變差","後段騎乘沒有更接近 0%","bad"];
 }
+function backtestRawFileIdentity(file){
+ const name=String(file?.name||"").trim().toLowerCase(),size=Number(file?.size),modified=Number(file?.lastModified);
+ return name&&Number.isFinite(size)&&Number.isFinite(modified)?`${name}|${size}|${modified}`:"";
+}
+function validateRawBacktestFileSets(beforeFiles,afterFiles){
+ const before=[...(beforeFiles||[])],after=[...(afterFiles||[])],sameObject=after.some(a=>before.some(b=>a===b));
+ if(sameObject){
+  const names=[...new Set(after.filter(a=>before.some(b=>a===b)).map(f=>f.name).filter(Boolean))].join("、")||"同一份檔案";
+  throw new Error(`P0 防呆：對照組與後段騎乘選到同一個檔案（${names}）。已在解壓與計算前停止；同一份 Log 絕不可做前後比較。`);
+ }
+ // 檔名、大小、修改時間相同並不等於內容相同；不得只靠 metadata 誤擋兩份正常 Log。
+ // 兩側各自選到同一個實體檔時，後續解壓內容 SHA-256 仍會確實攔截。
+ return true;
+}
 function validateBacktestPairSets(beforeUnique,afterUnique){
  const be=beforeUnique?.entries||[],ae=afterUnique?.entries||[];
  if(!be.length||!ae.length)throw new Error("對照組與後段騎乘都必須包含有效 Log。");
@@ -1076,6 +1090,14 @@ function validateBacktestPairSets(beforeUnique,afterUnique){
  if(overlap.length){
   const names=overlap.map(x=>`${x.b.name||x.b.sourceFile||"對照組 Log"} ↔ ${x.a.name||x.a.sourceFile||"後段騎乘 Log"}`).join("、");
   throw new Error(`對照組與後段騎乘包含相同 Log 內容：${names}。同一份資料不可用來證明前後工況變化。`);
+ }
+ const canonical=[];
+ for(const a of ae)for(const b of be){
+  if(a?.signature?.whole&&b?.signature?.whole&&a.signature.whole===b.signature.whole)canonical.push({a,b});
+ }
+ if(canonical.length){
+  const names=canonical.map(x=>`${x.b.name||x.b.sourceFile||"對照組 Log"} ↔ ${x.a.name||x.a.sourceFile||"後段騎乘 Log"}`).join("、");
+  throw new Error(`P0 防呆：前後 Log 的完整核心資料序列完全相同（${names}）。即使檔名或標頭不同，也視為同一份騎乘資料並停止比較。`);
  }
  const similar=[];
  for(const a of ae)for(const b of be)if(normalizedEntriesOverlap(a,b))similar.push({a,b});
@@ -1089,7 +1111,7 @@ function validateBacktestPairSets(beforeUnique,afterUnique){
  if(bsn&&asn&&bsn!==asn)throw new Error(`對照組／後段騎乘的 ECU SN 不同（${bsn} / ${asn}），不可拿不同車輛互相比較。`);
  let identityWarning="";
  if(!(bh&&ah&&bsn&&asn))identityWarning="⚠️ 對照組／後段騎乘有 Hardware ID 或 ECU SN 缺失，資料仍保留，但無法完整證明來自同一台 ECU；結果不列為完整身分認證。";
- const similarityWarning=similar.length?`⚠️ 發現 ${similar.length} 組核心騎乘序列高度相似；可能是同一趟重新匯出，也可能是刻意重現的相同工況。兩側資料均保留且不阻擋比較，請人工核對檔案來源。`:"";
+ const similarityWarning=similar.length?`⚠️ 發現 ${similar.length} 組核心騎乘序列部分高度相似；完整序列並不相同，因此資料保留，但請人工核對是否為重複匯出。`:"";
  return {beforeMetas,afterMetas,identityWarning,similarityWarning};
 }
 function nearest(a,v){let best=a[0],d=Math.abs(v-best);for(const x of a){const nd=Math.abs(v-x);if(nd<d){best=x;d=nd}}return {value:best,distance:d}}
@@ -1235,8 +1257,11 @@ function normalizedLogCoreTokens(text){
  if(hi<0||hi+1>=lines.length)return null;
  const header=lines[hi+1].trim().split(",").map(x=>x.trim()),di=lines.findIndex((x,i)=>i>hi+1&&x.trim()==="<DATA START>");
  if(di<0)return null;
- const wanted=["Time","RPM","TPS_Percent","Cyl1_Eng_AP","Fuel_CL","AFR_Target","AFR_WBO2","Cyl1_Comn_FuelPW"];
+ const wanted=["Time","RPM","TPS_Percent","Cyl1_Eng_AP","Fuel_CL","AFR_Target","AFR_WBO2","Cyl1_Comn_FuelPW","Cyl1_Injector_Period_Rate","T_Air","SA","T_Eng","P_Atm","Inj_Cut"];
  const idx=Object.fromEntries(wanted.map(k=>[k,header.indexOf(k)]));
+ idx.Dec_FC_En=header.indexOf("Dec_FC_En");if(idx.Dec_FC_En<0)idx.Dec_FC_En=header.indexOf("Fuel1.Dec_FC_En");
+ idx.WBO2_AT_En=header.indexOf("WBO2_AT_En");if(idx.WBO2_AT_En<0)idx.WBO2_AT_En=header.indexOf("Fuel5.WBO2_AT_En");
+ idx.WBO2_Ready=header.indexOf("WBO2_Ready");if(idx.WBO2_Ready<0)idx.WBO2_Ready=header.indexOf("Fuel5.WBO2_Ready");
  if(idx.Time<0||idx.RPM<0||idx.TPS_Percent<0||idx.Cyl1_Eng_AP<0||(idx.Fuel_CL<0&&idx.AFR_Target<0&&idx.AFR_WBO2<0))return null;
  const q=(v,step,d=0)=>{const x=Number(v);return Number.isFinite(x)?(Math.round(x/step)*step).toFixed(d):""};
  const rows=[];let lastTime=null;
@@ -1246,7 +1271,11 @@ function normalizedLogCoreTokens(text){
    rows.push([
      q(dt,10,0),q(v[idx.RPM],10,0),q(v[idx.TPS_Percent],.1,1),q(v[idx.Cyl1_Eng_AP],.1,1),
      idx.Fuel_CL>=0?q(v[idx.Fuel_CL],.1,1):"",idx.AFR_Target>=0?q(v[idx.AFR_Target],.02,2):"",
-     idx.AFR_WBO2>=0?q(v[idx.AFR_WBO2],.02,2):"",idx.Cyl1_Comn_FuelPW>=0?q(v[idx.Cyl1_Comn_FuelPW],.01,2):""
+     idx.AFR_WBO2>=0?q(v[idx.AFR_WBO2],.02,2):"",idx.Cyl1_Comn_FuelPW>=0?q(v[idx.Cyl1_Comn_FuelPW],.01,2):"",
+     idx.Cyl1_Injector_Period_Rate>=0?q(v[idx.Cyl1_Injector_Period_Rate],.1,1):"",idx.T_Air>=0?q(v[idx.T_Air],.1,1):"",
+     idx.SA>=0?q(v[idx.SA],.1,1):"",idx.T_Eng>=0?q(v[idx.T_Eng],.1,1):"",idx.P_Atm>=0?q(v[idx.P_Atm],.1,1):"",
+     idx.Dec_FC_En>=0?q(v[idx.Dec_FC_En],1,0):"",idx.WBO2_AT_En>=0?q(v[idx.WBO2_AT_En],1,0):"",
+     idx.WBO2_Ready>=0?q(v[idx.WBO2_Ready],1,0):"",idx.Inj_Cut>=0?q(v[idx.Inj_Cut],1,0):""
    ].join("|")
    );
  }
@@ -2531,6 +2560,7 @@ async function sideOpenLoop(files,loadedUnique=null){
    btn.disabled=true;btn.textContent="正在比較工況…";result.hidden=false;result.innerHTML='<div class="bt-note">正在獨立分析兩組 Log 工況…</div>';
    try{
      const beforeFiles=[...before.files],afterFiles=[...after.files];
+     validateRawBacktestFileSets(beforeFiles,afterFiles);
      const beforeUnique=await loadUniqueLogEntries(beforeFiles),afterUnique=await loadUniqueLogEntries(afterFiles);
      const pairCheck=validateBacktestPairSets(beforeUnique,afterUnique);
      const b=await side(beforeFiles,beforeUnique),a=await side(afterFiles,afterUnique);
@@ -2545,16 +2575,16 @@ async function sideOpenLoop(files,loadedUnique=null){
        const notes=[];if(bb.dwell<1||aa.dwell<1)notes.push("停留不足");if(bb.boundary||aa.boundary)notes.push("接近Map邊界");if(bb.conflict||aa.conflict)notes.push("CL/WBO2方向衝突");if(bb.fileConflict||aa.fileConflict)notes.push("跨Log正負方向衝突");
        // ON / OFF 皆顯示outcome真正使用的核心值；OFF不再改顯示median(AFR)/median(Target)。
        const bv=bb.cl,av=aa.cl;
-       const fmt=v=>Number.isFinite(v)?`${v>0?"+":""}${v.toFixed(2)}%`:"—";
-       return `<tr><td>${x.rpm}</td><td>${x.tps}%</td><td>${fmt(bb.afrTarget)} / ${fmt(aa.afrTarget)}</td><td>${fmt(bb.afr)} / ${fmt(aa.afr)}</td><td>${fmt(bv)}</td><td>${fmt(av)}</td><td>${Number.isFinite(bv)&&Number.isFinite(av)?fmt(av-bv):"—"}</td><td>${bb.samples}/${aa.samples}</td><td>${bb.quality||"數據不足"} / ${aa.quality||"數據不足"}</td><td class="${s[2]}"><strong>${s[0]}</strong><br><span>${s[1]}${notes.length?"<br>⚠️ "+notes.join("；"):""}</span></td></tr>`;
+       const fmtPct=v=>Number.isFinite(v)?`${v>0?"+":""}${v.toFixed(2)}%`:"—",fmtAfr=v=>Number.isFinite(v)?v.toFixed(2):"—";
+       return `<tr><td>${x.rpm}</td><td>${x.tps}%</td><td>${fmtAfr(bb.afrTarget)} / ${fmtAfr(aa.afrTarget)}</td><td>${fmtAfr(bb.afr)} / ${fmtAfr(aa.afr)}</td><td>${fmtPct(bv)}</td><td>${fmtPct(av)}</td><td>${Number.isFinite(bv)&&Number.isFinite(av)?fmtPct(av-bv):"—"}</td><td>${bb.samples}/${aa.samples}</td><td>${bb.quality||"數據不足"} / ${aa.quality||"數據不足"}</td><td class="${s[2]}"><strong>${s[0]}</strong><br><span>${s[1]}${notes.length?"<br>⚠️ "+notes.join("；"):""}</span></td></tr>`;
      }).join("");
-     result.innerHTML=`<div class="bt-head"><strong>前後工況對比完成</strong><span>兩組 Log 各自獨立處理，再比較共同實際 Map 格</span></div>
+     result.innerHTML=`<div class="bt-head"><strong>前後工況對比完成｜Safe v2.3.2</strong><span>兩組 Log 各自獨立處理，再比較共同實際 Map 格</span></div>
      ${pairCheck.identityWarning?`<div class="bt-warning">${esc(pairCheck.identityWarning)}</div>`:""}
      ${pairCheck.similarityWarning?`<div class="bt-warning">${esc(pairCheck.similarityWarning)}</div>`:""}
      <div class="bt-stats"><div><small>共同 Map 格</small><b>${keys.length}</b></div><div><small>🟢 良好／改善</small><b>${good}</b></div><div><small>🟡 需觀察</small><b>${warn}</b></div><div><small>🔴 工況變差</small><b>${bad}</b></div></div>
-     <div class="bt-note"><strong>本次比較基準：${compareMode==="on"?"Fuel_CL":"逐筆 WBO2 / Target 偏差"}。</strong> 這裡只比較相同 Map 格的前後騎乘工況，不驗證實際油圖修改內容。兩組已檢查 ECU 身分；SHA-256 完全相同才阻擋，正規化序列相似只提示並保留。Table ID 允許不同。跨 Log 正負衝突時不判定改善。加權證據量以標準 100 ms 為時間基準；AFR Target / WBO2 中位數僅為參考。</div>
+     <div class="bt-note"><strong>本次比較基準：${compareMode==="on"?"Fuel_CL":"逐筆 WBO2 / Target 偏差"}。</strong> 這裡只比較相同 Map 格的前後騎乘工況，不驗證實際油圖修改內容。兩組已檢查 ECU 身分；同一 File 物件、解壓內容 SHA-256 相同或完整分析欄位序列相同都會停止。只有部分正規化序列相似時僅提示並保留。Table ID 允許不同。跨 Log 正負衝突時不判定改善。加權證據量以標準 100 ms 為時間基準；AFR Target / WBO2 中位數僅為參考。</div>
      <div class="compare-table-wrap"><table class="compare-table"><thead><tr><th>RPM</th><th>TPS</th><th>Target AFR 前/後</th><th>WBO2 AFR 前/後</th><th>前 ${label}</th><th>後 ${label}</th><th>變化</th><th>有效數 前/後</th><th>可信度 前/後</th><th>結果</th></tr></thead><tbody>${rows||'<tr><td colspan="10">沒有共同且可比較的 Map 格。</td></tr>'}</tbody></table></div>`;
-   }catch(e){console.error(e);result.innerHTML='<div class="bt-warning">⚠️ 工況對比失敗：'+esc(e.message)+'</div>';}
+   }catch(e){console.error(e);result.innerHTML='<div class="bt-warning">⛔ Safe v2.3.2 工況對比已停止：'+esc(e.message)+'</div>';}
    finally{btn.disabled=false;btn.textContent="開始工況對比";}
  });
 })();
