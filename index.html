@@ -3,7 +3,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
-<meta content="#07101d" name="theme-color"/><meta content="yes" name="apple-mobile-web-app-capable"/><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/><title>CT125 X / XX Log 分析工具｜Safe v2.3.3</title>
+<meta content="#07101d" name="theme-color"/><meta content="yes" name="apple-mobile-web-app-capable"/><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/><title>CT125 GAGGLE · aRacer ECU-X / XX LOG 分析工具</title>
 <style>
 :root{--bg:#f3f4f6;--card:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;--blue:#2563eb;--green:#15803d;--yellow:#a16207;--red:#b91c1c;--orange:#c2410c}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif}
@@ -575,11 +575,11 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 <div class="wrap">
 <section class="hero">
 <div class="hero-content">
-<div class="hero-kicker">CT125 · aRacer X / XX LOG ANALYZER · SAFE v2.3.3</div>
-<h1>X / XX Log 分析建議</h1>
+<div class="hero-kicker">CT125 GAGGLE · aRacer ECU</div>
+<h1>CT125 GAGGLE · aRacer ECU-X / XX LOG 分析工具</h1>
 <div class="sub">CT125 分析工具｜依目前選定的 X / XX 系列與 Apple / Android App 實際 Fuel Map 格點採樣，不跨系列套用。</div>
 </div>
-</section><nav aria-label="頁面導覽" class="page-nav"><button class="page-tab active" data-page="1" type="button">① 分析工具<small>Log / 負載圖 / 修正</small></button><button class="page-tab" data-page="2" type="button">② 使用說明<small>規則 / 防失準</small></button></nav>
+</section><nav aria-label="頁面導覽" class="page-nav page-nav-v24"><button class="page-tab active" data-page="1" type="button">① 噴油量分析<small>油圖 / 前後工況</small></button><button class="page-tab" data-page="2" type="button">② 引擎負載<small>AP / 點火參照</small></button><button class="page-tab" data-page="3" type="button">③ 進氣壓降<small>高轉 WOT 診斷</small></button><button class="page-tab" data-page="4" type="button">④ 分析說明<small>規則 / 防失準</small></button></nav>
 
 
 
@@ -587,7 +587,7 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 
 
 
-<div class="app-page active" data-page-panel="1"><section class="cl-on-banner" id="loopModeBanner">
+<div class="app-page active" data-page-panel="1"><section class="calibration-safety-card" aria-label="調校輔助程式使用規則"><div class="calibration-safety-icon" aria-hidden="true">⚠️</div><div><div class="calibration-safety-title">使用前重要規則</div><p>此調校輔助程式所讀取的 LOG 紀錄，需在<strong>平面鋪裝道路</strong>或<strong>馬力機</strong>上獲取，並僅限於<strong>含氧感知設備正常、無故障異常</strong>的情況下使用。</p></div></section><section class="cl-on-banner" id="loopModeBanner">
 <div class="cl-on-badge" id="loopModeBadge">🔴 CLOSED LOOP ON</div>
 <div class="cl-on-copy">
 <strong id="loopModeTitle">閉迴路開啟｜Fuel_CL 主判定</strong>
@@ -835,7 +835,7 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 <div class="tablewrap"><table id="detail"></table></div>
 </details>
 </section>
-</div></div><div class="app-page" data-page-panel="2"><div class="help-intro"><h2>📖 使用說明與實際判定規則</h2><p>本頁完全以目前程式實際執行功能為準；若文字與程式設定不同，以程式實際判定為準。</p></div>
+</div></div><div class="app-page" data-page-panel="4"><div class="help-intro"><h2>📖 使用說明與實際判定規則</h2><p>本頁完全以目前程式實際執行功能為準；若文字與程式設定不同，以程式實際判定為準。</p></div>
 <div class="hero-meta">
 <span>Fuel_CL：ON 主判定</span><span>OFF：WBO2 / Target</span><span>T_Eng：軟權重參考</span><span>只用真實 Map 格</span>
 </div><section class="card rules-card">
@@ -877,7 +877,7 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 <div class="section-head"><div><div class="section-tag">QUALITY GATE</div><h2>防失準</h2><p class="section-sub">品質不足時降低可信度，不急著修改；強工況證據只提升進入修正判定的資格。</p></div></div>
 <div class="quality-grid"><div><b>①</b><span>整條 Log Fuel_CL 判定 ON / OFF</span></div><div><b>②</b><span>溫度權重＋瞬態／資料品質權重</span></div><div><b>③</b><span>weighted MAD ≤8＋方向一致度 ≥0.7</span></div><div><b>④</b><span>單一Log直接修正：RPM波動≤15%最佳；15～25%仍可用</span></div></div>
 <div class="quality-warning">⚠️ <strong>高可信度正常修正；中等證據半量；較少但可重複驗證者25%保守試修；互相衝突才觀望。</strong> 不把所有條件疊成硬門檻，也不讓短短三筆直接取得最高級。</div>
-<div class="note" style="margin-top:10px"><strong>程式參數快照：</strong> T_Eng 為軟權重參考｜核心溫區 80～110°C｜熱機趨勢納入權重｜TPS 瞬態 ≥12%/s｜RPM 瞬態 ≥600 rpm/s｜transient hold 0.8 s｜不修 ±3.0%｜極端 ≥11%｜100 ms標準加權證據量：3 / 6 / 12｜segment：effectiveN≥4有效、≥6強證據、≥2段只作獨立重複參考｜Map：X 14×17、XX 31×25。Safe v2.3.3：同一檔案會先以檔案身分攔截，再以解壓後 SHA-256 與完整核心序列做第二、第三層防呆；正規化部分相似只提醒、不刪資料；WBO2 AFR ≥23.5 在 ON／OFF 都列為感知器異常，只隔離該時段；AFR 17～18 只有在 TPS 全收，並同時有斷油旗標，或無噴油且 RPM 明確下降時才視為收油，其餘保留為真實偏稀候選。OFF WBO2 lag 會參考 Target AFR、Fuel PW 與 Injector Duty 的階躍並驗證 AFR 反應相關性，未達門檻即沿用 RPM＋AP 動態 delay。CI 採獨立 visit bootstrap，只有跨 Log 且方向穩定才標示可信；whole-map inverse 保留作同批資料平滑趨勢，不視為外部驗證。</div>
+<div class="note" style="margin-top:10px"><strong>程式參數快照：</strong> T_Eng 為軟權重參考｜核心溫區 80～110°C｜熱機趨勢納入權重｜TPS 瞬態 ≥12%/s｜RPM 瞬態 ≥600 rpm/s｜transient hold 0.8 s｜不修 ±3.0%｜極端 ≥11%｜100 ms標準加權證據量：3 / 6 / 12｜segment：effectiveN≥4有效、≥6強證據、≥2段只作獨立重複參考｜Map：X 14×17、XX 31×25。同一檔案會先以檔案身分攔截，再以解壓後 SHA-256 與完整核心序列做第二、第三層防呆；正規化部分相似只提醒、不刪資料；WBO2 AFR ≥23.5 在 ON／OFF 都列為感知器異常，只隔離該時段；AFR 17～18 只有在 TPS 全收，並同時有斷油旗標，或無噴油且 RPM 明確下降時才視為收油，其餘保留為真實偏稀候選。OFF WBO2 lag 會參考 Target AFR、Fuel PW 與 Injector Duty 的階躍並驗證 AFR 反應相關性，未達門檻即沿用 RPM＋AP 動態 delay。CI 採獨立 visit bootstrap，只有跨 Log 且方向穩定才標示可信；whole-map inverse 保留作同批資料平滑趨勢，不視為外部驗證。</div>
 </section></div>
 <footer>aRacer X / XX Log 分析建議｜CT125 分析工具｜本工具只提供分析與調校建議，不會寫入 ECU。實際騎乘負載圖以真實點火格顯示 RPM／TPS／AP／SA，只供使用者自行參照，不提供點火角增減建議。<div class="gaggle-credit">此分析程式為 Gaggle 發布</div></footer>
 </div>
@@ -973,19 +973,31 @@ async function scanHardwareFiles(files){
    const unique=await loadUniqueLogEntries(files),metas=unique.entries.map(e=>parseLogMeta(e.text));
    if(token!==hardwareScanToken)return;
    const known=metas.filter(m=>m.known),series=new Set(known.map(m=>m.known.series)),hardware=new Set(metas.map(m=>m.hardwareId).filter(Boolean)),ecuSns=new Set(metas.map(m=>m.ecuSn).filter(Boolean)),tableIds=new Set(metas.map(m=>String(m.tableId||"").trim()).filter(Boolean));
+   const platforms=[...new Set(unique.entries.map(e=>detectLogPlatformText(e.text)))],platformConflict=platforms.length!==1||platforms[0]==="unknown";
    const missingIdentity=metas.filter(m=>!m.hardwareId&&!m.ecuSn).length;
    const batchConflict=series.size>1||hardware.size>1||ecuSns.size>1||tableIds.size>1||(metas.length>1&&missingIdentity>0&&(hardware.size||ecuSns.size));
-   if(batchConflict){
-     if(status){status.className="hardware-status error";status.textContent=series.size>1?"⛔ 同批 Log 包含 X 與 XX ECU，請分開分析。":tableIds.size>1?"⛔ 同批 Log 包含不同 Table ID，請分開分析。":"⛔ 同批 Log 的 ECU 身份不一致或不完整，請分開分析。"}
+   if(batchConflict||platformConflict){
+     if(status){status.className="hardware-status error";status.textContent=platformConflict?"⛔ 同批 Log 的 Apple／Android 格式混合或無法辨識，請分開分析。":series.size>1?"⛔ 同批 Log 包含 X 與 XX ECU，請分開分析。":tableIds.size>1?"⛔ 同批 Log 包含不同 Table ID，請分開分析。":"⛔ 同批 Log 的 ECU 身份不一致或不完整，請分開分析。"}
    }
-   if(!batchConflict&&known.length){
+   if(!batchConflict&&!platformConflict){const platformSelect=$("logPlatformSelect");if(platformSelect){platformSelect.value=platforms[0];updateLogSystemConfirm()}}
+   if(!batchConflict&&!platformConflict&&known.length){
      const info=known[0].known,id=known[0].hardwareRaw||known[0].hardwareId,select=$("ecuSeriesSelect");
      if(select){select.value=info.series;updateLogSystemConfirm()}
      const unknown=metas.filter(m=>!m.known).length;
      if(status){status.className=`hardware-status ${unknown?"warn":"ok"}`;status.textContent=`${unknown?"⚠️":"✅"} Hardware ID ${id} → ${info.model}（${seriesText(info.series)}），已自動選擇${unknown?`；另有 ${unknown} 份未收錄 ID 需人工確認`:""}。`}
-   }else if(!batchConflict){
+   }else if(!batchConflict&&!platformConflict){
      const ids=[...new Set(metas.map(m=>m.hardwareRaw||m.hardwareId).filter(Boolean))];
      if(status){status.className="hardware-status warn";status.textContent=`⚠️ ${ids.length?`Hardware ID ${ids.join("、")} 尚未收錄`:"Log 未提供可辨識的 Hardware ID"}；不會自動猜測。若為 SuperXX，請手動選擇 XX 31×25，分析時會標示「SuperXX（手動確認）」。`}
+   }
+   let loopConflict=false,detectedLoop="";
+   if(!batchConflict&&!platformConflict){
+     try{
+       const loops=[...new Set(unique.entries.map(e=>detectLoopState(parseText(e.text,e.name)).state).filter(Boolean))];
+       loopConflict=loops.length!==1;
+       detectedLoop=loops[0]||"";
+       if(!loopConflict){const loopSelect=$("loopModeSelect");if(loopSelect){loopSelect.value=detectedLoop;updateLoopModeUI();updateLogSystemConfirm();if(status)status.textContent+=(status.textContent?" ":"")+`Closed Loop ${detectedLoop.toUpperCase()} 已自動選擇。`}}
+       else if(status){status.className="hardware-status error";status.textContent="⛔ 同批 Log 的 Closed Loop ON／OFF 狀態不一致或無法判定，請分開分析。"}
+     }catch(e){loopConflict=true;if(status){status.className="hardware-status error";status.textContent="⛔ Closed Loop 狀態讀取失敗："+e.message}}
    }
    const selectedPlatform=$("logPlatformSelect")?.value||"",selectedSeries=$("ecuSeriesSelect")?.value||"",selectedMode=getLoopMode();
    const cards=unique.entries.map((entry,i)=>{
@@ -997,7 +1009,8 @@ async function scanHardwareFiles(files){
      parsed=parseText(entry.text,entry.name);const state=detectLoopState(parsed);loop=state.state?.toUpperCase()||"無法判定";
      const prepared=state.state==="off"?prepareOpenLoopRows(parsed):prepareClosedLoopRows(parsed);usable=prepared.length;
      afr18=parsed.filter(r=>r._wbo2Overrun).length;afr24=parsed.filter(r=>r._wbo2Fault).length;alignmentRejected=parsed.filter(r=>r._wbo2AlignmentRejected).length;
-     if(state.state&&state.state!==selectedMode)error=`選擇為 ${selectedMode.toUpperCase()}，此 Log 實際為 ${state.state.toUpperCase()}`;
+     if(loopConflict)error="同批 Log 的 Closed Loop ON／OFF 狀態不一致或無法判定，請分開分析。";
+     else if(state.state&&state.state!==selectedMode)error=`選擇為 ${selectedMode.toUpperCase()}，此 Log 實際為 ${state.state.toUpperCase()}`;
     }catch(e){error=e.message}
     const model=meta.known?.model||(meta.hardwareId&&selectedSeries==="xx"?"SuperXX（手動確認）":"未確認"),map=seriesValue?seriesText(seriesValue):"尚未選擇";
     const sensorWarning=afr24?`<div class="log-preflight-error">🔴 WBO2 感知器健康警告：偵測到 ${afr24.toLocaleString()} 筆 AFR 約 24 異常值。可能與感知器污染／老化、線路短路或控制器狀態有關；異常時段已隔離，請檢查感知器良率。</div>`:"";
@@ -2486,6 +2499,7 @@ $("analyze").onclick=async()=>{
   // 負載圖只讀取已完成分析的 raw Log；等待 result 顯示後再繪製，避免隱藏容器造成 Canvas 尺寸為 0。
   requestAnimationFrame(()=>{
     if(window.renderLoadZoneV43)window.renderLoadZoneV43(window.__ctLogRows||[]);
+    if(window.renderIntakeRestrictionV24)window.renderIntakeRestrictionV24(window.__ctLogRows||[]);
   });
   $("result").scrollIntoView({behavior:"smooth"});
  }catch(e){
@@ -2604,13 +2618,13 @@ async function sideOpenLoop(files,loadedUnique=null){
        const fmtPct=v=>Number.isFinite(v)?`${v>0?"+":""}${v.toFixed(2)}%`:"—",fmtAfr=v=>Number.isFinite(v)?v.toFixed(2):"—";
        return `<tr><td>${x.rpm}</td><td>${x.tps}%</td><td>${fmtAfr(bb.afrTarget)} / ${fmtAfr(aa.afrTarget)}</td><td>${fmtAfr(bb.afr)} / ${fmtAfr(aa.afr)}</td><td>${fmtPct(bv)}</td><td>${fmtPct(av)}</td><td>${Number.isFinite(bv)&&Number.isFinite(av)?fmtPct(av-bv):"—"}</td><td>${bb.samples}/${aa.samples}</td><td>${bb.quality||"數據不足"} / ${aa.quality||"數據不足"}</td><td class="${s[2]}"><strong>${s[0]}</strong><br><span>${s[1]}${notes.length?"<br>⚠️ "+notes.join("；"):""}</span></td></tr>`;
      }).join("");
-     result.innerHTML=`<div class="bt-head"><strong>前後工況對比完成｜Safe v2.3.3</strong><span>兩組 Log 各自獨立處理，再比較共同實際 Map 格</span></div>
+     result.innerHTML=`<div class="bt-head"><strong>前後工況對比完成</strong><span>兩組 Log 各自獨立處理，再比較共同實際 Map 格</span></div>
      ${pairCheck.identityWarning?`<div class="bt-warning">${esc(pairCheck.identityWarning)}</div>`:""}
      ${pairCheck.similarityWarning?`<div class="bt-warning">${esc(pairCheck.similarityWarning)}</div>`:""}
      <div class="bt-stats"><div><small>共同 Map 格</small><b>${keys.length}</b></div><div><small>🟢 良好／改善</small><b>${good}</b></div><div><small>🟡 需觀察</small><b>${warn}</b></div><div><small>🔴 工況變差</small><b>${bad}</b></div></div>
      <div class="bt-note"><strong>本次比較基準：${compareMode==="on"?"Fuel_CL":"逐筆 WBO2 / Target 偏差"}。</strong> 這裡只比較相同 Map 格的前後騎乘工況，不驗證實際油圖修改內容。兩組已檢查 ECU 身分；同一 File 物件、解壓內容 SHA-256 相同或完整分析欄位序列相同都會停止。只有部分正規化序列相似時僅提示並保留。Table ID 允許不同。跨 Log 正負衝突時不判定改善。加權證據量以標準 100 ms 為時間基準；AFR Target / WBO2 中位數僅為參考。</div>
      <div class="compare-table-wrap"><table class="compare-table"><thead><tr><th>RPM</th><th>TPS</th><th>Target AFR 前/後</th><th>WBO2 AFR 前/後</th><th>前 ${label}</th><th>後 ${label}</th><th>變化</th><th>有效數 前/後</th><th>可信度 前/後</th><th>結果</th></tr></thead><tbody>${rows||'<tr><td colspan="10">沒有共同且可比較的 Map 格。</td></tr>'}</tbody></table></div>`;
-   }catch(e){console.error(e);result.innerHTML='<div class="bt-warning">⛔ Safe v2.3.3 工況對比已停止：'+esc(e.message)+'</div>';}
+   }catch(e){console.error(e);result.innerHTML='<div class="bt-warning">⛔ 工況對比已停止：'+esc(e.message)+'</div>';}
    finally{btn.disabled=false;btn.textContent="開始工況對比";}
  });
 })();
@@ -2727,6 +2741,89 @@ if(loopModeSelect){
   window.__updateFuelMapCoreNote=updateFuelMapCoreNote;
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",updateFuelMapCoreNote);
   else updateFuelMapCoreNote();
+})();
+</script>
+<style id="v24-intake-pages-css">
+.page-nav-v24{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.page-nav-v24 .page-tab{min-width:0}.intake-page-v24,.engine-page-v24{margin-top:2px}.page-panel-intro{margin:14px 0 10px;padding:16px 17px;border-radius:18px;background:linear-gradient(135deg,#07101d,#102a43);color:#e5eef9;box-shadow:0 12px 28px #0f172a22}.page-panel-intro h2{margin:0 0 6px;font-size:20px}.page-panel-intro p{margin:0;color:#b6c8dd;font-size:13px;line-height:1.65}.intake-v24{border:1px solid #dbe4ee;background:linear-gradient(150deg,#f8fafc,#fff)}.intake-v24 .section-tag{color:#b45309}.intake-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:12px 0}.intake-stat{padding:12px;border:1px solid #e2e8f0;border-radius:13px;background:#fff}.intake-stat span{display:block;color:#64748b;font-size:11px;font-weight:800}.intake-stat b{display:block;margin-top:4px;color:#0f172a;font-size:20px}.intake-dp-label{color:#b91c1c!important}.intake-dp-alert{color:#dc2626!important;text-shadow:0 0 10px #fca5a5;animation:intakePressurePulse 1.45s ease-in-out infinite}@keyframes intakePressurePulse{50%{color:#991b1b;text-shadow:0 0 18px #ef4444}}.intake-chart-shell{position:relative;border:1px solid #d8e1eb;border-radius:16px;overflow:hidden;background:#07101d;min-height:270px}.intake-chart{display:block;width:100%;height:290px;touch-action:none}.intake-tip{position:absolute;z-index:2;display:none;max-width:220px;padding:9px 10px;border-radius:10px;background:#fff;color:#0f172a;box-shadow:0 10px 24px #0004;font-size:12px;line-height:1.55;pointer-events:none}.intake-legend{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0 0}.intake-legend-item{padding:10px 11px;border:1px solid color-mix(in srgb,var(--intake-color) 24%,#fff);border-left:4px solid var(--intake-color);border-radius:12px;background:color-mix(in srgb,var(--intake-color) 5%,#fff);line-height:1.45}.intake-legend-item b{display:block;color:var(--intake-color);font-size:13px}.intake-legend-item span{display:block;margin-top:3px;color:#475569;font-size:12px;font-weight:650}.intake-conclusion{margin-top:12px;padding:14px 15px;border-left:5px solid #f59e0b;border-radius:12px;background:#fffbeb;color:#78350f;line-height:1.7;font-size:13px}.intake-conclusion.good{border-color:#16a34a;background:#f0fdf4;color:#14532d}.intake-conclusion.warn{border-color:#dc2626;background:#fff7ed;color:#7c2d12}.intake-table-wrap{overflow:auto;margin-top:12px;border:1px solid #e2e8f0;border-radius:13px}.intake-table{width:100%;min-width:760px;border-collapse:collapse;font-size:12px}.intake-table th{background:#f1f5f9;color:#334155;text-align:left}.intake-table th,.intake-table td{padding:9px 10px;border-bottom:1px solid #e2e8f0;white-space:nowrap}.intake-table tr:last-child td{border-bottom:0}.honda-watermark{position:fixed;z-index:0;right:-86px;bottom:7vh;width:min(490px,78vw);pointer-events:none;opacity:.035;transform:rotate(-11deg);color:#1e3a5f}.honda-watermark svg{display:block;width:100%;height:auto}.honda-watermark text{font-family:Arial,sans-serif;font-weight:900;letter-spacing:10px}.wrap{position:relative;isolation:isolate}.wrap> :not(.honda-watermark){position:relative;z-index:1}@media(max-width:700px){.page-nav-v24{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.page-nav-v24 .page-tab{min-height:54px;font-size:12px}.intake-summary{grid-template-columns:1fr}.intake-chart{height:260px}.intake-legend{grid-template-columns:1fr}.honda-watermark{right:-72px;bottom:4vh;width:92vw;opacity:.027}}
+.calibration-safety-card{display:flex;align-items:center;gap:13px;margin:12px 0 14px;padding:15px 16px;border:2px solid #fecaca;border-radius:18px;background:linear-gradient(135deg,#fff1f2,#fff7ed);box-shadow:0 10px 24px rgba(220,38,38,.12);color:#7f1d1d}.calibration-safety-icon{display:grid;place-items:center;flex:0 0 42px;width:42px;height:42px;border-radius:14px;background:#dc2626;color:#fff;font-size:22px;box-shadow:0 6px 14px rgba(220,38,38,.28)}.calibration-safety-title{font-size:19px;font-weight:950;letter-spacing:.02em;color:#dc2626;line-height:1.15}.calibration-safety-card p{margin:5px 0 0;font-size:14px;font-weight:750;line-height:1.65;color:#7f1d1d}.calibration-safety-card strong{color:#b91c1c;text-decoration:underline;text-decoration-color:#fca5a5;text-underline-offset:3px}@media(max-width:600px){.calibration-safety-card{align-items:flex-start;padding:14px}.calibration-safety-title{font-size:18px}.calibration-safety-card p{font-size:13px}.calibration-safety-icon{flex-basis:38px;width:38px;height:38px;font-size:19px}}
+</style>
+<script id="v24-four-page-intake-analysis">
+(function(){
+  const median=a=>{const b=a.filter(Number.isFinite).sort((x,y)=>x-y);if(!b.length)return null;const m=Math.floor(b.length/2);return b.length%2?b[m]:(b[m-1]+b[m])/2};
+  const num=v=>{const n=Number(v);return Number.isFinite(n)?n:null};
+  const esc=s=>String(s??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  function timeSec(v){const n=num(v);if(n==null)return null;return n>1e6?n/1000:n}
+  function injectionActive(r){
+    if(num(r?.Dec_FC_En)>0||num(r?.Inj_Cut)>0)return false;
+    const pw=num(r?.Cyl1_Comn_FuelPW),duty=num(r?.Cyl1_Injector_Period_Rate);
+    return (pw==null||pw>0)&&(duty==null||duty>0)&&(pw!=null||duty!=null);
+  }
+  function intakeBins(rows){
+    const source=[];
+    for(const r of rows||[]){
+      const rpm=num(r.RPM),tps=num(r.TPS_Percent),ap=num(r.Cyl1_Eng_AP),patm=num(r.P_Atm);
+      if(r._transient||!injectionActive(r)||rpm==null||tps==null||ap==null||patm==null||patm<=0)continue;
+      const ratio=ap/patm*100,drop=patm-ap;if(!Number.isFinite(ratio)||!Number.isFinite(drop)||drop<0||ratio>105)continue;
+      source.push({r,rpm,tps,ap,patm,ratio,drop,t:timeSec(r.Time)});
+    }
+    if(!source.length)return [];
+    const maxRpm=Math.max(...source.map(x=>x.rpm));
+    const highRpmFloor=Math.max(4500,Math.floor(maxRpm*.70/500)*500);
+    const groups=new Map();
+    for(const x of source){if(x.rpm<highRpmFloor)continue;const key=Math.floor(x.rpm/500)*500;if(!groups.has(key))groups.set(key,[]);groups.get(key).push(x)}
+    return [...groups].sort((a,b)=>a[0]-b[0]).map(([rpm,a])=>{
+      const tpsMax=Math.max(...a.map(x=>x.tps)),tpsFloor=Math.max(40,tpsMax-5),b=a.filter(x=>x.tps>=tpsFloor);
+      const ts=b.map(x=>x.t).filter(Number.isFinite).sort((x,y)=>x-y);let seconds=0;for(let i=1;i<ts.length;i++){const d=ts[i]-ts[i-1];if(d>0&&d<=.45)seconds+=d}
+      return {rpm,n:b.length,seconds,tpsMax,tpsFloor,ratio:median(b.map(x=>x.ratio)),drop:median(b.map(x=>x.drop)),ap:median(b.map(x=>x.ap)),patm:median(b.map(x=>x.patm)),highRpmFloor};
+    }).filter(b=>b.tpsMax>=40);
+  }
+  function status(b){const d=Number(b.drop.toFixed(1));if(d<=11)return {name:'進氣順暢範圍',range:'≤11.0 kPa',desc:'高轉吸氣順暢，目前沒有明顯進氣壓降。',color:'#16a34a'};if(d<=12)return {name:'壓降影響（微）',range:'11.1～12.0 kPa',desc:'已出現輕微進氣壓降，持續觀察即可。',color:'#ca8a04'};if(d<=12.9)return {name:'壓降影響（中）',range:'12.1～12.9 kPa',desc:'進氣壓降開始影響高轉吸氣，但仍屬可接受範圍。',color:'#ea580c'};if(d<=13.5)return {name:'當前設備臨界值',range:'13.0～13.5 kPa',desc:'高轉吸氣阻力已明顯，進氣路徑開始形成限制。',color:'#f97316'};if(d<=14)return {name:'可參考升級標準',range:'13.6～14.0 kPa',desc:'高轉吸氣阻力很明顯，進氣路徑限制已開始介入；若此轉速為平時常用工況，已達可參考升級進氣相關設備的門檻。',color:'#dc2626'};if(d<=14.5)return {name:'優先檢查／升級',range:'14.1～14.5 kPa',desc:'高轉吸氣阻力已非常高，進氣路徑限制程度非常明顯；若此轉速為平時常用工況，已達優先檢查／升級進氣相關設備的門檻。',color:'#b91c1c'};return {name:'高度不足',range:'≥14.6 kPa',desc:'高轉吸氣已明顯受限，進氣路徑限制程度極高；建議優先確認 LOG 錄製道路與工況一致，並排除進氣系統、感知器或其他設備異常。',color:'#991b1b'}}
+  function conclusion(bins){
+    const all=bins.filter(b=>Number.isFinite(b.ratio));
+    const worst=[...all].sort((a,b)=>b.drop-a.drop||b.rpm-a.rpm)[0];
+    if(!worst){return {kind:'',worst:null,html:'<strong>尚無可分析的高轉高開度資料。</strong>需要持續噴油、非斷油、非瞬態且 AP / P_Atm 完整的 Log。'};}
+    const band=status(worst),range=`${worst.rpm.toLocaleString()}～${(worst.rpm+499).toLocaleString()} RPM`;
+    const opening=worst.tpsMax>=90?'WOT':'高開度';
+    const d=Number(worst.drop.toFixed(1)),detail=`本段最高 TPS ${worst.tpsMax.toFixed(1)}%，壓力比 ${worst.ratio.toFixed(1)}%，ΔP ${d.toFixed(1)} kPa。`;
+    const sourceNote=worst.tpsMax>=90?'':' 本段為'+opening+'資料，壓降已照實顯示，但不能單獨鎖定限制零件。';
+    return {kind:d>=13.6?'warn':d<=11?'good':'',worst,html:`<strong>${range}｜${band.name}</strong>${detail}<br>${band.desc}${sourceNote}${d>=14.6?'<br><small>空濾、進氣管、歧管、汽門／凸輪與排氣系統也可能共同造成壓降；本分析不會指定單一零件。</small>':''}`};
+  }
+  function draw(bins){
+    const canvas=document.getElementById('intakeCanvasV24'),tip=document.getElementById('intakeTipV24');if(!canvas)return;
+    const box=canvas.getBoundingClientRect();if(box.width<20)return;const dpr=Math.min(2,devicePixelRatio||1),w=box.width,h=box.height;canvas.width=w*dpr;canvas.height=h*dpr;const c=canvas.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
+    const plot={l:48,r:w-16,t:18,b:h-36};const valid=bins.filter(b=>Number.isFinite(b.ratio));if(!valid.length){c.fillStyle='#cbd5e1';c.font='13px sans-serif';c.fillText('尚無符合高轉 WOT 條件的資料',plot.l,plot.t+30);return}
+    const minR=Math.min(...valid.map(b=>b.rpm)),maxR=Math.max(...valid.map(b=>b.rpm))+500;const yMin=Math.max(75,Math.floor(Math.min(...valid.map(b=>b.ratio))-2));const x=r=>plot.l+(r-minR)/(maxR-minR||1)*(plot.r-plot.l),y=v=>plot.b-(v-yMin)/(100-yMin)*(plot.b-plot.t);
+    c.strokeStyle='#334155';c.lineWidth=1;for(let v=Math.ceil(yMin/5)*5;v<=100;v+=5){const yy=y(v);c.beginPath();c.moveTo(plot.l,yy);c.lineTo(plot.r,yy);c.stroke();c.fillStyle='#94a3b8';c.font='10px sans-serif';c.fillText(v+'%',5,yy+3)}
+    c.strokeStyle='#475569';c.beginPath();c.moveTo(plot.l,plot.b);c.lineTo(plot.r,plot.b);c.stroke();valid.forEach((b,i)=>{const xx=x(b.rpm+250),s=status(b);c.fillStyle=s.color;c.globalAlpha=.15;c.fillRect(xx-16,y(b.ratio),32,plot.b-y(b.ratio));c.globalAlpha=1;c.beginPath();c.arc(xx,y(b.ratio),5,0,Math.PI*2);c.fill();c.fillStyle='#94a3b8';c.font='10px sans-serif';if(i%2===0)c.fillText((b.rpm/1000).toFixed(1)+'k',xx-10,plot.b+16)});
+    c.strokeStyle='#e2e8f0';c.lineWidth=2;c.beginPath();valid.forEach((b,i)=>{const xx=x(b.rpm+250),yy=y(b.ratio);i?c.lineTo(xx,yy):c.moveTo(xx,yy)});c.stroke();
+    canvas.onpointermove=e=>{const rect=canvas.getBoundingClientRect(),px=e.clientX-rect.left;let nearest=null,d=Infinity;for(const b of valid){const q=Math.abs(px-x(b.rpm+250));if(q<d){d=q;nearest=b}}if(!nearest||d>34){tip.style.display='none';return}const s=status(nearest);tip.innerHTML=`<b>${nearest.rpm.toLocaleString()}～${(nearest.rpm+499).toLocaleString()} RPM · ${s.name}</b><br>本段最高 TPS：${nearest.tpsMax.toFixed(1)}%（採 ${nearest.tpsFloor.toFixed(1)}% 以上）<br>壓力比：${nearest.ratio.toFixed(1)}%<br>ΔP：${nearest.drop.toFixed(1)} kPa<br>AP / P_Atm：${nearest.ap.toFixed(1)} / ${nearest.patm.toFixed(1)} kPa<br>有效資料：${nearest.n} 筆 · ${nearest.seconds.toFixed(1)} 秒`;tip.style.display='block';tip.style.left=Math.min(w-225,Math.max(8,px+10))+'px';tip.style.top='18px'};canvas.onpointerleave=()=>tip.style.display='none';
+  }
+  function render(rows){
+    const host=document.getElementById('intakeAnalysisHost');if(!host)return;
+    const bins=intakeBins(rows),c=conclusion(bins),floor=bins[0]?.highRpmFloor,alert=c.worst?.drop>11;
+    const legend=[
+      {range:'≤11.0 kPa',desc:'高轉吸氣順暢，目前沒有明顯進氣壓降。',color:'#16a34a'},
+      {range:'11.1～12.0 kPa',desc:'已出現輕微進氣壓降，持續觀察即可。',color:'#ca8a04'},
+      {range:'12.1～12.9 kPa',desc:'進氣壓降開始影響高轉吸氣，但仍屬可接受範圍。',color:'#ea580c'},
+      {range:'13.0～13.5 kPa',desc:'高轉吸氣阻力已明顯，進氣路徑開始形成限制。',color:'#f97316'},
+      {range:'13.6～14.0 kPa',desc:'高轉吸氣阻力很明顯，進氣路徑限制已開始介入；若此轉速為平時常用工況，已達可參考升級進氣相關設備的門檻。',color:'#dc2626'},
+      {range:'14.1～14.5 kPa',desc:'高轉吸氣阻力已非常高，進氣路徑限制程度非常明顯；若此轉速為平時常用工況，已達優先檢查／升級進氣相關設備的門檻。',color:'#b91c1c'},
+      {range:'≥14.6 kPa',desc:'高轉吸氣已明顯受限，進氣路徑限制程度極高；建議優先確認 LOG 錄製道路與工況一致，並排除進氣系統、感知器或其他設備異常。',color:'#991b1b'}
+    ];
+    host.innerHTML=`<section class="card intake-v24"><div class="section-head"><div><div class="section-tag">HIGH-OPENING INTAKE</div><h2>③ 高轉進氣壓降分析</h2><p class="section-sub"><strong>ΔP 壓力差／進氣壓降（kPa）</strong> 越高，代表高轉高開度時進氣路徑壓降越明顯。每個 500 RPM 分段只取該段最高 TPS 往下 5% 的資料；高轉範圍依本次 Log 的最高轉速自動設定${floor?`（本次自 ${floor.toLocaleString()} RPM 起）`:''}。持續噴油、非斷油、非瞬態；不參與 Fuel Map 修正。</p></div></div><div class="intake-summary"><div class="intake-stat"><span>分析 RPM 分段</span><b>${bins.length} 組</b></div><div class="intake-stat"><span>最低壓力比</span><b>${c.worst?c.worst.ratio.toFixed(1)+'%':'—'}</b></div><div class="intake-stat"><span class="intake-dp-label">最大 ΔP 壓力差／進氣壓降（kPa）</span><b class="${alert?'intake-dp-alert':''}">${c.worst?c.worst.drop.toFixed(1)+' kPa':'—'}</b></div></div><div class="intake-chart-shell"><canvas id="intakeCanvasV24" class="intake-chart"></canvas><div id="intakeTipV24" class="intake-tip"></div></div><div class="intake-legend">${legend.map(x=>`<div class="intake-legend-item" style="--intake-color:${x.color}"><b>${x.range}</b><span>${x.desc}</span></div>`).join('')}</div><div class="intake-conclusion ${c.kind}">${c.html}</div><div class="intake-table-wrap"><table class="intake-table"><thead><tr><th>RPM 分段</th><th>最高 TPS／採樣</th><th>壓力比</th><th class="intake-dp-label">ΔP 壓力差／進氣壓降（kPa）</th><th>Eng_AP</th><th>P_Atm</th><th>本段資料</th><th>判定</th></tr></thead><tbody>${bins.map(b=>{const s=status(b),red=b.drop>11;return `<tr><td>${b.rpm.toLocaleString()}～${(b.rpm+499).toLocaleString()}</td><td>${b.tpsMax.toFixed(1)}% / ≥${b.tpsFloor.toFixed(1)}%</td><td>${b.ratio.toFixed(1)}%</td class="${red?'intake-dp-alert':''}"><td class="${red?'intake-dp-alert':''}">${b.drop.toFixed(1)} kPa</td><td>${b.ap.toFixed(1)} kPa</td><td>${b.patm.toFixed(1)} kPa</td><td>${b.n} 筆 / ${b.seconds.toFixed(1)} 秒</td><td style="color:${s.color};font-weight:800">${s.name}</td></tr>`}).join('')||'<tr><td colspan="8">尚無符合本頁高轉高開度條件的資料。</td></tr>'}</tbody></table></div></section>`;
+    host.innerHTML=host.innerHTML.replace(/<\/td class="[^"]*">/g,'</td>');
+    requestAnimationFrame(()=>draw(bins));
+  }
+  function setup(){
+    const wrap=document.querySelector('.wrap'),help=document.querySelector('[data-page-panel="4"]');if(!wrap||!help)return;
+    const wm=document.createElement('div');wm.className='honda-watermark';wm.setAttribute('aria-hidden','true');wm.innerHTML='<svg viewBox="0 0 500 270" role="presentation"><path fill="currentColor" d="M54 146c71-24 100-66 139-118-8 51-1 84 32 106-46-4-92 7-171 43zm72 23c80-10 126 5 184 44-59-18-119-7-178 13 31-17 48-35-6-57zm164-35c55-1 105 20 151 68-57-29-116-36-173-20 23-12 33-28 22-48z"/><text x="88" y="253" font-size="51">HONDA</text></svg>';wrap.prepend(wm);
+    const p2=document.createElement('div');p2.className='app-page engine-page-v24';p2.dataset.pagePanel='2';p2.innerHTML='<div class="page-panel-intro"><h2>② 引擎負載分析</h2><p>實際騎乘的 RPM × TPS × AP 負載區域與點火參照。圖表僅作騎乘負載與點火格定位，不產生點火建議。</p></div><div id="engineLoadHost"></div>';
+    const p3=document.createElement('div');p3.className='app-page intake-page-v24';p3.dataset.pagePanel='3';p3.innerHTML='<div class="page-panel-intro"><h2>③ 進氣壓降分析</h2><p>以高轉全油門的歧管壓力比與壓降，找出值得優先檢查的進氣路徑工況。這是診斷資訊，不會自動判定單一零件故障。</p></div><div id="intakeAnalysisHost"><section class="card"><div class="note">請先完成 Log 分析，才會顯示高轉 WOT 進氣壓降結果。</div></section></div>';
+    wrap.insertBefore(p2,help);wrap.insertBefore(p3,help);const load=document.getElementById('loadZoneMap'),loadHost=document.getElementById('engineLoadHost');if(load&&loadHost)loadHost.append(load);
+    const tabs=[...document.querySelectorAll('.page-tab')],pages=[...document.querySelectorAll('.app-page')];function show(n){const v=String(n);tabs.forEach(t=>t.classList.toggle('active',t.dataset.page===v));pages.forEach(p=>p.classList.toggle('active',p.dataset.pagePanel===v));window.scrollTo({top:0,behavior:'smooth'});requestAnimationFrame(()=>{if(v==='2'&&window.renderLoadZoneV43)window.renderLoadZoneV43(window.__ctLogRows||[]);if(v==='3')render(window.__ctLogRows||[])})}tabs.forEach(t=>t.addEventListener('click',()=>show(t.dataset.page)));window.showCT125Page=show;window.renderIntakeRestrictionV24=render;
+  }
+  window.__intakePressureV24={intakeBins,conclusion};
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup);else setup();
 })();
 </script>
 </body></html>
