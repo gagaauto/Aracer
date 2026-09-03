@@ -570,6 +570,51 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 .log-preflight{margin-top:14px;padding:14px;border:1px solid #dce6f2;border-radius:17px;background:linear-gradient(145deg,#fbfdff,#f3f7fc);box-shadow:0 10px 28px #0f172a0a}.log-preflight[hidden]{display:none}.log-preflight-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.log-preflight-head strong{font-size:14px;color:#102a4c}.log-preflight-head span{font-size:10px;font-weight:800;color:#64748b}.log-preflight-alert{margin-top:9px;padding:9px 11px;border-radius:11px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:11px;font-weight:750;line-height:1.5}.log-preflight-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:9px;margin-top:10px}.log-preflight-item{min-width:0;padding:11px;border:1px solid #dfe7f1;border-radius:13px;background:#fff}.log-preflight-item.error{border-color:#fecaca;background:#fff7f7}.log-preflight-name{overflow-wrap:anywhere;font-size:11px;font-weight:900;color:#16355d}.log-preflight-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}.log-preflight-tags span{padding:4px 7px;border-radius:999px;background:#edf4ff;color:#245087;font-size:9px;font-weight:850}.log-preflight-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;margin-top:8px;font-size:9px;color:#64748b}.log-preflight-metrics b{display:block;margin-top:1px;color:#243b55;font-size:10px;overflow-wrap:anywhere}.log-preflight-error{margin-top:7px;color:#b91c1c;font-size:10px;font-weight:800;line-height:1.45}.conflict-card{margin:12px 0;padding:13px;border:1px solid #fed7aa;border-radius:16px;background:linear-gradient(145deg,#fffaf3,#fff7ed)}.conflict-card summary{cursor:pointer;display:flex;justify-content:space-between;gap:8px;color:#9a3412;font-size:12px;font-weight:900}.conflict-list{display:grid;gap:7px;margin-top:10px}.conflict-item{padding:10px;border-radius:11px;border:1px solid #ffedd5;background:#fff;font-size:10px}.conflict-item>strong{color:#7c2d12}.conflict-votes{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}.conflict-votes span{max-width:100%;overflow-wrap:anywhere;padding:5px 7px;border-radius:8px;background:#f8fafc;color:#475569}.conflict-votes b{color:#0f172a}
 @media(max-width:600px){.log-preflight{padding:11px}.log-preflight-grid{grid-template-columns:1fr}.log-preflight-head{display:block}.log-preflight-head span{display:block;margin-top:4px}.conflict-card summary{display:block}.conflict-card summary small{display:block;margin-top:4px}}
 </style>
+
+<style id="kawaii-nav-mascots-css">
+/* 頂部分頁吉祥物：只改導覽列圖示，不碰分析邏輯 */
+.kawaii-page-nav .page-tab{display:flex;align-items:center;justify-content:center;gap:9px;padding:7px 10px}
+.kawaii-page-nav .nav-copy{display:block;min-width:0;line-height:1.18}
+.kawaii-page-nav .nav-copy small{display:block}
+.kawaii-page-nav .nav-mascot{position:relative;display:grid;place-items:center;width:34px;height:34px;flex:0 0 34px;border-radius:50%;background:rgba(255,255,255,.10);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),0 5px 12px rgba(0,0,0,.12);font-style:normal}
+.kawaii-page-nav .nav-mascot:before{display:block;line-height:1;filter:drop-shadow(0 2px 2px rgba(0,0,0,.12))}
+.kawaii-page-nav .nav-mascot:after{position:absolute;left:50%;top:53%;transform:translate(-50%,-50%);font-size:6px;font-weight:950;letter-spacing:-1px;text-shadow:0 1px rgba(255,255,255,.95)}
+.kawaii-page-nav .nav-drop{background:linear-gradient(145deg,#e9f8ff,#dff1ff)}
+.kawaii-page-nav .nav-drop:before{content:'💧';font-size:25px}
+.kawaii-page-nav .nav-drop:after{content:'•ᴗ•';color:#23638e}
+.kawaii-page-nav .nav-flame{background:linear-gradient(145deg,#fff4df,#ffe7c4)}
+.kawaii-page-nav .nav-flame:before{content:'🔥';font-size:25px}
+.kawaii-page-nav .nav-flame:after{content:'•ᴗ•';color:#7c3f18}
+.kawaii-page-nav .nav-cloud{background:linear-gradient(145deg,#eefaff,#e4f5ff)}
+.kawaii-page-nav .nav-cloud:before{content:'☁️';font-size:25px}
+.kawaii-page-nav .nav-cloud:after{content:'•ᴗ•';color:#557f9f}
+.kawaii-page-nav .nav-book{font-size:21px;background:linear-gradient(145deg,#f6f4ff,#eeeaff)}
+.kawaii-page-nav .page-tab.active .nav-mascot{background:rgba(255,255,255,.93);box-shadow:0 6px 14px rgba(10,60,150,.18)}
+@media(max-width:700px){.kawaii-page-nav .page-tab{gap:5px;padding:6px 4px}.kawaii-page-nav .nav-mascot{width:28px;height:28px;flex-basis:28px}.kawaii-page-nav .nav-drop:before,.kawaii-page-nav .nav-flame:before,.kawaii-page-nav .nav-cloud:before{font-size:21px}.kawaii-page-nav .nav-mascot:after{font-size:5px}.kawaii-page-nav .nav-book{font-size:18px}}
+</style>
+
+<style id="home-kawaii-css">
+/* 只作用於 ① 噴油量分析首頁；不修改 ②/③/④ 分析邏輯與版面 */
+.app-page[data-page-panel="1"]{--hk-ink:#2e3b58;--hk-muted:#73829a;--hk-blue:#78b7f2;--hk-pink:#f5b9ca;--hk-mint:#bfe9d0;--hk-lav:#d9cdf9;--hk-line:#dce9f5;--hk-shadow:0 16px 38px rgba(77,110,153,.11);color:var(--hk-ink)}
+.home-kawaii-intro{position:relative;display:flex;align-items:center;gap:14px;margin:14px 0 13px;padding:17px 145px 17px 18px;border:1px solid #dceaf7;border-radius:24px;background:linear-gradient(135deg,#fff 0%,#f5fbff 55%,#fff6fb 100%);box-shadow:var(--hk-shadow);overflow:hidden}
+.home-kawaii-intro h2{margin:0 0 5px;font-size:21px;color:#2d3c5a}.home-kawaii-intro p{margin:0;color:#71809a;font-size:12px;line-height:1.65}.home-kawaii-spark{position:absolute;right:112px;top:15px;color:#f3b63c;font-size:19px}.home-kawaii-heart{position:absolute;right:22px;bottom:12px;color:#ef9eb3;font-size:20px;transform:rotate(10deg)}
+.home-drop-baby{position:relative;display:grid;place-items:center;width:52px;height:52px;flex:0 0 52px;border-radius:50%;background:linear-gradient(145deg,#eaf8ff,#fff);border:1px solid #cce8fb;box-shadow:0 8px 20px #5faee522}
+.home-drop-baby:before{content:'💧';font-size:35px;filter:drop-shadow(0 3px 4px #4aa3dd2c)}.home-drop-baby:after{content:'•ᴗ•';position:absolute;left:50%;top:53%;transform:translate(-50%,-50%);font-size:8px;font-weight:950;letter-spacing:-1px;color:#276f9d;text-shadow:0 1px #fff}
+.home-drop-big{position:absolute;right:30px;bottom:-22px;width:90px;height:90px;border-radius:48% 52% 55% 45%/58% 58% 42% 42%;background:linear-gradient(145deg,#9edcff,#6dbaf0);transform:rotate(45deg);box-shadow:inset 7px 7px 0 #ffffff70,0 10px 20px #6ba8d329}
+.home-drop-big:before{content:'•ᴗ•';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-45deg);font-size:13px;font-weight:950;letter-spacing:-1px;color:#28658d}.home-drop-big:after{content:'♡';position:absolute;right:-14px;top:-1px;transform:rotate(-45deg);font-size:21px;color:#ef9eb3;font-weight:900}
+.app-page[data-page-panel="1"] .calibration-safety-card{border:1.5px solid #f0c55d;border-radius:19px;background:linear-gradient(90deg,#fff9ea,#fffdf7);box-shadow:0 8px 20px #d5aa3610;color:#7e4a20}.app-page[data-page-panel="1"] .calibration-safety-icon{border-radius:50%;background:linear-gradient(145deg,#ffd971,#f5b841);color:#7b4a12;box-shadow:0 6px 14px #e7b33c2c}.app-page[data-page-panel="1"] .calibration-safety-title{color:#a35b1d}.app-page[data-page-panel="1"] .calibration-safety-card p{color:#7b5a35}.app-page[data-page-panel="1"] .calibration-safety-card strong{color:#a65324;text-decoration-color:#f0c99d}
+.app-page[data-page-panel="1"] .cl-on-banner{border:1px solid #d7e8f6!important;border-radius:20px!important;background:linear-gradient(135deg,#f6fbff,#fff)!important;box-shadow:0 9px 24px #5d9fe518!important}.app-page[data-page-panel="1"] .cl-on-badge{border-radius:999px!important;box-shadow:0 6px 16px #e85d6b16}.app-page[data-page-panel="1"] .mode-evidence-note,.app-page[data-page-panel="1"] .loop-source-note{border-radius:13px!important;background:#f8fbff!important;border:1px solid #e2edf7!important;color:#71809a!important}
+.app-page[data-page-panel="1"] .card{border:1px solid #dce8f4;border-radius:23px;background:linear-gradient(150deg,#fff 0%,#fcfdff 78%,#faf7ff 100%);box-shadow:var(--hk-shadow)}
+.app-page[data-page-panel="1"] .setup-card{background:linear-gradient(145deg,#fff,#f8fbff 64%,#faf7ff)}.app-page[data-page-panel="1"] .upload-card{background:linear-gradient(145deg,#fff,#f6fbff 68%,#f8fff9)}.app-page[data-page-panel="1"] .backtest-card{background:linear-gradient(145deg,#fff,#fbf8ff 67%,#fff9fb)}
+.app-page[data-page-panel="1"] .section-tag{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:999px;background:#eef6ff;color:#5b83b9;border:1px solid #dce9f7;font-size:10px;letter-spacing:.12em}.app-page[data-page-panel="1"] .section-head h2{color:#30415f}.app-page[data-page-panel="1"] .section-sub{color:#7b879b}
+.app-page[data-page-panel="1"] .setup-grid>div{position:relative;padding:11px;border:1px solid #e2ebf5;border-radius:16px;background:#fff;box-shadow:0 6px 16px rgba(65,92,130,.05)}.app-page[data-page-panel="1"] .setup-grid label{color:#657692}.app-page[data-page-panel="1"] select{border-radius:13px!important;border-color:#d9e6f2!important;background-color:#fbfdff!important}
+.app-page[data-page-panel="1"] .setup-warning{border:1px solid #efcc78!important;border-radius:14px!important;background:#fff9ea!important;color:#8a5a1f!important}
+.app-page[data-page-panel="1"] .upload-drop{position:relative;border:2px dashed #b9d9f4!important;border-radius:20px!important;background:linear-gradient(145deg,#f9fdff,#fff)!important}.app-page[data-page-panel="1"] .upload-drop:after{content:'💧';position:absolute;right:18px;top:15px;font-size:28px;opacity:.75}.app-page[data-page-panel="1"] .upload-icon{border-radius:50%!important;background:linear-gradient(145deg,#e8f5ff,#dff1ff)!important;color:#4d91d2!important;box-shadow:0 6px 16px #63a5df1c}.app-page[data-page-panel="1"] .upload-main{color:#385676!important}.app-page[data-page-panel="1"] .upload-sub,.app-page[data-page-panel="1"] .upload-status,.app-page[data-page-panel="1"] .hardware-status{color:#76869c!important}
+.app-page[data-page-panel="1"] .upload-checks{border-radius:17px!important;background:linear-gradient(145deg,#f7fcff,#fff)!important;border:1px solid #dceaf7!important;color:#63809d!important}.app-page[data-page-panel="1"] .analyze-btn{border-radius:17px!important;background:linear-gradient(135deg,#72b6f4,#83a8f4)!important;box-shadow:0 10px 24px #679ee437!important;font-weight:900!important}.app-page[data-page-panel="1"] .analyze-btn:hover{transform:translateY(-1px);filter:brightness(1.03)}
+.app-page[data-page-panel="1"] .compare-box{border-radius:19px!important;border-color:#e0e8f3!important;background:#fff!important;box-shadow:0 7px 18px #6f82a511}.app-page[data-page-panel="1"] .compare-box.before{background:linear-gradient(145deg,#f7fbff,#fff)!important}.app-page[data-page-panel="1"] .compare-box.after{background:linear-gradient(145deg,#fff7fb,#fff)!important}.app-page[data-page-panel="1"] .compare-arrow{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:#f0ebff;color:#8b72c6;font-weight:900}.app-page[data-page-panel="1"] #runBacktest{border-radius:16px!important;background:linear-gradient(135deg,#b49bea,#c6a9ee)!important;box-shadow:0 10px 23px #aa91dc2f!important}
+.app-page[data-page-panel="1"] .stats .stat{border-radius:17px!important;border-color:#e0e9f3!important;background:linear-gradient(145deg,#fff,#f9fbfe)!important;box-shadow:0 6px 16px rgba(67,92,126,.05)}
+@media(max-width:700px){.home-kawaii-intro{padding:14px 86px 14px 14px}.home-drop-big{right:10px;width:68px;height:68px;bottom:-16px}.home-kawaii-spark{right:74px}.home-drop-baby{width:45px;height:45px;flex-basis:45px}.home-drop-baby:before{font-size:30px}.home-kawaii-intro h2{font-size:19px}.home-kawaii-intro p{font-size:11px}}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -579,7 +624,12 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 <h1>CT125 GAGGLE · aRacer ECU-X / XX LOG 分析工具</h1>
 <div class="sub">CT125 分析工具｜依目前選定的 X / XX 系列與 Apple / Android App 實際 Fuel Map 格點採樣，不跨系列套用。</div>
 </div>
-</section><nav aria-label="頁面導覽" class="page-nav page-nav-v24"><button class="page-tab active" data-page="1" type="button">① 噴油量分析<small>油圖 / 前後工況</small></button><button class="page-tab" data-page="2" type="button">② 引擎負載<small>AP / 點火參照</small></button><button class="page-tab" data-page="3" type="button">③ 進氣壓降<small>高轉 WOT 診斷</small></button><button class="page-tab" data-page="4" type="button">④ 分析說明<small>規則 / 防失準</small></button></nav>
+</section><nav aria-label="頁面導覽" class="page-nav page-nav-v24 kawaii-page-nav">
+<button class="page-tab active" data-page="1" type="button"><span class="nav-mascot nav-drop" aria-hidden="true"></span><span class="nav-copy">① 噴油量分析<small>油圖 / 前後工況</small></span></button>
+<button class="page-tab" data-page="2" type="button"><span class="nav-mascot nav-flame" aria-hidden="true"></span><span class="nav-copy">② 引擎負載<small>AP / 點火參照</small></span></button>
+<button class="page-tab" data-page="3" type="button"><span class="nav-mascot nav-cloud" aria-hidden="true"></span><span class="nav-copy">③ 進氣壓降<small>高轉 WOT 診斷</small></span></button>
+<button class="page-tab" data-page="4" type="button"><span class="nav-mascot nav-book" aria-hidden="true">📖</span><span class="nav-copy">④ 分析說明<small>規則 / 防失準</small></span></button>
+</nav>
 
 
 
@@ -587,7 +637,7 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 
 
 
-<div class="app-page active" data-page-panel="1"><section class="calibration-safety-card" aria-label="調校輔助程式使用規則"><div class="calibration-safety-icon" aria-hidden="true">⚠️</div><div><div class="calibration-safety-title">使用前重要規則</div><p>此調校輔助程式所讀取的 LOG 紀錄，需在<strong>平面鋪裝道路</strong>或<strong>馬力機</strong>上獲取，並僅限於<strong>含氧感知設備正常、無故障異常</strong>的情況下使用。</p></div></section><section class="cl-on-banner" id="loopModeBanner">
+<div class="app-page active" data-page-panel="1"><section class="home-kawaii-intro" aria-label="噴油量分析首頁"><div class="home-drop-baby" aria-hidden="true"></div><div><h2>💧 噴油量分析</h2><p>把 Log 丟進來，依目前選定的 ECU／App 真實 Map 格點整理可信資料，再提供保守、可追溯的修正參考。</p></div><span class="home-kawaii-spark" aria-hidden="true">✦</span><span class="home-kawaii-heart" aria-hidden="true">♡</span><div class="home-drop-big" aria-hidden="true"></div></section><section class="calibration-safety-card" aria-label="調校輔助程式使用規則"><div class="calibration-safety-icon" aria-hidden="true">⚠️</div><div><div class="calibration-safety-title">使用前重要規則</div><p>此調校輔助程式所讀取的 LOG 紀錄，需在<strong>平面鋪裝道路</strong>或<strong>馬力機</strong>上獲取，並僅限於<strong>含氧感知設備正常、無故障異常</strong>的情況下使用。</p></div></section><section class="cl-on-banner" id="loopModeBanner">
 <div class="cl-on-badge" id="loopModeBadge">🔴 CLOSED LOOP ON</div>
 <div class="cl-on-copy">
 <strong id="loopModeTitle">閉迴路開啟｜Fuel_CL 主判定</strong>
@@ -707,9 +757,72 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 .lz-stat span{display:block;color:#718096;font-size:9px;font-weight:800}.lz-stat b{display:block;margin-top:2px;font-size:15px;color:#0f3d8c;letter-spacing:-.02em}
 @media(max-width:600px){.lz-chart{height:350px;border-radius:17px}.lz-grid{grid-template-columns:repeat(2,1fr)}.lz-legend{flex-wrap:nowrap;overflow-x:auto;padding:1px 1px 5px;scrollbar-width:thin}.lz-legend span{flex:0 0 auto}.lz-selected{padding:10px 11px}.lz-selected-metrics{gap:5px}}
 </style>
-<section class="card load-zone-v43" id="loadZoneMap">
-<h2>📊 實際騎乘負載區域</h2>
-<p class="lz-sub"><b>淡色波形＝全時段 AP 騎乘軌跡（不可點）</b>；<b>前景圓點＝真實點火表格（可點）</b>。點選可查看該 RPM／TPS 點火格的實測 AP 與 SA；本圖不提供增減建議。<small>點火參照格為 14 RPM × 9 TPS；下方 Fuel Map 修改定位仍依 X／XX 各自燃油表格式，兩者完全分離。</small></p>
+<style id="engine-load-kawaii-css">
+/* 只作用於「② 引擎負載」頁；不修改其他模式 */
+.engine-page-v24{--k-blue:#5d9df5;--k-ink:#23304e;--k-muted:#71809b;--k-line:#dfe8f5;--k-soft:#f8fbff;--k-shadow:0 18px 45px rgba(55,92,145,.12)}
+.engine-page-v24 .engine-kawaii-intro{display:flex;align-items:center;gap:13px;margin:14px 0 12px;padding:15px 18px;border:1px solid #dce9f7;border-radius:22px;background:linear-gradient(135deg,#ffffff 0%,#f7fbff 62%,#f6f1ff 100%);color:var(--k-ink);box-shadow:var(--k-shadow)}
+.engine-page-v24 .engine-kawaii-intro h2{margin:0 0 4px;color:#243252;font-size:21px}.engine-page-v24 .engine-kawaii-intro p{margin:0;color:#6a7b96;font-size:12px;line-height:1.65}
+.engine-intro-cloud{position:relative;display:grid;place-items:center;width:48px;height:48px;flex:0 0 48px;border-radius:50%;background:linear-gradient(145deg,#fff7e8,#fff);box-shadow:inset 0 0 0 1px #ffd9a6,0 8px 20px #f59e0b18;font-size:0}.engine-intro-cloud:before{content:'🔥';font-size:31px;filter:saturate(.9) drop-shadow(0 4px 5px #f59e0b2e)}.engine-intro-cloud:after{content:'•ᴗ•';position:absolute;left:50%;top:53%;transform:translate(-50%,-50%);font-size:8px;font-weight:900;letter-spacing:-1px;color:#7c3f18;text-shadow:0 1px #fff8}
+.engine-page-v24 #loadZoneMap{position:relative;margin-top:0;padding:18px;border:1px solid #dce7f3;border-radius:24px;background:linear-gradient(155deg,#fff 0%,#fcfdff 72%,#fbf8ff 100%);color:var(--k-ink);box-shadow:var(--k-shadow);overflow:hidden}
+.engine-page-v24 #loadZoneMap:before{content:'✦';position:absolute;right:125px;top:13px;color:#f6b936;font-size:20px;opacity:.9}.engine-page-v24 #loadZoneMap:after{content:'♡';position:absolute;right:22px;top:66px;color:#ff9caf;font-size:22px;font-weight:900;transform:rotate(9deg)}
+.lz-kawaii-header{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;min-height:92px}.lz-kawaii-title{display:flex;align-items:flex-start;gap:10px;min-width:0}.lz-kawaii-title h2{margin:2px 0 5px!important;color:#263453!important;font-size:19px!important}.lz-cloud-face{position:relative;display:grid;place-items:center;width:40px;height:40px;flex:0 0 40px;border:1px solid #ffd9a6;border-radius:50%;background:#fff8ed;box-shadow:0 7px 18px #f59e0b1a}.lz-cloud-face span{font-size:0}.lz-cloud-face:before{content:'🔥';font-size:27px;filter:saturate(.9) drop-shadow(0 3px 4px #f59e0b2e)}.lz-cloud-face:after{content:'•ᴗ•';position:absolute;left:50%;top:54%;transform:translate(-50%,-50%);font-size:7px;font-weight:900;letter-spacing:-1px;color:#7c3f18}
+.engine-page-v24 #loadZoneMap .lz-sub{margin:0;color:#6c7b96;font-size:12px;line-height:1.6}.engine-page-v24 #loadZoneMap .lz-sub b{color:#40516d}.engine-page-v24 #loadZoneMap .lz-sub small{margin-top:4px;color:#4d78d8;font-size:10px}
+.lz-cat{position:relative;width:105px;height:86px;flex:0 0 105px;margin:-6px 3px 0 0;filter:drop-shadow(0 8px 10px rgba(118,83,90,.12))}.lz-cat svg{display:block;width:100%;height:100%;overflow:visible}.lz-cat-heart{position:absolute;right:-4px;top:7px;color:#ff8fa8;font-size:25px;font-weight:900;transform:rotate(12deg)}
+.lz-highload-warning{display:flex;align-items:center;gap:11px;margin:8px 0 13px;padding:11px 14px;border:2px solid #ef4444;border-radius:16px;background:linear-gradient(135deg,#fff7f7,#fffafa);color:#8b1d26;box-shadow:0 8px 20px rgba(239,68,68,.09)}.lz-highload-warning strong{font-size:13px;color:#b4232f}.lz-highload-warning span{font-size:12px;color:#8f3b43}.lz-warning-dot{display:block;width:19px;height:19px;flex:0 0 19px;border-radius:50%;background:#ef4444;box-shadow:0 0 0 5px #fee2e2,0 4px 10px #ef44443d}
+.engine-page-v24 #loadZoneMap .lz-chart{height:390px;border:1px solid #dce8f5;border-radius:22px;background:#fbfdff;box-shadow:inset 0 1px 0 #fff,0 12px 30px #3b82f60d}.engine-page-v24 #loadZoneMap .lz-chart canvas{cursor:crosshair}
+.engine-page-v24 #loadZoneMap .lz-legend{gap:7px;margin-top:10px}.engine-page-v24 #loadZoneMap .lz-legend span{padding:7px 10px;border:1px solid #dce8f5;background:#fff;color:#53627e;box-shadow:0 5px 14px #5a78a70d;font-size:10px}.engine-page-v24 #loadZoneMap .lz-legend span:last-child{border-color:#fecaca;background:#fff7f7;color:#b4232f}
+.engine-page-v24 #loadZoneMap .lz-selected{position:relative;margin-top:11px;min-height:62px;padding:13px 105px 13px 56px;border:1px solid #cfe4fb;border-radius:18px;background:linear-gradient(135deg,#f4faff,#f8fcff);color:#56708e;box-shadow:0 10px 24px #4592dd10}.engine-page-v24 #loadZoneMap .lz-selected:before{content:'🔥';position:absolute;left:14px;top:50%;transform:translateY(-50%);display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#fffaf2;border:1px solid #ffe0b2;font-size:20px}.engine-page-v24 #loadZoneMap .lz-selected:after{content:'小提示：點選前景圓點查看實測格';position:absolute;right:11px;top:50%;transform:translateY(-50%);max-width:90px;padding:6px 8px;border:1px solid #cfe1ff;border-radius:12px;background:#fff;color:#4d78d8;font-size:9px;font-weight:800;line-height:1.35;text-align:center}.engine-page-v24 #loadZoneMap .lz-selected-main{color:#355b98}.engine-page-v24 #loadZoneMap .lz-selected-metrics span{border-color:#d7e7f8;background:#fff;color:#667994}.engine-page-v24 #loadZoneMap .lz-selected-metrics b{color:#284772}
+.engine-page-v24 #loadZoneMap .lz-grid{gap:10px;margin-top:13px}.engine-page-v24 #loadZoneMap .lz-stat{position:relative;min-height:96px;padding:13px 13px 11px 52px;border-radius:17px;background:#fff;box-shadow:0 8px 20px rgba(46,73,114,.07);overflow:hidden}.engine-page-v24 #loadZoneMap .lz-stat i{position:absolute;left:13px;top:14px;display:grid;place-items:center;width:31px;height:31px;border-radius:11px;font-style:normal;font-size:20px;background:#f8fafc}.engine-page-v24 #loadZoneMap .lz-stat span{font-size:10px}.engine-page-v24 #loadZoneMap .lz-stat b{margin-top:3px;font-size:23px}.engine-page-v24 #loadZoneMap .lz-stat small{display:block;margin-top:3px;color:#8a97aa;font-size:8.5px;font-weight:700;line-height:1.35}.engine-page-v24 #loadZoneMap .lz-stat-purple{border-color:#eadcff;background:linear-gradient(145deg,#fff,#fbf7ff)}.engine-page-v24 #loadZoneMap .lz-stat-purple b{color:#8b5cf6}.engine-page-v24 #loadZoneMap .lz-stat-purple i{background:#f4ebff}.engine-page-v24 #loadZoneMap .lz-stat-blue{border-color:#d8e8ff;background:linear-gradient(145deg,#fff,#f5f9ff)}.engine-page-v24 #loadZoneMap .lz-stat-blue b{color:#3478dc}.engine-page-v24 #loadZoneMap .lz-stat-blue i{background:#eaf3ff}.engine-page-v24 #loadZoneMap .lz-stat-green{border-color:#d8efd9;background:linear-gradient(145deg,#fff,#f6fcf5)}.engine-page-v24 #loadZoneMap .lz-stat-green b{color:#4f9f64}.engine-page-v24 #loadZoneMap .lz-stat-green i{background:#eaf8e9}.engine-page-v24 #loadZoneMap .lz-stat-orange{border-color:#ffe2c4;background:linear-gradient(145deg,#fff,#fff9f2)}.engine-page-v24 #loadZoneMap .lz-stat-orange b{color:#e07822}.engine-page-v24 #loadZoneMap .lz-stat-orange i{background:#fff0df}
+@media(max-width:720px){.lz-cat{width:78px;height:68px;flex-basis:78px}.lz-kawaii-header{min-height:75px}.engine-page-v24 #loadZoneMap{padding:13px;border-radius:19px}.engine-page-v24 #loadZoneMap .lz-chart{height:360px}.engine-page-v24 #loadZoneMap .lz-selected{padding-right:13px}.engine-page-v24 #loadZoneMap .lz-selected:after{display:none}.engine-page-v24 #loadZoneMap .lz-grid{grid-template-columns:repeat(2,1fr)}.engine-page-v24 .engine-kawaii-intro{padding:13px}.engine-intro-cloud{width:42px;height:42px;flex-basis:42px}}
+</style>
+<section class="card load-zone-v43 kawaii-load-zone" id="loadZoneMap">
+<div class="lz-kawaii-header">
+  <div class="lz-kawaii-title">
+    <div class="lz-cloud-face" aria-hidden="true"><span>☁️</span></div>
+    <div>
+      <h2>📊 實際騎乘負載區域</h2>
+      <p class="lz-sub"><b>淡色波形＝全時段 AP 騎乘軌跡（不可點）</b>；<b>前景圓點＝真實點火表格（可點）</b>。點選可查看該 RPM／TPS 點火格的實測 AP 與 SA；本圖不提供點火角增減建議。<small>點火參照格為 14 RPM × 9 TPS；下方 Fuel Map 修改定位仍依 X／XX 各自燃油表格式，兩者完全分離。</small></p>
+    </div>
+  </div>
+  <div class="lz-cat" aria-label="可愛火焰娃娃裝飾" role="img">
+    <svg viewBox="0 0 160 126" aria-hidden="true">
+      <defs>
+        <linearGradient id="bigFlameOuter" x1="0" x2="1" y1="0" y2="1">
+          <stop offset="0" stop-color="#ff9f43"/><stop offset=".55" stop-color="#ff7043"/><stop offset="1" stop-color="#ff4f6d"/>
+        </linearGradient>
+        <linearGradient id="bigFlameInner" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#fff6a6"/><stop offset="1" stop-color="#ffd45b"/>
+        </linearGradient>
+        <filter id="bigFlameShadow" x="-30%" y="-30%" width="160%" height="170%">
+          <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#ec6a57" flood-opacity=".18"/>
+        </filter>
+      </defs>
+      <!-- outer flame: a different, rounder mascot than the small flame icons -->
+      <path d="M82 8c7 18-2 27 9 33 9-11 17-20 16-31 20 18 30 39 26 60-4 28-25 47-53 47S29 98 27 70c-2-20 8-36 24-51-1 14 5 23 12 30C69 34 70 20 82 8Z" fill="url(#bigFlameOuter)" stroke="#d85a50" stroke-width="3.5" stroke-linejoin="round" filter="url(#bigFlameShadow)"/>
+      <!-- inner warm core -->
+      <path d="M81 43c8 11 3 20 10 25 5-6 9-11 10-18 9 9 14 20 12 31-2 17-15 28-33 28S48 97 47 80c-1-13 6-24 17-34 0 9 3 15 8 20 2-10 3-17 9-23Z" fill="url(#bigFlameInner)" opacity=".98"/>
+      <!-- little arms -->
+      <path d="M39 77c-11 2-17 8-17 14 0 5 5 8 10 6 5-2 8-7 11-12" fill="#ff8a55" stroke="#d85a50" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M121 77c11 2 17 8 17 14 0 5-5 8-10 6-5-2-8-7-11-12" fill="#ff8a55" stroke="#d85a50" stroke-width="3.5" stroke-linecap="round"/>
+      <!-- face -->
+      <ellipse cx="67" cy="75" rx="4.2" ry="5.2" fill="#4c4050"/>
+      <ellipse cx="94" cy="75" rx="4.2" ry="5.2" fill="#4c4050"/>
+      <ellipse cx="58" cy="87" rx="9" ry="5" fill="#ff9aaa" opacity=".72"/>
+      <ellipse cx="103" cy="87" rx="9" ry="5" fill="#ff9aaa" opacity=".72"/>
+      <path d="M73 86c3 4 6 6 8 6s5-2 8-6" fill="none" stroke="#5b4550" stroke-width="3.4" stroke-linecap="round"/>
+      <path d="M77 82c2 1 5 1 7 0" fill="none" stroke="#5b4550" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- shine + tiny sparks -->
+      <path d="M61 31c5-7 10-11 16-14" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".72"/>
+      <path d="M17 39l3 7 7 3-7 3-3 7-3-7-7-3 7-3 3-7Z" fill="#ffc83d"/>
+      <path d="M140 38l2 5 5 2-5 2-2 5-2-5-5-2 5-2 2-5Z" fill="#ff8ba7"/>
+    </svg>
+    <span class="lz-cat-heart">♡</span>
+  </div>
+</div>
+<div class="lz-highload-warning" role="note">
+  <span class="lz-warning-dot" aria-hidden="true"></span>
+  <div><strong>重點：紅點格為高負載區域（AP 負載率 &gt; 70%）</strong><br><span>此區域請謹慎、保守調校點火角。</span></div>
+</div>
 <div class="lz-chart"><canvas id="loadZoneCanvas" aria-label="全時段 AP 波形與真實 RPM × TPS 點火格"></canvas></div>
 <div class="lz-legend">
 <span><i class="lz-wave"></i>淡色全時段 AP（不可點）</span>
@@ -798,7 +911,7 @@ button,input,select{-webkit-tap-highlight-color:transparent}
    g.globalAlpha=1;g.shadowBlur=0;
  }
  function selectAt(e){const c=$('loadZoneCanvas');if(!c||!plotBounds)return;const b=c.getBoundingClientRect(),px=e.clientX-b.left,py=e.clientY-b.top,inside=px>=plotBounds.left&&px<=plotBounds.right&&py>=plotBounds.top&&py<=plotBounds.bottom;const box=$('loadZoneSelected');if(!inside){box.textContent='請點選圖內的真實點火格。';return}let best=-1,bd=Infinity;for(const h of hit){const dx=(px-h.cx)/(plotBounds.right-plotBounds.left)*IGN_RPM_GRID.length,dy=(py-h.cy)/(plotBounds.bottom-plotBounds.top)*IGN_TPS_GRID.length,d=Math.hypot(dx,dy);if(d<bd){bd=d;best=h.i}}if(best<0||bd>.58){box.textContent='淡色 AP 波形不可點選；請點前景的真實點火格圓點。';return}selected=best;draw();const p=pts[best],ap=Number.isFinite(p.ap)?p.ap.toFixed(1)+'%':'—',sa=Number.isFinite(p.sa)?p.sa.toFixed(1)+'°':'—';box.innerHTML=`<div class="lz-selected-main">${p.rpm.toLocaleString()} RPM · TPS ${p.tps}%｜真實點火格</div><div class="lz-selected-metrics"><span>AP 中位數 <b>${ap}</b></span><span>SA 點火角中位數 <b>${sa}</b></span><span>樣本 <b>${p.n.toLocaleString()}</b></span>${p.n?'':'<span><b>本次 Log 無資料</b></span>'}</div>`}
- function render(raw){build(raw);selected=-1;const st=$('loadZoneStats'),data=pts.filter(p=>p.n>0),aps=data.map(p=>p.ap).filter(Number.isFinite);if(st)st.innerHTML=`<div class="lz-stat"><span>真實點火格</span><b>${pts.length}</b></div><div class="lz-stat"><span>本次有資料格</span><b>${data.length}</b></div><div class="lz-stat"><span>全時段 AP 樣本</span><b>${totalTrailSamples.toLocaleString()}</b></div><div class="lz-stat"><span>最高格點 AP</span><b>${aps.length?Math.max(...aps).toFixed(1)+'%':'—'}</b></div>`;draw()}
+ function render(raw){build(raw);selected=-1;const st=$('loadZoneStats'),data=pts.filter(p=>p.n>0),aps=data.map(p=>p.ap).filter(Number.isFinite);if(st)st.innerHTML=`<div class="lz-stat lz-stat-purple"><i>🎯</i><span>真實點火格</span><b>${pts.length}</b><small>點火表格總格數</small></div><div class="lz-stat lz-stat-blue"><i>📄</i><span>本次有資料格</span><b>${data.length}</b><small>本次 Log 實際覆蓋格數</small></div><div class="lz-stat lz-stat-green"><i>🗃️</i><span>全時段 AP 樣本</span><b>${totalTrailSamples.toLocaleString()}</b><small>全時段有效 AP 資料樣本</small></div><div class="lz-stat lz-stat-orange"><i>📈</i><span>最高格點 AP</span><b>${aps.length?Math.max(...aps).toFixed(1)+'%':'—'}</b><small>所有有資料格的最高 AP</small></div>`;draw()}
  window.renderLoadZoneV43=render;
  const c=$('loadZoneCanvas');if(c){c.addEventListener('click',selectAt);window.addEventListener('resize',draw)}
  document.addEventListener('analysisComplete',()=>render(window.__ctLogRows||[]));
@@ -2747,82 +2860,119 @@ if(loopModeSelect){
 .page-nav-v24{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.page-nav-v24 .page-tab{min-width:0}.intake-page-v24,.engine-page-v24{margin-top:2px}.page-panel-intro{margin:14px 0 10px;padding:16px 17px;border-radius:18px;background:linear-gradient(135deg,#07101d,#102a43);color:#e5eef9;box-shadow:0 12px 28px #0f172a22}.page-panel-intro h2{margin:0 0 6px;font-size:20px}.page-panel-intro p{margin:0;color:#b6c8dd;font-size:13px;line-height:1.65}.intake-v24{border:1px solid #dbe4ee;background:linear-gradient(150deg,#f8fafc,#fff)}.intake-v24 .section-tag{color:#b45309}.intake-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:12px 0}.intake-stat{padding:12px;border:1px solid #e2e8f0;border-radius:13px;background:#fff}.intake-stat span{display:block;color:#64748b;font-size:11px;font-weight:800}.intake-stat b{display:block;margin-top:4px;color:#0f172a;font-size:20px}.intake-dp-label{color:#b91c1c!important}.intake-dp-alert{color:#dc2626!important;text-shadow:0 0 10px #fca5a5;animation:intakePressurePulse 1.45s ease-in-out infinite}@keyframes intakePressurePulse{50%{color:#991b1b;text-shadow:0 0 18px #ef4444}}.intake-chart-shell{position:relative;border:1px solid #d8e1eb;border-radius:16px;overflow:hidden;background:#07101d;min-height:270px}.intake-chart{display:block;width:100%;height:290px;touch-action:none}.intake-tip{position:absolute;z-index:2;display:none;max-width:220px;padding:9px 10px;border-radius:10px;background:#fff;color:#0f172a;box-shadow:0 10px 24px #0004;font-size:12px;line-height:1.55;pointer-events:none}.intake-legend{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0 0}.intake-legend-item{padding:10px 11px;border:1px solid color-mix(in srgb,var(--intake-color) 24%,#fff);border-left:4px solid var(--intake-color);border-radius:12px;background:color-mix(in srgb,var(--intake-color) 5%,#fff);line-height:1.45}.intake-legend-item b{display:block;color:var(--intake-color);font-size:13px}.intake-legend-item span{display:block;margin-top:3px;color:#475569;font-size:12px;font-weight:650}.intake-conclusion{margin-top:12px;padding:14px 15px;border-left:5px solid #f59e0b;border-radius:12px;background:#fffbeb;color:#78350f;line-height:1.7;font-size:13px}.intake-conclusion.good{border-color:#16a34a;background:#f0fdf4;color:#14532d}.intake-conclusion.warn{border-color:#dc2626;background:#fff7ed;color:#7c2d12}.intake-table-wrap{overflow:auto;margin-top:12px;border:1px solid #e2e8f0;border-radius:13px}.intake-table{width:100%;min-width:760px;border-collapse:collapse;font-size:12px}.intake-table th{background:#f1f5f9;color:#334155;text-align:left}.intake-table th,.intake-table td{padding:9px 10px;border-bottom:1px solid #e2e8f0;white-space:nowrap}.intake-table tr:last-child td{border-bottom:0}.honda-watermark{position:fixed;z-index:0;right:-86px;bottom:7vh;width:min(490px,78vw);pointer-events:none;opacity:.035;transform:rotate(-11deg);color:#1e3a5f}.honda-watermark svg{display:block;width:100%;height:auto}.honda-watermark text{font-family:Arial,sans-serif;font-weight:900;letter-spacing:10px}.wrap{position:relative;isolation:isolate}.wrap> :not(.honda-watermark){position:relative;z-index:1}@media(max-width:700px){.page-nav-v24{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.page-nav-v24 .page-tab{min-height:54px;font-size:12px}.intake-summary{grid-template-columns:1fr}.intake-chart{height:260px}.intake-legend{grid-template-columns:1fr}.honda-watermark{right:-72px;bottom:4vh;width:92vw;opacity:.027}}
 .calibration-safety-card{display:flex;align-items:center;gap:13px;margin:12px 0 14px;padding:15px 16px;border:2px solid #fecaca;border-radius:18px;background:linear-gradient(135deg,#fff1f2,#fff7ed);box-shadow:0 10px 24px rgba(220,38,38,.12);color:#7f1d1d}.calibration-safety-icon{display:grid;place-items:center;flex:0 0 42px;width:42px;height:42px;border-radius:14px;background:#dc2626;color:#fff;font-size:22px;box-shadow:0 6px 14px rgba(220,38,38,.28)}.calibration-safety-title{font-size:19px;font-weight:950;letter-spacing:.02em;color:#dc2626;line-height:1.15}.calibration-safety-card p{margin:5px 0 0;font-size:14px;font-weight:750;line-height:1.65;color:#7f1d1d}.calibration-safety-card strong{color:#b91c1c;text-decoration:underline;text-decoration-color:#fca5a5;text-underline-offset:3px}@media(max-width:600px){.calibration-safety-card{align-items:flex-start;padding:14px}.calibration-safety-title{font-size:18px}.calibration-safety-card p{font-size:13px}.calibration-safety-icon{flex-basis:38px;width:38px;height:38px;font-size:19px}}
 </style>
+
+<style id="intake-kawaii-integrated-css">
+/* 只作用於「③ 進氣壓降」頁；保留其他模式原樣 */
+.intake-page-v24{--ci-ink:#24324d;--ci-muted:#6f7f98;--ci-blue:#2f78bf;--ci-green:#2bae56;--ci-line:#dce8f4;--ci-shadow:0 18px 45px rgba(62,92,132,.11);color:var(--ci-ink)}
+.intake-page-v24 .ci-intro{position:relative;display:flex;align-items:center;gap:13px;margin:14px 0 12px;padding:16px 138px 16px 18px;border:1px solid #dce9f6;border-radius:23px;background:linear-gradient(135deg,#fff 0%,#f7fbff 60%,#fffaf5 100%);box-shadow:var(--ci-shadow);overflow:hidden}
+.intake-page-v24 .ci-intro h2{margin:0 0 5px;color:#253552;font-size:21px}.intake-page-v24 .ci-intro p{margin:0;color:#6b7b95;font-size:12px;line-height:1.65}.ci-cloud-face{position:relative;display:grid;place-items:center;width:48px;height:48px;flex:0 0 48px;border-radius:50%;background:linear-gradient(145deg,#eefbff,#fff);border:1px solid #cfeafa;box-shadow:0 7px 18px #67b7ee18;font-size:0}.ci-cloud-face span{font-size:0}.ci-cloud-face:before{content:'☁️';font-size:29px;filter:drop-shadow(0 2px 3px #9fd6f62e)}.ci-cloud-face:after{content:'•ᴗ•';position:absolute;left:50%;top:53%;transform:translate(-50%,-50%);font-size:8px;font-weight:900;letter-spacing:-1px;color:#5782a8;text-shadow:0 1px #fff8}.ci-cat{position:absolute;right:28px;bottom:-20px;font-size:76px;filter:drop-shadow(0 5px 5px #b67d6640)}
+.ci-important{display:flex;align-items:flex-start;gap:10px;margin:0 0 14px;padding:13px 16px;border:1.5px solid #f0c55d;border-radius:17px;background:linear-gradient(90deg,#fff9ec,#fffdf7);color:#7e3c18;line-height:1.7;font-size:13px;box-shadow:0 8px 20px #eab63d0c}.ci-important .star{font-size:22px;line-height:1}.ci-important strong{color:#8c2e18}
+.ci-dash{display:grid;grid-template-columns:2fr 1fr;gap:16px}.ci-panel{background:#fff;border:1px solid var(--ci-line);border-radius:22px;padding:19px;margin-bottom:15px;box-shadow:0 9px 28px rgba(54,86,125,.07)}
+.ci-result{border:1.7px solid #bfe2ad;background:linear-gradient(135deg,#fbfff9,#fff)}.ci-result-grid{display:grid;grid-template-columns:270px 1fr;gap:22px;align-items:center}.ci-state-label{color:#41765a;font-weight:800;font-size:13px}.ci-state{font-size:38px;font-weight:950;margin:7px 0}.ci-state.good{color:#2ba851}.ci-state.warn{color:#df9a1a}.ci-state.bad{color:#e04f3c}.ci-state.good:before{content:'😊 '}.ci-state.warn:before{content:'😕 '}.ci-state.bad:before{content:'😣 '}.ci-explain{font-size:14px;line-height:1.75;color:#4c5d73}.ci-metric-title{text-align:center;font-weight:850;font-size:17px}.ci-big{text-align:center;font-size:62px;font-weight:950;color:#2aa74d;letter-spacing:-2px;margin:5px 0}.ci-bar{height:48px;padding:5px;border:3px solid #cfd9e5;border-radius:999px;background:#fff;overflow:hidden;box-shadow:0 4px 10px #9fb4c622}.ci-bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#7bdc3e,#43c850,#28b75a);position:relative}.ci-bar-fill:after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(135deg,#fff2 0 9px,#fff0 9px 18px)}.ci-bar-axis{display:flex;justify-content:space-between;margin-top:4px;font-size:11px;color:#718096}.ci-bar-hint{text-align:center;margin-top:9px;color:#27974a;font-size:14px;font-weight:850}
+.ci-condition{border:1.7px solid #bedcf5;background:linear-gradient(145deg,#f8fcff,#fff)}.ci-condition h3,.ci-table-title,.ci-trend h3{margin:0 0 11px;color:#2f70b1;font-size:18px}.ci-checks{font-size:13px;line-height:1.95;color:#43546a}.ci-checks b{color:#2b9b51}.ci-tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px}.ci-tile{padding:10px;border:1px solid #d4e4f2;border-radius:13px;background:#fff;font-size:11px;color:#63748d}.ci-tile b{display:block;margin-top:3px;color:#273851;font-size:17px}
+.ci-lower{display:grid;grid-template-columns:2fr 1fr;gap:16px}.ci-table-wrap{overflow:auto;border:1px solid #e0e8f0;border-radius:14px;background:#fff}.ci-table{border-collapse:collapse;width:100%;min-width:700px;font-size:12px}.ci-table th,.ci-table td{padding:10px 9px;border-bottom:1px solid #edf1f5;text-align:right;white-space:nowrap}.ci-table th:first-child,.ci-table td:first-child{text-align:left}.ci-table thead th{background:#f8fafc;color:#53647b}.ci-mini-bar{display:inline-block;vertical-align:middle;width:112px;height:16px;margin-right:7px;border:1px solid #ccd8e5;border-radius:999px;background:#fff;overflow:hidden}.ci-mini-fill{display:block;height:100%;min-width:2px;border-radius:999px;background:linear-gradient(90deg,#82df43,#33bc57)}.ci-judge{font-weight:850}.ci-judge.good{color:#279a4a}.ci-judge.warn{color:#d68c10}.ci-judge.bad{color:#df4b38}.ci-judge.good:before{content:'😊 '}.ci-judge.warn:before{content:'😕 '}.ci-judge.bad:before{content:'😣 '}.ci-foot{margin-top:8px;font-size:11px;line-height:1.6;color:#748198}
+.ci-details details{border:1px solid #bcdff1;border-radius:16px;padding:12px;background:#fbfeff}.ci-details summary{cursor:pointer;color:#2875b5;font-weight:850}.ci-adv-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:11px}.ci-adv-grid .ci-tile:first-child:before{content:'🫁 ';font-size:20px}
+.ci-trend{border:1.7px solid #dfd1f4;background:linear-gradient(145deg,#fdfaff,#fff)}.ci-trend-msg{font-weight:850;color:#7049a2;line-height:1.6}.ci-faces{display:flex;align-items:center;justify-content:space-between;margin:17px 5px 10px}.ci-face{font-size:35px;text-align:center}.ci-face small{display:block;margin-top:3px;font-size:15px;font-weight:900}.ci-arrow{height:15px;flex:1;margin:0 12px;border-radius:999px;background:linear-gradient(90deg,#55cf68,#f4d44d,#ff795d);position:relative;transform:rotate(5deg)}.ci-arrow:after{content:'➜';position:absolute;right:-13px;top:-15px;color:#ff795d;font-size:34px}.ci-simple{margin-top:11px;padding:12px;border:1px solid #e2d5f4;border-radius:13px;background:#fffefa;line-height:1.65;font-size:12px}.ci-why{margin-top:14px;padding:14px;border:1.6px solid #bedff2;border-radius:17px;background:#f9fdff;line-height:1.7;color:#4d6079;font-size:12px}.ci-why b{color:#2875b5}.ci-why:after{content:'☁  •ᴗ•';float:right;color:#6fa8ce;font-weight:850}.ci-na{text-align:center;padding:30px;border:1.6px solid #d5e1ec;background:#fbfdff}.ci-na h2{margin:0 0 9px}.ci-na-big{font-size:43px;font-weight:950;color:#65758a;margin:7px}.ci-empty{text-align:center;padding:32px;color:#748198}
+@media(max-width:850px){.ci-dash,.ci-lower,.ci-result-grid{grid-template-columns:1fr}.ci-adv-grid{grid-template-columns:1fr 1fr}.intake-page-v24 .ci-intro{padding-right:90px}.ci-cat{right:6px;font-size:58px}.ci-big{font-size:50px}}
+</style>
 <script id="v24-four-page-intake-analysis">
 (function(){
   const median=a=>{const b=a.filter(Number.isFinite).sort((x,y)=>x-y);if(!b.length)return null;const m=Math.floor(b.length/2);return b.length%2?b[m]:(b[m-1]+b[m])/2};
   const num=v=>{const n=Number(v);return Number.isFinite(n)?n:null};
-  const esc=s=>String(s??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  function timeSec(v){const n=num(v);if(n==null)return null;return n>1e6?n/1000:n}
+  const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+  function timeSec(v){const n=num(v);if(n==null)return null;return n/1000}
   function injectionActive(r){
     if(num(r?.Dec_FC_En)>0||num(r?.Inj_Cut)>0)return false;
     const pw=num(r?.Cyl1_Comn_FuelPW),duty=num(r?.Cyl1_Injector_Period_Rate);
-    return (pw==null||pw>0)&&(duty==null||duty>0)&&(pw!=null||duty!=null);
+    if(pw!=null&&pw<=0)return false;if(duty!=null&&duty<=0)return false;
+    return true;
   }
-  function intakeBins(rows){
-    const source=[];
-    for(const r of rows||[]){
-      const rpm=num(r.RPM),tps=num(r.TPS_Percent),ap=num(r.Cyl1_Eng_AP),patm=num(r.P_Atm);
-      if(r._transient||!injectionActive(r)||rpm==null||tps==null||ap==null||patm==null||patm<=0)continue;
-      const ratio=ap/patm*100,drop=patm-ap;if(!Number.isFinite(ratio)||!Number.isFinite(drop)||drop<0||ratio>105)continue;
-      source.push({r,rpm,tps,ap,patm,ratio,drop,t:timeSec(r.Time)});
+  function effectiveSeconds(arr){
+    const ts=arr.map(x=>x.t).filter(Number.isFinite).sort((a,b)=>a-b);let sec=0;
+    for(let i=1;i<ts.length;i++){const d=ts[i]-ts[i-1];if(d>0&&d<=.45)sec+=d}return sec;
+  }
+  function intakeTransientRows(rows){
+    const bad=new Set();let last=null,lastFile=null,holdUntil=-Infinity;
+    for(const r of rows){
+      const file=r?._file||'',t=timeSec(r?.Time),rpm=num(r?.RPM),tps=num(r?.TPS_Percent);
+      if(lastFile!==null&&file!==lastFile){last=null;holdUntil=-Infinity}
+      let trigger=num(r?.Dec_FC_En)>0||num(r?.Inj_Cut)>0;
+      if(last&&Number.isFinite(t)&&Number.isFinite(last.t)&&t>last.t&&Number.isFinite(rpm)&&Number.isFinite(last.rpm)&&Number.isFinite(tps)&&Number.isFinite(last.tps)){
+        const dt=t-last.t,tpsRate=Math.abs(tps-last.tps)/dt,rpmSignedRate=(rpm-last.rpm)/dt;
+        // 進氣診斷允許正常 WOT 正向加速；只排除快速油門變化與明顯 RPM 下掉（換檔／收油型態）。
+        if(tpsRate>=cfg.transientTpsRate||rpmSignedRate<=-cfg.transientRpmRate)trigger=true;
+      }
+      if(trigger&&Number.isFinite(t))holdUntil=Math.max(holdUntil,t+cfg.transientHoldSec);
+      if(trigger||(Number.isFinite(t)&&t<holdUntil))bad.add(r);
+      last={t,rpm,tps};lastFile=file;
     }
-    if(!source.length)return [];
+    return bad;
+  }
+  function band(loss){const ratio=100-loss;if(ratio>=92)return {name:'順暢',cls:'good'};if(ratio>=88)return {name:'開始受限',cls:'warn'};return {name:'明顯受限',cls:'bad'};}
+  function analyze(rows){
+    const all=Array.isArray(rows)?rows:[];
+    const patms=all.map(r=>num(r.P_Atm)).filter(Number.isFinite);
+    const baseline={patmMed:median(patms)};
+    const intakeTransient=intakeTransientRows(all);
+    const source=[];
+    for(const r of all){
+      const rpm=num(r.RPM),tps=num(r.TPS_Percent),ap=num(r.Cyl1_Eng_AP),patm=num(r.P_Atm);
+      if(intakeTransient.has(r)||!injectionActive(r)||tps==null||tps<90||rpm==null||ap==null||patm==null||patm<=0)continue;
+      const drop=patm-ap,ratio=ap/patm*100,loss=drop/patm*100;
+      if(![drop,ratio,loss].every(Number.isFinite)||drop<0||ratio>105)continue;
+      source.push({rpm,tps,ap,patm,drop,ratio,loss,t:timeSec(r.Time)});
+    }
+    if(!source.length)return {bins:[],baseline,maxRpm:null,floor:null};
     const maxRpm=Math.max(...source.map(x=>x.rpm));
-    const highRpmFloor=Math.max(4500,Math.floor(maxRpm*.70/500)*500);
+    const floor=Math.max(4500,Math.floor(maxRpm*.70/500)*500);
     const groups=new Map();
-    for(const x of source){if(x.rpm<highRpmFloor)continue;const key=Math.floor(x.rpm/500)*500;if(!groups.has(key))groups.set(key,[]);groups.get(key).push(x)}
-    return [...groups].sort((a,b)=>a[0]-b[0]).map(([rpm,a])=>{
-      const tpsMax=Math.max(...a.map(x=>x.tps)),tpsFloor=Math.max(40,tpsMax-5),b=a.filter(x=>x.tps>=tpsFloor);
-      const ts=b.map(x=>x.t).filter(Number.isFinite).sort((x,y)=>x-y);let seconds=0;for(let i=1;i<ts.length;i++){const d=ts[i]-ts[i-1];if(d>0&&d<=.45)seconds+=d}
-      return {rpm,n:b.length,seconds,tpsMax,tpsFloor,ratio:median(b.map(x=>x.ratio)),drop:median(b.map(x=>x.drop)),ap:median(b.map(x=>x.ap)),patm:median(b.map(x=>x.patm)),highRpmFloor};
-    }).filter(b=>b.tpsMax>=40);
-  }
-  function status(b){const d=Number(b.drop.toFixed(1));if(d<=11)return {name:'進氣順暢範圍',range:'≤11.0 kPa',desc:'高轉吸氣順暢，目前沒有明顯進氣壓降。',color:'#16a34a'};if(d<=12)return {name:'壓降影響（微）',range:'11.1～12.0 kPa',desc:'已出現輕微進氣壓降，持續觀察即可。',color:'#ca8a04'};if(d<=12.9)return {name:'壓降影響（中）',range:'12.1～12.9 kPa',desc:'進氣壓降開始影響高轉吸氣，但仍屬可接受範圍。',color:'#ea580c'};if(d<=13.5)return {name:'當前設備臨界值',range:'13.0～13.5 kPa',desc:'高轉吸氣阻力已明顯，進氣路徑開始形成限制。',color:'#f97316'};if(d<=14)return {name:'可參考升級標準',range:'13.6～14.0 kPa',desc:'高轉吸氣阻力很明顯，進氣路徑限制已開始介入；若此轉速為平時常用工況，已達可參考升級進氣相關設備的門檻。',color:'#dc2626'};if(d<=14.5)return {name:'優先檢查／升級',range:'14.1～14.5 kPa',desc:'高轉吸氣阻力已非常高，進氣路徑限制程度非常明顯；若此轉速為平時常用工況，已達優先檢查／升級進氣相關設備的門檻。',color:'#b91c1c'};return {name:'高度不足',range:'≥14.6 kPa',desc:'高轉吸氣已明顯受限，進氣路徑限制程度極高；建議優先確認 LOG 錄製道路與工況一致，並排除進氣系統、感知器或其他設備異常。',color:'#991b1b'}}
-  function conclusion(bins){
-    const all=bins.filter(b=>Number.isFinite(b.ratio));
-    const worst=[...all].sort((a,b)=>b.drop-a.drop||b.rpm-a.rpm)[0];
-    if(!worst){return {kind:'',worst:null,html:'<strong>尚無可分析的高轉高開度資料。</strong>需要持續噴油、非斷油、非瞬態且 AP / P_Atm 完整的 Log。'};}
-    const band=status(worst),range=`${worst.rpm.toLocaleString()}～${(worst.rpm+499).toLocaleString()} RPM`;
-    const opening=worst.tpsMax>=90?'WOT':'高開度';
-    const d=Number(worst.drop.toFixed(1)),detail=`本段最高 TPS ${worst.tpsMax.toFixed(1)}%，壓力比 ${worst.ratio.toFixed(1)}%，ΔP ${d.toFixed(1)} kPa。`;
-    const sourceNote=worst.tpsMax>=90?'':' 本段為'+opening+'資料，壓降已照實顯示，但不能單獨鎖定限制零件。';
-    return {kind:d>=13.6?'warn':d<=11?'good':'',worst,html:`<strong>${range}｜${band.name}</strong>${detail}<br>${band.desc}${sourceNote}${d>=14.6?'<br><small>空濾、進氣管、歧管、汽門／凸輪與排氣系統也可能共同造成壓降；本分析不會指定單一零件。</small>':''}`};
-  }
-  function draw(bins){
-    const canvas=document.getElementById('intakeCanvasV24'),tip=document.getElementById('intakeTipV24');if(!canvas)return;
-    const box=canvas.getBoundingClientRect();if(box.width<20)return;const dpr=Math.min(2,devicePixelRatio||1),w=box.width,h=box.height;canvas.width=w*dpr;canvas.height=h*dpr;const c=canvas.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
-    const plot={l:48,r:w-16,t:18,b:h-36};const valid=bins.filter(b=>Number.isFinite(b.ratio));if(!valid.length){c.fillStyle='#cbd5e1';c.font='13px sans-serif';c.fillText('尚無符合高轉 WOT 條件的資料',plot.l,plot.t+30);return}
-    const minR=Math.min(...valid.map(b=>b.rpm)),maxR=Math.max(...valid.map(b=>b.rpm))+500;const yMin=Math.max(75,Math.floor(Math.min(...valid.map(b=>b.ratio))-2));const x=r=>plot.l+(r-minR)/(maxR-minR||1)*(plot.r-plot.l),y=v=>plot.b-(v-yMin)/(100-yMin)*(plot.b-plot.t);
-    c.strokeStyle='#334155';c.lineWidth=1;for(let v=Math.ceil(yMin/5)*5;v<=100;v+=5){const yy=y(v);c.beginPath();c.moveTo(plot.l,yy);c.lineTo(plot.r,yy);c.stroke();c.fillStyle='#94a3b8';c.font='10px sans-serif';c.fillText(v+'%',5,yy+3)}
-    c.strokeStyle='#475569';c.beginPath();c.moveTo(plot.l,plot.b);c.lineTo(plot.r,plot.b);c.stroke();valid.forEach((b,i)=>{const xx=x(b.rpm+250),s=status(b);c.fillStyle=s.color;c.globalAlpha=.15;c.fillRect(xx-16,y(b.ratio),32,plot.b-y(b.ratio));c.globalAlpha=1;c.beginPath();c.arc(xx,y(b.ratio),5,0,Math.PI*2);c.fill();c.fillStyle='#94a3b8';c.font='10px sans-serif';if(i%2===0)c.fillText((b.rpm/1000).toFixed(1)+'k',xx-10,plot.b+16)});
-    c.strokeStyle='#e2e8f0';c.lineWidth=2;c.beginPath();valid.forEach((b,i)=>{const xx=x(b.rpm+250),yy=y(b.ratio);i?c.lineTo(xx,yy):c.moveTo(xx,yy)});c.stroke();
-    canvas.onpointermove=e=>{const rect=canvas.getBoundingClientRect(),px=e.clientX-rect.left;let nearest=null,d=Infinity;for(const b of valid){const q=Math.abs(px-x(b.rpm+250));if(q<d){d=q;nearest=b}}if(!nearest||d>34){tip.style.display='none';return}const s=status(nearest);tip.innerHTML=`<b>${nearest.rpm.toLocaleString()}～${(nearest.rpm+499).toLocaleString()} RPM · ${s.name}</b><br>本段最高 TPS：${nearest.tpsMax.toFixed(1)}%（採 ${nearest.tpsFloor.toFixed(1)}% 以上）<br>壓力比：${nearest.ratio.toFixed(1)}%<br>ΔP：${nearest.drop.toFixed(1)} kPa<br>AP / P_Atm：${nearest.ap.toFixed(1)} / ${nearest.patm.toFixed(1)} kPa<br>有效資料：${nearest.n} 筆 · ${nearest.seconds.toFixed(1)} 秒`;tip.style.display='block';tip.style.left=Math.min(w-225,Math.max(8,px+10))+'px';tip.style.top='18px'};canvas.onpointerleave=()=>tip.style.display='none';
+    for(const x of source){if(x.rpm<floor)continue;const k=Math.floor(x.rpm/500)*500;if(!groups.has(k))groups.set(k,[]);groups.get(k).push(x)}
+    const bins=[];
+    for(const [rpm,a] of [...groups].sort((x,y)=>x[0]-y[0])){
+      const b=a.filter(x=>x.tps>=90);if(!b.length)continue;
+      const patm=median(b.map(x=>x.patm)),ap=median(b.map(x=>x.ap)),drop=patm-ap,ratio=ap/patm*100,loss=drop/patm*100;
+      bins.push({rpm,n:b.length,seconds:effectiveSeconds(b),tpsMax:Math.max(...b.map(x=>x.tps)),tpsFloor:90,patm,ap,drop,ratio,loss,band:band(loss)});
+    }
+    return {bins,baseline,maxRpm,floor};
   }
   function render(rows){
     const host=document.getElementById('intakeAnalysisHost');if(!host)return;
-    const bins=intakeBins(rows),c=conclusion(bins),floor=bins[0]?.highRpmFloor,alert=c.worst?.drop>11;
-    const legend=[
-      {range:'≤11.0 kPa',desc:'高轉吸氣順暢，目前沒有明顯進氣壓降。',color:'#16a34a'},
-      {range:'11.1～12.0 kPa',desc:'已出現輕微進氣壓降，持續觀察即可。',color:'#ca8a04'},
-      {range:'12.1～12.9 kPa',desc:'進氣壓降開始影響高轉吸氣，但仍屬可接受範圍。',color:'#ea580c'},
-      {range:'13.0～13.5 kPa',desc:'高轉吸氣阻力已明顯，進氣路徑開始形成限制。',color:'#f97316'},
-      {range:'13.6～14.0 kPa',desc:'高轉吸氣阻力很明顯，進氣路徑限制已開始介入；若此轉速為平時常用工況，已達可參考升級進氣相關設備的門檻。',color:'#dc2626'},
-      {range:'14.1～14.5 kPa',desc:'高轉吸氣阻力已非常高，進氣路徑限制程度非常明顯；若此轉速為平時常用工況，已達優先檢查／升級進氣相關設備的門檻。',color:'#b91c1c'},
-      {range:'≥14.6 kPa',desc:'高轉吸氣已明顯受限，進氣路徑限制程度極高；建議優先確認 LOG 錄製道路與工況一致，並排除進氣系統、感知器或其他設備異常。',color:'#991b1b'}
-    ];
-    host.innerHTML=`<section class="card intake-v24"><div class="section-head"><div><div class="section-tag">HIGH-OPENING INTAKE</div><h2>③ 高轉進氣壓降分析</h2><p class="section-sub"><strong>ΔP 壓力差／進氣壓降（kPa）</strong> 越高，代表高轉高開度時進氣路徑壓降越明顯。每個 500 RPM 分段只取該段最高 TPS 往下 5% 的資料；高轉範圍依本次 Log 的最高轉速自動設定${floor?`（本次自 ${floor.toLocaleString()} RPM 起）`:''}。持續噴油、非斷油、非瞬態；不參與 Fuel Map 修正。</p></div></div><div class="intake-summary"><div class="intake-stat"><span>分析 RPM 分段</span><b>${bins.length} 組</b></div><div class="intake-stat"><span>最低壓力比</span><b>${c.worst?c.worst.ratio.toFixed(1)+'%':'—'}</b></div><div class="intake-stat"><span class="intake-dp-label">最大 ΔP 壓力差／進氣壓降（kPa）</span><b class="${alert?'intake-dp-alert':''}">${c.worst?c.worst.drop.toFixed(1)+' kPa':'—'}</b></div></div><div class="intake-chart-shell"><canvas id="intakeCanvasV24" class="intake-chart"></canvas><div id="intakeTipV24" class="intake-tip"></div></div><div class="intake-legend">${legend.map(x=>`<div class="intake-legend-item" style="--intake-color:${x.color}"><b>${x.range}</b><span>${x.desc}</span></div>`).join('')}</div><div class="intake-conclusion ${c.kind}">${c.html}</div><div class="intake-table-wrap"><table class="intake-table"><thead><tr><th>RPM 分段</th><th>最高 TPS／採樣</th><th>壓力比</th><th class="intake-dp-label">ΔP 壓力差／進氣壓降（kPa）</th><th>Eng_AP</th><th>P_Atm</th><th>本段資料</th><th>判定</th></tr></thead><tbody>${bins.map(b=>{const s=status(b),red=b.drop>11;return `<tr><td>${b.rpm.toLocaleString()}～${(b.rpm+499).toLocaleString()}</td><td>${b.tpsMax.toFixed(1)}% / ≥${b.tpsFloor.toFixed(1)}%</td><td>${b.ratio.toFixed(1)}%</td class="${red?'intake-dp-alert':''}"><td class="${red?'intake-dp-alert':''}">${b.drop.toFixed(1)} kPa</td><td>${b.ap.toFixed(1)} kPa</td><td>${b.patm.toFixed(1)} kPa</td><td>${b.n} 筆 / ${b.seconds.toFixed(1)} 秒</td><td style="color:${s.color};font-weight:800">${s.name}</td></tr>`}).join('')||'<tr><td colspan="8">尚無符合本頁高轉高開度條件的資料。</td></tr>'}</tbody></table></div></section>`;
-    host.innerHTML=host.innerHTML.replace(/<\/td class="[^"]*">/g,'</td>');
-    requestAnimationFrame(()=>draw(bins));
+    const all=Array.isArray(rows)?rows:[];
+    if(!all.length){host.innerHTML='<section class="ci-panel ci-empty">請先完成 Log 分析，才會顯示全油門進氣受阻診斷。</section>';return;}
+    const maxTps=Math.max(...all.map(r=>num(r.TPS_Percent)).filter(Number.isFinite));
+    const res=analyze(all),formal=res.bins;
+    if(!formal.length){
+      host.innerHTML=`<section class="ci-panel ci-na"><h2>⚪ 無法進行進氣受阻診斷</h2><div>本次 Log 最高油門開度</div><div class="ci-na-big">${Number.isFinite(maxTps)?maxTps.toFixed(1):'—'}%</div><b>沒有 TPS ≥ 90% 的有效全油門資料</b><p>油門低於 90% 時，節流閥本身仍會限制進氣，因此這些資料不具有進氣受阻判斷的參考價值。<br><b>為避免誤判，本工具不提供結果。</b></p></section>`;return;
+    }
+    const first=formal[0],last=formal.at(-1),ratio=last.ratio,statusBand=band(last.loss),state=statusBand.name;
+    const trendDelta=last.ratio-first.ratio;
+    let trendTitle='高轉進氣表現大致穩定',simple='全油門高轉區間的進氣壓力保持率沒有明顯惡化。';
+    if(trendDelta<=-3){trendTitle=`約 ${last.rpm.toLocaleString()} rpm 前後，高轉進氣阻力有增加趨勢`;simple=`隨著轉速提高，進氣壓力保持率由 ${first.ratio.toFixed(1)}% 下降到 ${last.ratio.toFixed(1)}%。代表高轉需要更多空氣時，整體進氣路徑的壓力損失正在增加。`;}
+    else if(trendDelta>=3){trendTitle='高轉進氣壓力保持率上升';simple=`本次有效區間由 ${first.ratio.toFixed(1)}% 上升到 ${last.ratio.toFixed(1)}%，未呈現隨轉速升高而惡化的受阻趨勢。`;}
+    const stateExplain=ratio>=92?'全油門時，進氣壓力仍能良好保持，目前沒有發現明顯的進氣受阻。':ratio>=88?'全油門高轉時已可看到進氣壓力保持率下降，代表進氣路徑開始出現較明顯的壓力損失。':'全油門高轉時進氣壓力保持率偏低，顯示整體進氣路徑存在明顯受限跡象。';
+    const tableRows=formal.map(x=>`<tr><td>${x.rpm.toLocaleString()}–${(x.rpm+499).toLocaleString()}</td><td>${x.tpsMax.toFixed(1)}%</td><td><span class="ci-mini-bar"><span class="ci-mini-fill" style="width:${clamp(x.ratio,0,100)}%"></span></span><b>${x.ratio.toFixed(1)}%</b></td><td>${x.loss.toFixed(1)}%</td><td><span class="ci-judge ${x.band.cls}">${x.band.name}</span></td></tr>`).join('');
+    host.innerHTML=`
+      <div class="ci-dash">
+        <section class="ci-panel ci-result"><div class="ci-result-grid"><div><div class="ci-state-label">進氣狀態</div><div class="ci-state ${statusBand.cls}">${state}</div><div class="ci-explain">${stateExplain}</div></div><div><div class="ci-metric-title">進氣壓力保持率</div><div class="ci-big">${ratio.toFixed(1)}%</div><div class="ci-bar"><div class="ci-bar-fill" style="width:${clamp(ratio,0,100)}%"></div></div><div class="ci-bar-axis"><span>0%</span><span>50%</span><span>100%</span></div><div class="ci-bar-hint">越接近 100% = 進氣越順暢</div></div></div></section>
+        <section class="ci-panel ci-condition"><h3>本次分析條件</h3><div class="ci-checks"><b>✓</b> 油門開度：≥ 90%<br><b>✓</b> 噴油狀態：正常<br><b>✓</b> 排除瞬態：收油／換檔已排除<br><b>✓</b> 分析資料：僅使用 TPS ≥ 90%</div><div class="ci-tiles"><div class="ci-tile">☁ 環境大氣壓 P_Atm<b>${Number.isFinite(res.baseline.patmMed)?res.baseline.patmMed.toFixed(1):'—'} kPa</b></div><div class="ci-tile">🏁 最高有效轉速<b>${res.maxRpm?res.maxRpm.toFixed(0):'—'} rpm</b></div></div></section>
+      </div>
+      <div class="ci-lower">
+        <div><section class="ci-panel"><h3 class="ci-table-title">🏎️ 各轉速區間進氣狀態</h3><div class="ci-table-wrap"><table class="ci-table"><thead><tr><th>轉速 (rpm)</th><th>油門開度 (TPS)</th><th>進氣壓力保持率</th><th>壓力損失</th><th>判定</th></tr></thead><tbody>${tableRows}</tbody></table></div><div class="ci-foot">本表只顯示 TPS ≥ 90% 的有效資料；90% 以下完全不參考。</div></section><section class="ci-panel ci-details"><details><summary>詳細數據（點擊展開）</summary><div class="ci-adv-grid"><div class="ci-tile">進氣歧管壓力 Eng_AP<b>${last.ap.toFixed(1)} kPa</b></div><div class="ci-tile">實際壓降 ΔP<b>${last.drop.toFixed(1)} kPa</b></div><div class="ci-tile">壓力損失<b>${last.loss.toFixed(1)}%</b></div><div class="ci-tile">環境大氣壓 P_Atm<b>${last.patm.toFixed(1)} kPa</b></div></div></details></section></div>
+        <div><section class="ci-panel ci-trend"><h3>↗ 高轉趨勢</h3><div class="ci-trend-msg">${trendTitle}</div><div class="ci-faces"><div class="ci-face">😊<small>${first.ratio.toFixed(0)}%</small></div><div class="ci-arrow"></div><div class="ci-face">😣<small>${last.ratio.toFixed(0)}%</small></div></div><div class="ci-simple">💡 <b>簡單說：</b>${simple}</div><div class="ci-foot">⚠️ 此分析只能判斷整體進氣路徑的壓力損失，無法單靠此 Log 指定是哪一個零件造成。</div></section><div class="ci-why"><b>為什麼 P_Atm 不是 100？</b><br>大氣壓力會隨海拔與天氣改變，因此 P_Atm 本來就不一定是 100 kPa；另外也可能存在硬體感知器的讀取誤差。程式會直接使用 Log 當時記錄的 P_Atm 進行比較。</div></div>
+      </div>`;
   }
   function setup(){
     const wrap=document.querySelector('.wrap'),help=document.querySelector('[data-page-panel="4"]');if(!wrap||!help)return;
     const wm=document.createElement('div');wm.className='honda-watermark';wm.setAttribute('aria-hidden','true');wm.innerHTML='<svg viewBox="0 0 500 270" role="presentation"><path fill="currentColor" d="M54 146c71-24 100-66 139-118-8 51-1 84 32 106-46-4-92 7-171 43zm72 23c80-10 126 5 184 44-59-18-119-7-178 13 31-17 48-35-6-57zm164-35c55-1 105 20 151 68-57-29-116-36-173-20 23-12 33-28 22-48z"/><text x="88" y="253" font-size="51">HONDA</text></svg>';wrap.prepend(wm);
-    const p2=document.createElement('div');p2.className='app-page engine-page-v24';p2.dataset.pagePanel='2';p2.innerHTML='<div class="page-panel-intro"><h2>② 引擎負載分析</h2><p>實際騎乘的 RPM × TPS × AP 負載區域與點火參照。圖表僅作騎乘負載與點火格定位，不產生點火建議。</p></div><div id="engineLoadHost"></div>';
-    const p3=document.createElement('div');p3.className='app-page intake-page-v24';p3.dataset.pagePanel='3';p3.innerHTML='<div class="page-panel-intro"><h2>③ 進氣壓降分析</h2><p>以高轉全油門的歧管壓力比與壓降，找出值得優先檢查的進氣路徑工況。這是診斷資訊，不會自動判定單一零件故障。</p></div><div id="intakeAnalysisHost"><section class="card"><div class="note">請先完成 Log 分析，才會顯示高轉 WOT 進氣壓降結果。</div></section></div>';
-    wrap.insertBefore(p2,help);wrap.insertBefore(p3,help);const load=document.getElementById('loadZoneMap'),loadHost=document.getElementById('engineLoadHost');if(load&&loadHost)loadHost.append(load);
-    const tabs=[...document.querySelectorAll('.page-tab')],pages=[...document.querySelectorAll('.app-page')];function show(n){const v=String(n);tabs.forEach(t=>t.classList.toggle('active',t.dataset.page===v));pages.forEach(p=>p.classList.toggle('active',p.dataset.pagePanel===v));window.scrollTo({top:0,behavior:'smooth'});requestAnimationFrame(()=>{if(v==='2'&&window.renderLoadZoneV43)window.renderLoadZoneV43(window.__ctLogRows||[]);if(v==='3')render(window.__ctLogRows||[])})}tabs.forEach(t=>t.addEventListener('click',()=>show(t.dataset.page)));window.showCT125Page=show;window.renderIntakeRestrictionV24=render;
+    const p2=document.createElement('div');p2.className='app-page engine-page-v24';p2.dataset.pagePanel='2';p2.innerHTML='<div class="page-panel-intro engine-kawaii-intro"><div class="engine-intro-cloud"><span>🔥</span></div><div><h2>② 引擎負載分析</h2><p>實際騎乘的 RPM × TPS × AP 負載區域與點火參照。圖表僅作騎乘負載與點火格定位，不產生點火角增減建議。</p></div></div><div id="engineLoadHost"></div>';
+    const p3=document.createElement('div');p3.className='app-page intake-page-v24';p3.dataset.pagePanel='3';p3.innerHTML='<div class="ci-intro"><div class="ci-cloud-face"><span>☁️</span></div><div><h2>③ 進氣受阻診斷</h2><p>用實際 P_Atm 與 Eng_AP 比較全油門高轉時的進氣壓力保持率；越接近 100%，代表進氣越順暢。</p></div><div class="ci-cat">🐱</div></div><div class="ci-important"><span class="star">⭐</span><div><strong>重要說明：油門開度 TPS 必須 ≥ 90%，進氣壓力數據才具有受阻判斷的參考價值。</strong><br>TPS &lt; 90% 的資料不納入分析，因為節流閥本身仍在限制進氣，無法可靠判斷進氣系統是否受阻。<br><b>建議於平坦鋪裝道路進行測試，並保持穩定全油門加速，以提高不同 LOG 之間的比較一致性。</b></div></div><div id="intakeAnalysisHost"><section class="ci-panel ci-empty">請先完成 Log 分析，才會顯示全油門進氣受阻診斷。</section></div>';
+    wrap.insertBefore(p2,help);wrap.insertBefore(p3,help);
+    const load=document.getElementById('loadZoneMap'),loadHost=document.getElementById('engineLoadHost');if(load&&loadHost)loadHost.append(load);
+    const tabs=[...document.querySelectorAll('.page-tab')],pages=[...document.querySelectorAll('.app-page')];
+    function show(n){const v=String(n);tabs.forEach(t=>t.classList.toggle('active',t.dataset.page===v));pages.forEach(p=>p.classList.toggle('active',p.dataset.pagePanel===v));window.scrollTo({top:0,behavior:'smooth'});requestAnimationFrame(()=>{if(v==='2'&&window.renderLoadZoneV43)window.renderLoadZoneV43(window.__ctLogRows||[]);if(v==='3')render(window.__ctLogRows||[])})}
+    tabs.forEach(t=>t.addEventListener('click',()=>show(t.dataset.page)));window.showCT125Page=show;window.renderIntakeRestrictionV24=render;
   }
-  window.__intakePressureV24={intakeBins,conclusion};
+  window.__intakePressureV24={analyze};
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup);else setup();
 })();
 </script>
