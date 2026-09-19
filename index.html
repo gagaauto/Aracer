@@ -615,6 +615,31 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 .app-page[data-page-panel="1"] .stats .stat{border-radius:17px!important;border-color:#e0e9f3!important;background:linear-gradient(145deg,#fff,#f9fbfe)!important;box-shadow:0 6px 16px rgba(67,92,126,.05)}
 @media(max-width:700px){.home-kawaii-intro{padding:14px 86px 14px 14px}.home-drop-big{right:10px;width:68px;height:68px;bottom:-16px}.home-kawaii-spark{right:74px}.home-drop-baby{width:45px;height:45px;flex-basis:45px}.home-drop-baby:before{font-size:30px}.home-kawaii-intro h2{font-size:19px}.home-kawaii-intro p{font-size:11px}}
 </style>
+<style id="setup-layout-polish-v1">
+/* 首頁設定：四項依使用順序排列成兩組，讓桌面與平板的閱讀節奏一致。 */
+.app-page[data-page-panel="1"] .setup-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:start;gap:12px!important}
+.app-page[data-page-panel="1"] .setup-grid>.setup-field{min-width:0;min-height:104px;padding:13px!important;display:flex;flex-direction:column;justify-content:flex-start}
+.app-page[data-page-panel="1"] .setup-grid>.setup-field>label{display:flex;align-items:center;min-height:20px;margin-bottom:7px}
+.app-page[data-page-panel="1"] .setup-grid>.setup-field>select{flex:0 0 auto}
+.app-page[data-page-panel="1"] .base-map-field{border-color:#f4c7c7!important;background:linear-gradient(145deg,#fffafa,#fff3f3)!important}
+.base-map-warning,#baseMapHint{display:block;margin-top:7px;line-height:1.45;color:#b91c1c;font-size:12px;font-weight:800}
+.base-map-warning{padding:7px 9px;border:1px solid #fecaca;border-radius:10px;background:#fff6f6;animation:base-map-glow 1.6s ease-in-out infinite}
+@keyframes base-map-glow{0%,100%{color:#991b1b;box-shadow:none}50%{color:#ef1d1d;box-shadow:0 0 4px rgba(255,35,35,.7),0 0 12px rgba(255,35,35,.35)}}
+@media(max-width:720px){
+ .app-page[data-page-panel="1"] .setup-grid{grid-template-columns:1fr!important}
+ .app-page[data-page-panel="1"] .setup-grid>.setup-field{min-height:0;padding:12px!important}
+}
+@media(max-width:520px){
+ .kawaii-page-nav{gap:4px!important;padding:5px!important}
+ .kawaii-page-nav .page-tab{min-width:0;min-height:64px!important;flex-direction:column;gap:2px!important;padding:5px 2px!important}
+ .kawaii-page-nav .nav-mascot{width:25px;height:25px;flex-basis:25px}
+ .kawaii-page-nav .nav-drop:before,.kawaii-page-nav .nav-flame:before,.kawaii-page-nav .nav-cloud:before{font-size:18px}
+ .kawaii-page-nav .nav-book{font-size:16px}
+ .kawaii-page-nav .nav-copy{width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;font-size:10px;line-height:1.1}
+ .kawaii-page-nav .nav-copy small{display:none}
+}
+@media(prefers-reduced-motion:reduce){.base-map-warning{animation:none}}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -652,7 +677,7 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 </div>
 </div>
 <div class="format-grid setup-grid">
-<div>
+<div class="setup-field">
 <label>Log 系統</label>
 <select id="logPlatformSelect">
 <option value="">請先選擇</option>
@@ -660,7 +685,7 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 <option value="android">Android aRacer Log</option>
 </select>
 </div>
-<div>
+<div class="setup-field">
 <label>ECU 系列</label>
 <select id="ecuSeriesSelect">
 <option value="">請先選擇</option>
@@ -669,21 +694,16 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 </select>
 </div>
 
-<div>
+<div class="setup-field base-map-field">
 <label for="baseMapSelect">原始罐頭程式基底</label>
 <select id="baseMapSelect">
 <option value="ct125" selected>CT125（預設）</option>
 <option value="dax125" disabled>DAX125（僅 MINIXX／SUPERXX）</option>
 </select>
-<style>
-.base-map-warning{display:block;margin-top:6px;line-height:1.6;color:#b91c1c;font-size:14px;font-weight:800;animation:base-map-glow 1.6s ease-in-out infinite}
-@keyframes base-map-glow{0%,100%{color:#991b1b;text-shadow:none}50%{color:#ff1616;text-shadow:0 0 3px rgba(255,35,35,.9),0 0 9px rgba(255,35,35,.75),0 0 16px rgba(255,35,35,.5)}}
-@media(prefers-reduced-motion:reduce){.base-map-warning{animation:none}}
-</style>
 <small class="base-map-warning">請選對罐頭基底，避免調錯油圖格位。</small>
-<small id="baseMapHint" style="display:block;margin-top:6px;line-height:1.6;color:#b91c1c;font-size:14px;font-weight:700">DAX125 僅供 MINIXX／SUPERXX 選用，請依 ECU 實際載入的罐頭程式選擇。</small>
+<small id="baseMapHint">DAX125 僅供 MINIXX／SUPERXX 選用，請依 ECU 實際載入的罐頭程式選擇。</small>
 </div>
-<div>
+<div class="setup-field">
 <label>閉迴路狀態</label>
 <select id="loopModeSelect">
 <option selected="" value="on">ON｜開啟閉迴路・Fuel_CL 主判定</option>
@@ -853,7 +873,7 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 <script id="load-zone-v43-js">
 (function(){
  "use strict";
- const $=id=>document.getElementById(id),num=v=>{const n=Number(v);return Number.isFinite(n)?n:null};
+ const $=id=>document.getElementById(id),num=v=>{if(v==null||String(v).trim()==='')return null;const n=Number(v);return Number.isFinite(n)?n:null};
  const median=a=>{const v=a.filter(Number.isFinite).sort((x,y)=>x-y),n=v.length;if(!n)return null;const m=Math.floor(n/2);return n%2?v[m]:(v[m-1]+v[m])/2};
  // 使用者實機確認：MiniX / SuperX / MiniXX / SuperXX 共用此真實點火表格。
  const IGN_RPM_GRID=Object.freeze([800,1600,2400,3200,4000,4800,5600,6400,7200,8000,8800,9600,10400,11200]);
@@ -982,6 +1002,7 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 <strong>① ON／OFF 實際判定：</strong><br>
 <strong>ON：</strong>整條 Log 只要存在有效非 0 Fuel_CL 就判定 ON；ON Log 內 Fuel_CL=0 仍保留，不切成 OFF。WBO2_AT_En 不作 ON/OFF 判定。<br>
 <strong>OFF：</strong>整條 Log 必須 Fuel_CL 全為 0 才能進 OFF；OFF 的有效資料還必須 WBO2_Ready=1、AFR_WBO2 有效、AFR_Target &gt;0。OFF 的主要偏差為 <code>(WBO2 / Target − 1) × 100%</code>；Fuel_CL 不參與 OFF 修正。
+<br><small>噴油脈寬／Duty 欄位若為空白，只視為「未知」，不會被誤認為 0 噴油或收油；AFR 17～18 只有在 TPS 全收，且噴油脈寬／Duty 明確下降（含歸零）時才會分流為收油；無斷油旗標時還必須同時看到 RPM 下降。</small>
 <br><br>
 <strong>② 溫度與權重：</strong>溫度感知值只作參考，不以 67°C 一刀切除 Fuel 資料。程式以 80～110°C 為偏好區；低溫、持續升溫或過高溫度會降低權重，但資料仍保留。溫度權重與資料品質權重會一起影響加權證據量。
 <br><br>
@@ -1000,11 +1021,11 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 <br><br>
 <strong>⑦ 結果分類：</strong>🛠️ 建議修改／👀 觀望／⚠️ 數據不足／🚨 偏差異常。±3% 內只保留資料，不修改；≥11% 不直接修改。
 </div></div></div></details>
-</section><section class="card quality-card">
+</section><section class="card intake-rules-card"><div class="section-head"><div><div class="section-tag">WOT INTAKE</div><h2>③ 進氣壓降判讀</h2><p class="section-sub">適用於 TPS ≥90% 的高轉全油門 Log；顯示實測 ΔP、壓力保持率與每個 RPM 區間的有效樣本，不參與 Fuel Map 修正。</p></div></div><div class="rule-details-inline"><div class="note compact-note"><strong>壓力保持率判讀：</strong><br>・<strong>≥90.0%｜健康：</strong>高轉進氣保持良好。<br>・<strong>87.1～89.9%｜開始有阻力：</strong>高轉進氣壓降已開始影響。<br>・<strong>≤87.0%｜明顯阻力：</strong>實際騎乘通常可感受到高轉進氣受阻。<br><br><strong>使用方式：</strong>顏色與文字直接顯示在各 RPM 區間的「壓力保持率」欄；藍色閃耀為健康、橘色為開始有阻力、紅色閃耀為明顯阻力。有效樣本只呈現資料覆蓋度，不因筆數不足自動刪除實測壓降。<br><br><strong>限制：</strong>壓降只能指出整體進氣路徑的壓力損失，不能單靠 Log 指定是哪個零件造成；空濾、進氣管、歧管、節流閥、汽門／凸輪與排氣都可能造成相同現象。</div></div></section><section class="card quality-card">
 <div class="section-head"><div><div class="section-tag">QUALITY GATE</div><h2>防失準</h2><p class="section-sub">品質不足時降低可信度，不急著修改；強工況證據只提升進入修正判定的資格。</p></div></div>
 <div class="quality-grid"><div><b>①</b><span>整條 Log Fuel_CL 判定 ON / OFF</span></div><div><b>②</b><span>溫度權重＋瞬態／資料品質權重</span></div><div><b>③</b><span>weighted MAD ≤8＋方向一致度 ≥0.7</span></div><div><b>④</b><span>單一Log直接修正：RPM波動≤15%最佳；15～25%仍可用</span></div></div>
 <div class="quality-warning">⚠️ <strong>高可信度正常修正；中等證據半量；較少但可重複驗證者25%保守試修；互相衝突才觀望。</strong> 不把所有條件疊成硬門檻，也不讓短短三筆直接取得最高級。</div>
-<div class="note" style="margin-top:10px"><strong>程式參數快照：</strong> T_Eng 為軟權重參考｜核心溫區 80～110°C｜熱機趨勢納入權重｜TPS 瞬態 ≥12%/s｜RPM 瞬態 ≥600 rpm/s｜transient hold 0.8 s｜不修 ±3.0%｜極端 ≥11%｜100 ms標準加權證據量：3 / 6 / 12｜segment：effectiveN≥4有效、≥6強證據、≥2段只作獨立重複參考｜Map：CT125 X 14×17、XX 31×25；DAX125 僅 XX 15×17，依手動選定的罐頭基底套用。同一檔案會先以檔案身分攔截，再以解壓後 SHA-256 與完整核心序列做第二、第三層防呆；正規化部分相似只提醒、不刪資料；WBO2 AFR ≥23.5 在 ON／OFF 都列為感知器異常，只隔離該時段；AFR 17～18 只有在 TPS 全收，並同時有斷油旗標，或無噴油且 RPM 明確下降時才視為收油，其餘保留為真實偏稀候選。OFF WBO2 lag 會參考 Target AFR、Fuel PW 與 Injector Duty 的階躍並驗證 AFR 反應相關性，未達門檻即沿用 RPM＋AP 動態 delay。CI 採獨立 visit bootstrap，只有跨 Log 且方向穩定才標示可信；whole-map inverse 保留作同批資料平滑趨勢，不視為外部驗證。</div>
+<div class="note" style="margin-top:10px"><strong>程式參數快照：</strong> T_Eng 為軟權重參考｜核心溫區 80～110°C｜熱機趨勢納入權重｜TPS 瞬態 ≥12%/s｜RPM 瞬態 ≥600 rpm/s｜transient hold 0.8 s｜不修 ±3.0%｜極端 ≥11%｜100 ms標準加權證據量：3 / 6 / 12｜segment：effectiveN≥4有效、≥6強證據、≥2段只作獨立重複參考｜Map：CT125 X 14×17、XX 31×25；DAX125 僅 XX 15×17，依手動選定的罐頭基底套用。同一檔案會先以檔案身分攔截，再以解壓後 SHA-256 與完整核心序列做第二、第三層防呆；正規化部分相似只提醒、不刪資料；WBO2 AFR ≥23.5 在 ON／OFF 都列為感知器異常，只隔離該時段；AFR 17～18 只有在 TPS 全收且噴油脈寬／Duty 明確下降（含歸零）時才視為收油；無斷油旗標時還必須同時有 RPM 明確下降，其餘保留為真實偏稀候選。OFF WBO2 lag 會參考 Target AFR、Fuel PW 與 Injector Duty 的階躍並驗證 AFR 反應相關性，未達門檻即沿用 RPM＋AP 動態 delay。CI 採獨立 visit bootstrap，只有跨 Log 且方向穩定才標示可信；whole-map inverse 保留作同批資料平滑趨勢，不視為外部驗證。</div>
 </section></div>
 <footer>aRacer X / XX Log 分析建議｜CT125 分析工具｜本工具只提供分析與調校建議，不會寫入 ECU。實際騎乘負載圖以真實點火格顯示 RPM／TPS／AP／SA，只供使用者自行參照，不提供點火角增減建議。<div class="gaggle-credit">此分析程式為 Gaggle 發布</div></footer>
 </div>
@@ -1049,6 +1070,7 @@ const cfg={
  temp:67,apGreen:60,apRed:80,minRef:10,stableMinSamples:3,stableWaitSec:0,
  clDeadband:3.0,clPerCell:0.8,clStateEpsilon:0,
  transientTpsRate:12,transientRpmRate:600,transientHoldSec:0.8,minDwellSec:0,
+ fuelReductionMinRatio:0.15,fuelReductionMaxGapSec:1.0,
  tempCoreLow:80,tempCoreHigh:110,tempEdgeLowWeight:0.5,tempHotWeight:0.5,
  trialScale:0.50,cautiousScale:0.25,afrLeanPeg:17,minTrialEffectiveN:6,minDirectEffectiveN:12,singleLogDirectMinSeconds:1.5,
  evidenceIntervalMs:100,wbo2DelayMinMs:120,wbo2DelayMaxMs:450,wbo2TargetSettleMs:700,wbo2AlignmentMaxMs:220,
@@ -1106,6 +1128,7 @@ async function scanHardwareFiles(files){
  if(!files.length){if(status){status.className="hardware-status";status.textContent="上傳後會讀取 ECU Hardware ID，交叉檢查 X／XX 油圖版本。"}if(host)host.hidden=true;return}
  if(status){status.className="hardware-status";status.textContent="正在讀取 ECU Hardware ID…"}
  if(host)host.hidden=false;if(body)body.innerHTML='<div class="log-preflight-alert">正在解壓、去重與檢查每份 Log…</div>';
+ const scanJob=beginAnalysisJob("scan");if(!scanJob)return;
  try{
    const unique=await loadUniqueLogEntries(files),metas=unique.entries.map(e=>parseLogMeta(e.text));
    if(token!==hardwareScanToken)return;
@@ -1139,24 +1162,27 @@ async function scanHardwareFiles(files){
    const selectedPlatform=$("logPlatformSelect")?.value||"",selectedSeries=$("ecuSeriesSelect")?.value||"",selectedMode=getLoopMode();
    const cards=unique.entries.map((entry,i)=>{
     const meta=metas[i],platform=detectLogPlatformText(entry.text),seriesValue=meta.known?.series||selectedSeries;
-    let parsed=[],usable=0,loop="無法判定",afr18=0,afr24=0,alignmentRejected=0,error="";
+    let parsed=[],usable=0,loop="無法判定",afr18=0,afr24=0,alignmentRejected=0,injectorBlank=0,error="";
     try{
      if(platform==="unknown")throw new Error("無法辨識 Apple／Android 格式");
      if(selectedPlatform&&selectedPlatform!==platform)throw new Error(`目前選擇 ${selectedPlatform==="apple"?"Apple":"Android"}，但此檔是 ${platform==="apple"?"Apple":"Android"}`);
      parsed=parseText(entry.text,entry.name);const state=detectLoopState(parsed);loop=state.state?.toUpperCase()||"無法判定";
      const prepared=state.state==="off"?prepareOpenLoopRows(parsed):prepareClosedLoopRows(parsed);usable=prepared.length;
      afr18=parsed.filter(r=>r._wbo2Overrun).length;afr24=parsed.filter(r=>r._wbo2Fault).length;alignmentRejected=parsed.filter(r=>r._wbo2AlignmentRejected).length;
+     injectorBlank=parsed.filter(r=>!validNum(r.Cyl1_Comn_FuelPW)||!validNum(r.Cyl1_Injector_Period_Rate)).length;
      if(loopConflict)error="同批 Log 的 Closed Loop ON／OFF 狀態不一致或無法判定，請分開分析。";
      else if(state.state&&state.state!==selectedMode)error=`選擇為 ${selectedMode.toUpperCase()}，此 Log 實際為 ${state.state.toUpperCase()}`;
     }catch(e){error=e.message}
     const model=meta.known?.model||(meta.hardwareId&&selectedSeries==="xx"?"SuperXX（手動確認）":"未確認"),map=seriesValue?fuelMapLabel(seriesValue):"尚未選擇";
     const sensorWarning=afr24?`<div class="log-preflight-error">🔴 WBO2 感知器健康警告：偵測到 ${afr24.toLocaleString()} 筆 AFR 約 24 異常值。可能與感知器污染／老化、線路短路或控制器狀態有關；異常時段已隔離，請檢查感知器良率。</div>`:"";
-    return `<div class="log-preflight-item ${error||afr24?"error":""}"><div class="log-preflight-name">${esc(entry.name)}</div><div class="log-preflight-tags"><span>${platform==="apple"?"🍎 Apple":platform==="android"?"🤖 Android":"⚠️ 格式未知"}</span><span>${esc(model)}</span><span>${esc(map)}</span><span>Closed Loop ${esc(loop)}</span></div><div class="log-preflight-metrics"><div>原始筆數<b>${parsed.length.toLocaleString()}</b></div><div>可用筆數<b>${usable.toLocaleString()}</b></div><div>Hardware ID<b>${esc(meta.hardwareRaw||meta.hardwareId||"—")}</b></div><div>ECU SN<b>${esc(meta.ecuSn||"—")}</b></div><div>Table ID<b>${esc(meta.tableId||"—")}</b></div><div>WBO2 對齊超距<b>${alignmentRejected.toLocaleString()}</b></div><div>AFR 17～18 確認收油<b>${afr18.toLocaleString()}</b></div><div>AFR 24 異常<b>${afr24.toLocaleString()}</b></div></div>${sensorWarning}${error?`<div class="log-preflight-error">⚠️ ${esc(error)}</div>`:""}</div>`;
+    const injectorWarning=injectorBlank?`<div class="log-preflight-alert">⚠️ 噴油脈寬／Duty 有 ${injectorBlank.toLocaleString()} 筆空白；空白不會再被誤認為斷油，該筆仍保留並依其他有效資訊判定。</div>`:"";
+    return `<div class="log-preflight-item ${error||afr24?"error":""}"><div class="log-preflight-name">${esc(entry.name)}</div><div class="log-preflight-tags"><span>${platform==="apple"?"🍎 Apple":platform==="android"?"🤖 Android":"⚠️ 格式未知"}</span><span>${esc(model)}</span><span>${esc(map)}</span><span>Closed Loop ${esc(loop)}</span></div><div class="log-preflight-metrics"><div>原始筆數<b>${parsed.length.toLocaleString()}</b></div><div>可用筆數<b>${usable.toLocaleString()}</b></div><div>Hardware ID<b>${esc(meta.hardwareRaw||meta.hardwareId||"—")}</b></div><div>ECU SN<b>${esc(meta.ecuSn||"—")}</b></div><div>Table ID<b>${esc(meta.tableId||"—")}</b></div><div>噴油欄位空白<b>${injectorBlank.toLocaleString()}</b></div><div>WBO2 對齊超距<b>${alignmentRejected.toLocaleString()}</b></div><div>AFR 17～18 確認收油<b>${afr18.toLocaleString()}</b></div><div>AFR 24 異常<b>${afr24.toLocaleString()}</b></div></div>${sensorWarning}${injectorWarning}${error?`<div class="log-preflight-error">⚠️ ${esc(error)}</div>`:""}</div>`;
    }).join("");
    const dup=unique.duplicates.length?`<div class="log-preflight-alert">已依原始內容 SHA-256 排除 <b>${unique.duplicates.length}</b> 份完全相同 Log：${unique.duplicates.map(x=>`${esc(x.duplicate)} → 保留 ${esc(x.kept)}`).join("、")}。完全重複資料不會重複加權。</div>`:"";
    const similar=unique.similarities?.length?`<div class="log-preflight-alert">⚠️ 發現 <b>${unique.similarities.length}</b> 組核心序列高度相似：${unique.similarities.map(x=>`${esc(x.similar)} ↔ ${esc(x.matched)}`).join("、")}。可能是重新匯出，也可能是重現工況；資料全部保留，請人工核對。</div>`:"";
    if(body)body.innerHTML=`${dup}${similar}<div class="log-preflight-grid">${cards}</div>`;
  }catch(e){if(token===hardwareScanToken){if(status){status.className="hardware-status error";status.textContent="⛔ Hardware ID 讀取失敗："+e.message}if(body)body.innerHTML='<div class="log-preflight-alert">檢查失敗：'+esc(e.message)+'</div>'}}
+ finally{endAnalysisJob(scanJob)}
 }
 
 
@@ -1193,6 +1219,8 @@ if(!$("loopModeSelect")?.value){alert("請先選擇閉迴路狀態。");return f
 
 function n(v){if(v==null||String(v).trim()==="")return null;const x=Number(v);return Number.isFinite(x)?x:null}
 function validNum(v){return typeof v==="number"&&Number.isFinite(v)}
+function numericMin(a){let v=Infinity;for(const x of a)if(Number.isFinite(x)&&x<v)v=x;return v}
+function numericMax(a){let v=-Infinity;for(const x of a)if(Number.isFinite(x)&&x>v)v=x;return v}
 function med(a){a=a.filter(Number.isFinite).sort((x,y)=>x-y);if(!a.length)return null;const i=Math.floor(a.length/2);return a.length%2?a[i]:(a[i-1]+a[i])/2}
 function mad(a){a=a.filter(Number.isFinite);const m=med(a);return m==null?null:med(a.map(x=>Math.abs(x-m)))}
 function fmt(x,d=2){return x==null?"—":x.toFixed(d)}
@@ -1202,8 +1230,8 @@ function hasDirectionConflict(values,deadband=cfg.clDeadband){const sig=(values|
 function backtestOutcome(b,a){
  if(!b||!a)return["🟡 無法比較","缺少對照組／後段騎乘 Log 資料","warn"];
  if(b.fileConflict||a.fileConflict)return["🟡 跨 Log 方向衝突","同一 Map 格在不同 Log 出現正負相反，不判定工況改善；請重測","warn"];
- const vb=Number(b.cl),va=Number(a.cl);
- if(!Number.isFinite(vb)||!Number.isFinite(va))return["🟡 無法比較","缺少可用的比較數值","warn"];
+ const vb=b.cl,va=a.cl;
+ if(!validNum(vb)||!validNum(va))return["🟡 無法比較","缺少可用的比較數值","warn"];
  const ab=Math.abs(vb),aa=Math.abs(va),improved=aa<ab-.05,ib=ab<=cfg.clDeadband,ia=aa<=cfg.clDeadband;
  const rev=vb!==0&&va!==0&&Math.sign(vb)!==Math.sign(va),strongA=a.quality==="高可信度"||a.quality==="最高級直接認證";
  // 兩組原本都在不修正區時，不得宣稱「工況改善」；只描述是否維持及是否略為靠近／遠離 0。
@@ -1285,23 +1313,31 @@ function warmValidOpen(r){
 }
 
 function injectionActive(r){
-  const cut=Number(r?.Dec_FC_En)>0||Number(r?.Inj_Cut)>0;
-  const pw=Number(r?.Cyl1_Comn_FuelPW), duty=Number(r?.Cyl1_Injector_Period_Rate);
-  const pwKnown=Number.isFinite(pw), dutyKnown=Number.isFinite(duty);
+  // 空白欄位不是「0 噴油」；只有明確數值 0 才可當作斷油證據。
+  const dec=validNum(r?.Dec_FC_En)?r.Dec_FC_En:null,injCut=validNum(r?.Inj_Cut)?r.Inj_Cut:null;
+  const cut=dec>0||injCut>0;
+  const pw=validNum(r?.Cyl1_Comn_FuelPW)?r.Cyl1_Comn_FuelPW:null;
+  const duty=validNum(r?.Cyl1_Injector_Period_Rate)?r.Cyl1_Injector_Period_Rate:null;
+  const pwKnown=pw!==null, dutyKnown=duty!==null;
   const active=!cut&&(!pwKnown||pw>0)&&(!dutyKnown||duty>0);
   if(r)r._invalidInjection=!active;
   return active;
 }
 function isWbo2LeanBand(afr){const x=Number(afr);return Number.isFinite(x)&&x>=cfg.wbo2OverrunLow&&x<=cfg.wbo2OverrunHigh}
 function isVerifiedDecelLean(r,afr=r?.AFR_WBO2){
-  if(!isWbo2LeanBand(afr)||Number(r?.TPS_Percent)>2.5)return false;
-  const cut=Number(r?.Dec_FC_En)>0||Number(r?.Inj_Cut)>0,pw=Number(r?.Cyl1_Comn_FuelPW),duty=Number(r?.Cyl1_Injector_Period_Rate);
-  const noFuel=(Number.isFinite(pw)&&pw<=0)||(Number.isFinite(duty)&&duty<=0);
+  const tps=validNum(r?.TPS_Percent)?r.TPS_Percent:null;
+  if(!isWbo2LeanBand(afr)||tps===null||tps>2.5)return false;
+  const dec=validNum(r?.Dec_FC_En)?r.Dec_FC_En:null,injCut=validNum(r?.Inj_Cut)?r.Inj_Cut:null;
+  const cut=dec>0||injCut>0;
+  const pw=validNum(r?.Cyl1_Comn_FuelPW)?r.Cyl1_Comn_FuelPW:null,duty=validNum(r?.Cyl1_Injector_Period_Rate)?r.Cyl1_Injector_Period_Rate:null;
+  const noFuel=(pw!==null&&pw<=0)||(duty!==null&&duty<=0);
+  const fuelReduced=r?._fuelReduced===true;
   const rpmRate=Number(r?._rpmRatePerSec),rpmDropping=Number.isFinite(rpmRate)&&rpmRate<=-120;
-  // TPS 全收仍不足以證明收油：斷油旗標可直接確認；否則必須同時無噴油且 RPM 明確下降。
-  return cut||(noFuel&&rpmDropping);
+  // TPS 全收仍不足以證明收油。必須看見噴油脈寬／Duty 實際下降（含歸零）：
+  // 有明確斷油旗標時可直接確認；沒有旗標時還必須同時看到 RPM 明確下降。
+  return (noFuel||fuelReduced)&&(cut||rpmDropping);
 }
-function isFueledLeanCandidate(r,afr=r?.AFR_WBO2){return isWbo2LeanBand(afr)&&Number(r?.TPS_Percent)<=2.5&&!isVerifiedDecelLean(r,afr)&&injectionActive(r)}
+function isFueledLeanCandidate(r,afr=r?.AFR_WBO2){const tps=validNum(r?.TPS_Percent)?r.TPS_Percent:null;return isWbo2LeanBand(afr)&&tps!==null&&tps<=2.5&&!isVerifiedDecelLean(r,afr)&&injectionActive(r)}
 
 function validateLogHeader(header,name){
  const h=new Set(header||[]);
@@ -1713,7 +1749,7 @@ function markWbo2Health(rawRows){
      if(a<0||b<=a)return;
      const span=Number(list[b].Time)-Number(list[a].Time);
      const rpm=list.slice(a,b+1).map(r=>Number(r.RPM)).filter(Number.isFinite),tps=list.slice(a,b+1).map(r=>Number(r.TPS_Percent)).filter(Number.isFinite);
-     const moved=(rpm.length&&Math.max(...rpm)-Math.min(...rpm)>=400)||(tps.length&&Math.max(...tps)-Math.min(...tps)>=5);
+     const moved=(rpm.length&&numericMax(rpm)-numericMin(rpm)>=400)||(tps.length&&numericMax(tps)-numericMin(tps)>=5);
      if(span>=5000&&moved)for(let i=a;i<=b;i++){list[i]._wbo2Stuck=true;list[i]._wbo2HealthWeight=Math.min(list[i]._wbo2HealthWeight,.2)}
    };
    let start=-1,lastAfr=null,lastReady=null;const readyChanges=[];
@@ -1751,7 +1787,9 @@ function markTransient(rows){
    const file=r._file||"";
    if(lastFile!==null && file!==lastFile){ last=null; holdUntil=-Infinity; holdReason=""; }
    const tmRaw=Number(r.Time), tm=Number.isFinite(tmRaw)?tmRaw/1000:null, rpm=Number(r.RPM), tps=Number(r.TPS_Percent);
-   let transient=false, reason="";r._rpmRatePerSec=null;
+   const pw=validNum(r.Cyl1_Comn_FuelPW)?r.Cyl1_Comn_FuelPW:null;
+   const duty=validNum(r.Cyl1_Injector_Period_Rate)?r.Cyl1_Injector_Period_Rate:null;
+   let transient=false, reason="";r._rpmRatePerSec=null;r._fuelReduced=false;r._fuelReductionPct=null;
    if(Number(r.Dec_FC_En)>0 || Number(r.Inj_Cut)>0){
      transient=true; reason="cut";
    }
@@ -1759,6 +1797,16 @@ function markTransient(rows){
      const dt=tm-last.t;
      const tpsRate=Math.abs(tps-last.tps)/dt;
      const rpmSignedRate=(rpm-last.rpm)/dt,rpmRate=Math.abs(rpmSignedRate);r._rpmRatePerSec=Number.isFinite(rpmSignedRate)?rpmSignedRate:null;
+     // AFR 17～18 的收油分流必須有可觀察到的噴油減少。只比較同一份 Log、相鄰且不超過 1 秒的樣本；
+     // PW 或 Duty 任一項從有效正值下降至少 15% 即成立，歸零則由 isVerifiedDecelLean 的 noFuel 處理。
+     if(dt<=cfg.fuelReductionMaxGapSec){
+       const drops=[];
+       if(Number.isFinite(last.pw)&&last.pw>0&&pw!==null)drops.push((last.pw-pw)/last.pw);
+       if(Number.isFinite(last.duty)&&last.duty>0&&duty!==null)drops.push((last.duty-duty)/last.duty);
+       const reduction=drops.length?Math.max(...drops):null;
+       r._fuelReductionPct=Number.isFinite(reduction)?reduction*100:null;
+       r._fuelReduced=Number.isFinite(reduction)&&reduction>=cfg.fuelReductionMinRatio;
+     }
      if(tpsRate>=cfg.transientTpsRate||rpmRate>=cfg.transientRpmRate){
        transient=true; reason="rate";
      }
@@ -1773,7 +1821,7 @@ function markTransient(rows){
    // Transient information is retained. Only explicit fuel/injection cut is treated
    // as near-zero influence; ordinary transient/hold samples remain as low-weight evidence.
    r._analysisWeight=(r._transientReason==="cut")?0.05:(r._transient?0.20:1);
-   last={t:tm,rpm,tps}; lastFile=file;
+   last={t:tm,rpm,tps,pw,duty}; lastFile=file;
  }
  return rows;
 }
@@ -1858,7 +1906,7 @@ function independentCellVisits(c,value){
  for(const [file,rows0] of by){const rr=rows0.slice().sort((a,b)=>Number(a.Time)-Number(b.Time));let groups=[],cur=[];
    for(const r of rr){const t=Number(r.Time);if(!Number.isFinite(t))continue;if(cur.length&&t-Number(cur[cur.length-1].Time)>1200){groups.push(cur);cur=[]}cur.push(r)}if(cur.length)groups.push(cur);
    // Merge nearby revisits so a brief cell exit cannot manufacture independence.
-   const merged=[];for(const g of groups){if(!merged.length){merged.push(g);continue}const prev=merged[merged.length-1],gap=Number(g[0].Time)-Number(prev[prev.length-1].Time);if(gap<cfg.ciVisitSeparationMs)prev.push(...g);else merged.push(g)}
+   const merged=[];for(const g of groups){if(!merged.length){merged.push(g);continue}const prev=merged[merged.length-1],gap=Number(g[0].Time)-Number(prev[prev.length-1].Time);if(gap<cfg.ciVisitSeparationMs)g.forEach(r=>prev.push(r));else merged.push(g)}
    for(let i=0;i<merged.length;i++){const g=merged[i],dur=Number(g[g.length-1].Time)-Number(g[0].Time);if(g.length<4||dur<cfg.ciVisitMinDurationMs)continue;const v=g.map(r=>({v:value(r),w:tempWeight(r.T_Eng)*analysisWeight(r)})).filter(x=>Number.isFinite(x.v)&&x.w>0);const center=weightedMedian(v);if(Number.isFinite(center))units.push({file,name:`${file}#${i+1}`,center,duration:dur})}
  }
  return units;
@@ -1888,8 +1936,8 @@ function stableMapGroups(validRows){
  const appendSegment=(cellKey,segment)=>{
    if(!segment?.length)return;
    if(!groups.has(cellKey))groups.set(cellKey,{rpm:segment[0]._rp,tps:segment[0]._tp,rs:[],segments:[],dwell:0,boundary:false,afrConflict:false,stabilityPct:null});
-   const g=groups.get(cellKey);g.rs.push(...segment);g.segments.push(segment.slice());
-   const rpms=segment.map(r=>Number(r.RPM)).filter(Number.isFinite),rm=med(rpms),tr=rpms.length?Math.max(...rpms)-Math.min(...rpms):Infinity,rpmPct=rm?tr/rm*100:Infinity;
+   const g=groups.get(cellKey);for(const r of segment)g.rs.push(r);g.segments.push(segment.slice());
+   const rpms=segment.map(r=>r.RPM).filter(Number.isFinite),rm=med(rpms),tr=rpms.length?numericMax(rpms)-numericMin(rpms):Infinity,rpmPct=rm?tr/rm*100:Infinity;
    g.stabilityPct=Number.isFinite(g.stabilityPct)?Math.max(g.stabilityPct,rpmPct):rpmPct;
    for(let i=1;i<segment.length;i++){
      const dt=(Number(segment[i].Time)-Number(segment[i-1].Time))/1000;
@@ -1903,8 +1951,8 @@ function stableMapGroups(validRows){
  const flushAll=()=>{for(const k of [...active.keys()])flushKey(k)};
 
  for(const r of validRows){
-   const rpm=Number(r.RPM),tps=Number(r.TPS_Percent),file=r._file||"",tm=Number(r.Time);
-   if(!Number.isFinite(rpm)||rpm<=0||!Number.isFinite(tps)||tps<0||tps>100){flushAll();continue}
+   const rpm=r.RPM,tps=r.TPS_Percent,file=r._file||"",tm=r.Time;
+   if(!validNum(rpm)||rpm<=0||!validNum(tps)||tps<0||tps>100||!validNum(tm)){flushAll();continue}
    const rms=gridMemberships(rpm,map.rpm),tms=gridMemberships(tps,map.tps);
    if(!rms.length||!tms.length){flushAll();continue}
    const memberships=[];
@@ -1962,15 +2010,20 @@ function recommendationDecision(c,q,strong,deviation){
   }
   return {action:false,tier:"watch",scale:0};
 }
-function workProgressKey(files){
+function workProgressKey(files,entries=null){
   const platform=$("logPlatformSelect")?.value||"",series=$("ecuSeriesSelect")?.value||"",mode=getLoopMode();
-  const raw=[platform,series,mode,...(selectedBaseMap()==="dax125"?["dax125"]:[]),...files.map(f=>`${f.name}:${f.size}:${f.lastModified}`).sort()].join("|");
+  // 分析完成後以內容 SHA-256 識別 Log，避免相同檔名／大小／時間戳的不同資料誤帶入已完成格位。
+  // 預覽階段尚未取得 hash 才暫時使用檔案 metadata；正式分析一律傳入 entries。
+  const contentIds=Array.isArray(entries)&&entries.length
+    ?entries.map(e=>`sha256:${e?.hash||e?.name||""}`).filter(Boolean).sort()
+    :files.map(f=>`${f.name}:${f.size}:${f.lastModified}`).sort();
+  const raw=[platform,series,mode,...(selectedBaseMap()==="dax125"?["dax125"]:[]),...contentIds].join("|");
   let h=2166136261;
   for(let i=0;i<raw.length;i++){h^=raw.charCodeAt(i);h=Math.imul(h,16777619)}
   return `ct125-work-v2-${(h>>>0).toString(16)}`;
 }
-function initWorkProgress(files){
-  window.__ctProgressKey=workProgressKey(files);
+function initWorkProgress(files,entries=null){
+  window.__ctProgressKey=workProgressKey(files,entries);
   window.__ctCompleted=new Set();window.__ctMapInputs={};window.__ctWorkFilter="all";
   try{
     const saved=JSON.parse(localStorage.getItem(window.__ctProgressKey)||"null");
@@ -2169,11 +2222,11 @@ function prepareWorkMap(items){
 
 
 function strongEligibleRow(r){
-  return !!r&&!r._transient&&(!Number.isFinite(r._cellWeight)||r._cellWeight>=.25)&&Number.isFinite(Number(r.RPM))&&Number.isFinite(Number(r.TPS_Percent))&&Number.isFinite(Number(r.Cyl1_Eng_AP));
+  return !!r&&!r._transient&&(!Number.isFinite(r._cellWeight)||r._cellWeight>=.25)&&validNum(r.RPM)&&validNum(r.TPS_Percent)&&validNum(r.Cyl1_Eng_AP);
 }
 function strongLoadValue(r){
-  const ap=Number(r?.Cyl1_Eng_AP),patm=Number(r?.P_Atm);
-  return Number.isFinite(ap)&&Number.isFinite(patm)&&patm>0?ap/patm*100:ap;
+  const ap=r?.Cyl1_Eng_AP,patm=r?.P_Atm;
+  return validNum(ap)&&validNum(patm)&&patm>0?ap/patm*100:(validNum(ap)?ap:null);
 }
 function strongAxisConcentrated(rows){
   const usable=(rows||[]).filter(strongEligibleRow);
@@ -2216,7 +2269,7 @@ function segmentRepeatEvidence(c,value){
     const rpms=list.map(x=>x.rpm),tpss=list.map(x=>x.tps),rpmMid=med(rpms),tpsMid=med(tpss);
     const sameOperatingPoint=rpms.every(Number.isFinite)&&tpss.every(Number.isFinite)&&loads.length===list.length&&
       rpms.every(v=>Math.abs(v-rpmMid)<=rpmTol)&&tpss.every(v=>Math.abs(v-tpsMid)<=tpsTol)&&loads.every(v=>Math.abs(v-loadMid)<=loadTol);
-    const spread=Math.max(...devs)-Math.min(...devs),centerDev=Math.abs(med(devs)||0),repeatTolerance=Math.max(2,Math.min(4,centerDev*.5));
+    const spread=numericMax(devs)-numericMin(devs),centerDev=Math.abs(med(devs)||0),repeatTolerance=Math.max(2,Math.min(4,centerDev*.5));
     return {ok:sameDirection&&sameOperatingPoint&&spread<=repeatTolerance,count:list.length,spread,rpmTol,tpsTol,loadTol};
   };
   const goodResult=assess(good),strongResult=assess(strong);
@@ -2450,6 +2503,7 @@ function buildClosedLoop(){
  $("stats").innerHTML=[
   ["Log 檔案",new Set(rows.map(r=>r._file)).size],["原始樣本",rows.length.toLocaleString()],
   ["CL 參與修正",prepared.length.toLocaleString()],["溫度／狀態降權",prepared.filter(r=>tempWeight(r.T_Eng)<.75||analysisWeight(r)<.75).length.toLocaleString()],
+["噴油欄位空白",rows.filter(r=>!validNum(r.Cyl1_Comn_FuelPW)||!validNum(r.Cyl1_Injector_Period_Rate)).length.toLocaleString()],
 ["AFR 24／WBO2異常",rows.filter(r=>r._wbo2Fault).length.toLocaleString()],
 ["已對應 Map 格",cells.length],
   ["瞬態／斷油低權重",rows.filter(r=>r._transient).length.toLocaleString()],["Log 格式",androidMode?"Android aRacer":"Apple"],
@@ -2542,8 +2596,8 @@ function validateLoopLogGuard(parsedRows,mode,label="Log"){
 }
 function build(){if(window.__updateFuelMapCoreNote)window.__updateFuelMapCoreNote();updateLoopModeUI();const off=getLoopMode()==="off";const rm=$("resultMode");if(rm)rm.textContent=off?"🔵 閉迴路 OFF｜WBO2 / Target 校正模式":"🔴 閉迴路 ON｜Fuel_CL 校正模式";return off?buildOpenLoop():buildClosedLoop();}
 
-function loadRatio(r){const ap=Number(r.Cyl1_Eng_AP),patm=Number(r.P_Atm);return Number.isFinite(ap)&&Number.isFinite(patm)&&patm>0?ap/patm*100:null}
-function prepareLoadSpectrumRows(rawRows){markTransient(rawRows);const out=[];for(const r of rawRows){if(r._transient||Number(r.Dec_FC_En)>0||Number(r.Inj_Cut)>0)continue;if(!Number.isFinite(r.T_Eng)||r.T_Eng<cfg.temp||!Number.isFinite(r.RPM)||r.RPM<=0)continue;const q=loadRatio(r);if(!Number.isFinite(q))continue;r._loadRatio=q;out.push(r)}return out}
+function loadRatio(r){const ap=r.Cyl1_Eng_AP,patm=r.P_Atm;return validNum(ap)&&validNum(patm)&&patm>0?ap/patm*100:null}
+function prepareLoadSpectrumRows(rawRows){markTransient(rawRows);const out=[];for(const r of rawRows){if(r._transient||Number(r.Dec_FC_En)>0||Number(r.Inj_Cut)>0)continue;if(!Number.isFinite(r.T_Eng)||!Number.isFinite(r.RPM)||r.RPM<=0)continue;const q=loadRatio(r);if(!Number.isFinite(q))continue;r._loadRatio=q;out.push(r)}return out}
 function loadBand(v){if(v<30)return{name:'低負載',cls:'low',color:'#2563eb'};if(v<51)return{name:'中低負載',cls:'midlow',color:'#0ea5e9'};if(v<71)return{name:'中高負載',cls:'mid',color:'#eab308'};if(v<86)return{name:'高負載',cls:'high',color:'#f97316'};return{name:'很高負載',cls:'vhigh',color:'#ef4444'}}
 function summarizeLoadByRpm(rs){const step=200,b=new Map();for(const r of rs){const k=Math.floor(r.RPM/step)*step;if(!b.has(k))b.set(k,[]);b.get(k).push(r._loadRatio)}return [...b].map(([rpm,v])=>({rpm,load:med(v),n:v.length})).filter(x=>Number.isFinite(x.load)).sort((a,b)=>a.rpm-b.rpm)}
 function contiguousRanges(items){const g=items.filter(x=>x.n>=10&&x.load>=51).map(x=>x.rpm);if(!g.length)return[];const out=[];let a=g[0],p=g[0];for(let i=1;i<g.length;i++){if(g[i]-p<=200){p=g[i];continue}out.push([a,p+199]);a=p=g[i]}out.push([a,p+199]);return out}
@@ -2556,6 +2610,7 @@ function buildOpenLoop(){
  $("stats").innerHTML=[
   ["Log 檔案",new Set(rows.map(r=>r._file)).size],["原始樣本",rows.length.toLocaleString()],
   ["WBO2 參與修正",prepared.length.toLocaleString()],["Auto lag 採用",new Set(rows.filter(r=>r._wbo2AutoLagAccepted).map(r=>r._file)).size],["WBO2 對齊超距",rows.filter(r=>r._wbo2AlignmentRejected).length.toLocaleString()],["AFR 17～18 確認收油",rows.filter(r=>r._wbo2Overrun).length.toLocaleString()],["AFR 17～18 保留偏稀",rows.filter(r=>r._wbo2FueledLean).length.toLocaleString()],
+["噴油欄位空白",rows.filter(r=>!validNum(r.Cyl1_Comn_FuelPW)||!validNum(r.Cyl1_Injector_Period_Rate)).length.toLocaleString()],
 ["AFR 24／WBO2異常",rows.filter(r=>r._wbo2Fault).length.toLocaleString()],["WBO2狀態降權",rows.filter(r=>r._wbo2Stuck||r._wbo2ReadyUnstable).length.toLocaleString()],["Target切換降權",rows.filter(r=>r._targetChanging).length.toLocaleString()],
 ["已對應 Map 格",cells.length],
   ["瞬態／斷油低權重",rows.filter(r=>r._transient).length.toLocaleString()],["Log 格式",androidMode?"Android aRacer":"Apple"],
@@ -2594,7 +2649,7 @@ arr.sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);addNeighborEvidence(arr);
    <div class="stat">數據不足<b>${arr.filter(c=>c.quality==="數據不足").length}</b></div>
    <div class="stat">極端偏差<b>${arr.filter(c=>c.extreme).length}</b></div>
  </div>
- <div class="note" style="margin-top:9px"><strong>最大化保留可信資料：</strong>高可信度正常修正；中等證據採 50%；較少但重複同方向且工況穩定者採 25%。OFF 模式會自動補償 WBO2 延遲；AFR 17～18 必須同時符合低 TPS 與斷油旗標，或無噴油且 RPM 明確下降，才分流為收油，其餘保留為偏稀候選；AFR 24 異常只隔離該時段，不報廢整份 Log。</div>
+ <div class="note" style="margin-top:9px"><strong>最大化保留可信資料：</strong>高可信度正常修正；中等證據採 50%；較少但重複同方向且工況穩定者採 25%。OFF 模式會自動補償 WBO2 延遲；AFR 17～18 必須同時符合 TPS 全收與噴油脈寬／Duty 明確下降（含歸零）；無斷油旗標時還要 RPM 明確下降，才分流為收油，其餘保留為偏稀候選；AFR 24 異常只隔離該時段，不報廢整份 Log。</div>
  ${renderAdvancedSummary(arr,inverse,"off")}${renderConflictDetails(arr)}${renderWorkList(recommend)}${renderWatchList(arr)}`;
 
  $("detail").innerHTML=`<thead><tr><th>RPM</th><th>TPS</th><th>有效數</th><th>AFR 偏差</th><th>CI (advisory)</th><th>Inverse (advisory)</th><th>P10～P90</th><th>MAD</th><th>Log同方向</th><th>溫度</th><th>穩定次數</th><th>可信度</th></tr></thead><tbody>${
@@ -2605,57 +2660,81 @@ arr.sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);addNeighborEvidence(arr);
 }
 const $=id=>document.getElementById(id);
 
+let analysisRevision=0,activeAnalysisJob=null;
+const analysisControls=["logPlatformSelect","ecuSeriesSelect","baseMapSelect","loopModeSelect","logs","backtestBeforeLogs","backtestAfterLogs","analyze","runBacktest"];
+function analysisSettingsKey(){return ["logPlatformSelect","ecuSeriesSelect","baseMapSelect","loopModeSelect"].map(id=>$(id)?.value||"").join("|")}
+function beginAnalysisJob(kind){
+ if(activeAnalysisJob)return null;
+ const job={kind,revision:analysisRevision,settings:analysisSettingsKey(),disabled:new Map()};
+ activeAnalysisJob=job;
+ for(const id of analysisControls){const el=$(id);if(el){job.disabled.set(id,el.disabled);el.disabled=true}}
+ return job;
+}
+function currentAnalysisJob(job){return activeAnalysisJob===job&&job.revision===analysisRevision&&job.settings===analysisSettingsKey()}
+function endAnalysisJob(job){if(activeAnalysisJob!==job)return;for(const [id,disabled] of job.disabled){const el=$(id);if(el)el.disabled=disabled}activeAnalysisJob=null}
+function invalidateComparison(){const el=$("backtestResult");if(el){el.hidden=true;el.innerHTML=""}}
+function invalidateAnalysisResults(){
+ analysisRevision++;hardwareScanToken++;
+ $("result")?.classList.add("hidden");invalidateComparison();
+ rows=[];window.__ctLogRows=[];window.__ctWorkMap=new Map();window.__ctProgressKey=null;
+ if(window.renderLoadZoneV43)window.renderLoadZoneV43([]);
+ if(window.renderIntakeRestrictionV24)window.renderIntakeRestrictionV24([]);
+}
 function refreshSelectedLogPreflight(){const fs=[...($("logs")?.files||[])];if(fs.length)scanHardwareFiles(fs)}
-$("baseMapSelect").addEventListener("change",()=>{updateLogSystemConfirm();$("result")?.classList.add("hidden");if($("backtestResult"))$("backtestResult").hidden=true;refreshSelectedLogPreflight()});
-$("logPlatformSelect").addEventListener("change",()=>{updateLogSystemConfirm();$("result")?.classList.add("hidden");refreshSelectedLogPreflight()});
-$("ecuSeriesSelect").addEventListener("change",()=>{updateLogSystemConfirm();$("result")?.classList.add("hidden");if($("backtestResult"))$("backtestResult").hidden=true;refreshSelectedLogPreflight()});
+for(const id of ["baseMapSelect","logPlatformSelect","ecuSeriesSelect"]){$(id).addEventListener("change",()=>{invalidateAnalysisResults();updateLogSystemConfirm();refreshSelectedLogPreflight()})}
 $("logs").addEventListener("change",()=>{
  const fs=[...$("logs").files];
- $("result")?.classList.add("hidden");
+ invalidateAnalysisResults();
  $("status").textContent=fs.length?`已選擇 ${fs.length} 個檔案：`+fs.map(f=>f.name).join("、"):"尚未選擇 Log";
  scanHardwareFiles(fs);
 });
 
 $("analyze").onclick=async()=>{
+ if(activeAnalysisJob)return;
  if(!validateSelection())return;
  const fs=[...$("logs").files];
  if(!fs.length){alert("請先選擇 .loga / .loga.zip / .log / .txt / .csv");return}
- $("result")?.classList.add("hidden");
+ invalidateAnalysisResults();
+ const job=beginAnalysisJob("fuel");if(!job)return;
  $("status").textContent="正在讀取 Log…";rows=[];
  try{
   const unique=await loadUniqueLogEntries(fs);
+  if(!currentAnalysisJob(job))return;
   const loaded=unique.entries.map(entry=>({file:entry.sourceFile,entry,meta:parseLogMeta(entry.text)}));
   validateHardwareBatch(loaded.map(x=>x.meta));
   for(const item of loaded){
     const e=item.entry,parsed=parseText(e.text,e.name);
     validateLoopLogGuard(parsed,getLoopMode(),e.name);
-    rows.push(...parsed);
+    for(const r of parsed)rows.push(r);
   }
   if(!rows.length)throw new Error("沒有讀到有效 Log 資料。");
   $("status").textContent=`完成：${rows.length.toLocaleString()} 筆原始資料${unique.duplicates.length?`；已排除 ${unique.duplicates.length} 份完全相同 Log`:""}${unique.similarities?.length?`；${unique.similarities.length} 組相似序列已保留並提示`:""}。`;
-   initWorkProgress(fs);
+   initWorkProgress(fs,unique.entries);
   window.__ctLogRows=rows;
   build();
   // 進氣分析不依賴 Canvas 尺寸：分析完成後立刻同步餵入「本次剛解析完成」的 rows，避免頁面保留上一份 Log 的結果。
   if(window.renderIntakeRestrictionV24)window.renderIntakeRestrictionV24(rows);
   // 負載圖仍等待 result 顯示後再繪製，避免隱藏 Canvas 尺寸為 0。
   requestAnimationFrame(()=>{
+    if(job.revision!==analysisRevision)return;
     if(window.renderLoadZoneV43)window.renderLoadZoneV43(window.__ctLogRows||[]);
     // 再同步一次目前全域 rows，確保切頁前後都是本次 Log。
     if(window.renderIntakeRestrictionV24)window.renderIntakeRestrictionV24(rows);
   });
   $("result").scrollIntoView({behavior:"smooth"});
  }catch(e){
+  if(!currentAnalysisJob(job))return;
+  invalidateAnalysisResults();
   console.error(e);
   $("status").innerHTML='<span style="color:#b91c1c;font-weight:700">分析失敗：'+esc(e.message)+'</span>';
- }
+ }finally{endAnalysisJob(job)}
 };
 </script>
 <script>
 (function(){
  const before=$("backtestBeforeLogs"),after=$("backtestAfterLogs"),bs=$("backtestBeforeStatus"),as=$("backtestAfterStatus"),btn=$("runBacktest"),result=$("backtestResult");
  if(!before||!after||!bs||!as||!btn||!result)return;
- const show=(i,n)=>{const c=i.files?.length||0;n.textContent=c?`已選擇 ${c} 個檔案`:"尚未選擇";};
+ const show=(i,n)=>{analysisRevision++;invalidateComparison();const c=i.files?.length||0;n.textContent=c?`已選擇 ${c} 個檔案`:"尚未選擇";};
  before.addEventListener("change",()=>show(before,bs)); after.addEventListener("change",()=>show(after,as));
  const backtestConflict=list=>hasDirectionConflict(list.map(x=>x.cl));
 
@@ -2738,15 +2817,19 @@ async function sideOpenLoop(files,loadedUnique=null){
    return backtestOutcome(b,a,mode);
  }
  btn.addEventListener("click",async()=>{
+   if(activeAnalysisJob)return;
    if(typeof validateSelection==="function"&&!validateSelection())return;
    if(!before.files?.length||!after.files?.length){result.hidden=false;result.innerHTML='<div class="bt-warning">⚠️ 請同時選擇「對照組」與「後段騎乘」Log。</div>';return;}
-   btn.disabled=true;btn.textContent="正在比較工況…";result.hidden=false;result.innerHTML='<div class="bt-note">正在獨立分析兩組 Log 工況…</div>';
+   const job=beginAnalysisJob("compare");if(!job)return;
+   btn.textContent="正在比較工況…";result.hidden=false;result.innerHTML='<div class="bt-note">正在獨立分析兩組 Log 工況…</div>';
    try{
      const beforeFiles=[...before.files],afterFiles=[...after.files];
      validateRawBacktestFileSets(beforeFiles,afterFiles);
      const beforeUnique=await loadUniqueLogEntries(beforeFiles),afterUnique=await loadUniqueLogEntries(afterFiles);
+     if(!currentAnalysisJob(job))return;
      const pairCheck=validateBacktestPairSets(beforeUnique,afterUnique);
      const b=await side(beforeFiles,beforeUnique),a=await side(afterFiles,afterUnique);
+     if(!currentAnalysisJob(job))return;
      const bm=new Map(b.map(x=>[x.rpm+"|"+x.tps,x])),am=new Map(a.map(x=>[x.rpm+"|"+x.tps,x]));
      const compareMode=getLoopMode();
      const label=compareMode==="on"?"Fuel_CL":"AFR 偏差";
@@ -2767,13 +2850,13 @@ async function sideOpenLoop(files,loadedUnique=null){
      <div class="bt-stats"><div><small>共同 Map 格</small><b>${keys.length}</b></div><div><small>🟢 良好／改善</small><b>${good}</b></div><div><small>🟡 需觀察</small><b>${warn}</b></div><div><small>🔴 工況變差</small><b>${bad}</b></div></div>
      <div class="bt-note"><strong>本次比較基準：${compareMode==="on"?"Fuel_CL":"逐筆 WBO2 / Target 偏差"}。</strong> 這裡只比較相同 Map 格的前後騎乘工況，不驗證實際油圖修改內容。兩組已檢查 ECU 身分；同一 File 物件、解壓內容 SHA-256 相同或完整分析欄位序列相同都會停止。只有部分正規化序列相似時僅提示並保留。Table ID 允許不同。跨 Log 正負衝突時不判定改善。加權證據量以標準 100 ms 為時間基準；AFR Target / WBO2 中位數僅為參考。</div>
      <div class="compare-table-wrap"><table class="compare-table"><thead><tr><th>RPM</th><th>TPS</th><th>Target AFR 前/後</th><th>WBO2 AFR 前/後</th><th>前 ${label}</th><th>後 ${label}</th><th>變化</th><th>有效數 前/後</th><th>可信度 前/後</th><th>結果</th></tr></thead><tbody>${rows||'<tr><td colspan="10">沒有共同且可比較的 Map 格。</td></tr>'}</tbody></table></div>`;
-   }catch(e){console.error(e);result.innerHTML='<div class="bt-warning">⛔ 工況對比已停止：'+esc(e.message)+'</div>';}
-   finally{btn.disabled=false;btn.textContent="開始工況對比";}
+   }catch(e){if(currentAnalysisJob(job)){console.error(e);result.innerHTML='<div class="bt-warning">⛔ 工況對比已停止：'+esc(e.message)+'</div>';}}
+   finally{endAnalysisJob(job);btn.textContent="開始工況對比";}
  });
 })();
 const loopModeSelect=$("loopModeSelect");
 if(loopModeSelect){
- loopModeSelect.addEventListener("change",()=>{updateLoopModeUI();updateLogSystemConfirm();$("result")?.classList.add("hidden");refreshSelectedLogPreflight()});
+ loopModeSelect.addEventListener("change",()=>{invalidateAnalysisResults();updateLoopModeUI();updateLogSystemConfirm();refreshSelectedLogPreflight()});
  updateLoopModeUI();
 }
 </script>
@@ -2909,6 +2992,12 @@ if(loopModeSelect){
 .intake-page-v24 .ci-ratio-under87{display:inline-block;padding:2px 7px;border-radius:8px;background:#fee2e2;color:#dc2626;font-weight:950;animation:ci87ValueGlow .85s ease-in-out infinite alternate}
 @keyframes ci87ValueGlow{from{color:#b91c1c;background:#fee2e2;box-shadow:0 0 3px rgba(239,68,68,.30);transform:scale(1)}to{color:#fff;background:#ef4444;box-shadow:0 0 12px rgba(239,68,68,.9),0 0 22px rgba(239,68,68,.45);transform:scale(1.04)}}
 </style>
+<style id="intake-grade-v25-css">
+.intake-page-v24 .ci-grade-guide{margin-top:14px}.intake-page-v24 .ci-grade-guide h3{margin:0 0 10px;color:#334155;font-size:16px}.intake-page-v24 .ci-grade-guide>p{margin:0 0 10px;color:#64748b;font-size:12px;line-height:1.6}.intake-page-v24 .ci-grade-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.intake-page-v24 .ci-grade{padding:9px 10px;border-left:4px solid var(--grade-color);border-radius:10px;background:color-mix(in srgb,var(--grade-color) 7%,#fff);font-size:12px;line-height:1.45}.intake-page-v24 .ci-grade b{display:block;color:var(--grade-color);font-size:13px}.intake-page-v24 .ci-grade small{display:block;margin-top:2px;color:#475569}.intake-page-v24 .ci-peak{margin-top:12px;padding:13px 14px;border:1px solid #fed7aa;border-left:5px solid #f97316;border-radius:13px;background:linear-gradient(135deg,#fff7ed,#fff);line-height:1.6}.intake-page-v24 .ci-peak-label{display:block;color:#9a3412;font-size:12px;font-weight:850}.intake-page-v24 .ci-peak b{display:inline-block;margin:2px 7px 0 0;color:#c2410c;font-size:24px}.intake-page-v24 .ci-peak strong{color:#9a3412}.intake-page-v24 .ci-peak p{margin:5px 0 0;color:#7c2d12;font-size:13px}@media(max-width:700px){.intake-page-v24 .ci-grade-grid{grid-template-columns:1fr}.intake-page-v24 .ci-peak b{font-size:22px}}
+</style>
+<style id="intake-hold-status-v26-css">
+.intake-page-v24 .ci-hold-status{display:inline-flex;flex-direction:column;gap:2px;min-width:132px;font-weight:950;line-height:1.25}.intake-page-v24 .ci-hold-status small{font-size:10px;font-weight:850;white-space:normal}.intake-page-v24 .ci-hold-status.healthy{color:#1769c2;text-shadow:0 0 7px #93c5fd;animation:holdHealthyPulse 1.45s ease-in-out infinite}.intake-page-v24 .ci-hold-status.healthy small{color:#2563eb}.intake-page-v24 .ci-hold-status.caution{color:#c56a00;text-shadow:0 0 6px #fde68a}.intake-page-v24 .ci-hold-status.caution small{color:#b45309}.intake-page-v24 .ci-hold-status.restricted{color:#dc2626;text-shadow:0 0 8px #fca5a5;animation:holdRestrictedPulse 1.15s ease-in-out infinite}.intake-page-v24 .ci-hold-status.restricted small{color:#b91c1c}@keyframes holdHealthyPulse{50%{color:#0b4f9c;text-shadow:0 0 14px #60a5fa}}@keyframes holdRestrictedPulse{50%{color:#991b1b;text-shadow:0 0 16px #ef4444}}@media(prefers-reduced-motion:reduce){.intake-page-v24 .ci-hold-status{animation:none!important}}
+</style>
 <script id="v24-four-page-intake-analysis">
 (function(){
   'use strict';
@@ -2922,9 +3011,15 @@ if(loopModeSelect){
     if(duty!=null&&duty<=0)return false;
     return true;
   }
+  function pressureHoldStatus(ratio){
+    const x=Number(ratio);
+    if(!Number.isFinite(x))return '<span class="ci-hold-status unknown">—</span>';
+    if(x>=90)return '<span class="ci-hold-status healthy">'+x.toFixed(1)+'%<small>健康｜高轉進氣保持良好</small></span>';
+    if(x>87)return '<span class="ci-hold-status caution">'+x.toFixed(1)+'%<small>開始有阻力｜壓降已開始影響</small></span>';
+    return '<span class="ci-hold-status restricted">'+x.toFixed(1)+'%<small>明顯阻力｜實際騎乘通常可感受受阻</small></span>';
+  }
   function trendStats(bins){
-    if(!bins.length)return {slope:0,delta:0,tolerance:0,state:'高轉壓降持平',cls:'good'};
-    if(bins.length===1)return {slope:0,delta:0,tolerance:0,state:'高轉壓降持平',cls:'good'};
+    if(bins.length<2)return {slope:0,delta:0,tolerance:0,comparable:false,state:'尚無法判斷轉速趨勢',cls:'warn'};
     const xs=bins.map(b=>b.rpm/1000),ys=bins.map(b=>b.drop);
     const xm=xs.reduce((a,b)=>a+b,0)/xs.length,ym=ys.reduce((a,b)=>a+b,0)/ys.length;
     let nume=0,den=0;for(let i=0;i<xs.length;i++){const dx=xs[i]-xm;nume+=dx*(ys[i]-ym);den+=dx*dx}
@@ -2933,11 +3028,12 @@ if(loopModeSelect){
     const noise=1.4826*mad(residuals);
     const fittedFirst=intercept+slope*xs[0],fittedLast=intercept+slope*xs[xs.length-1];
     const delta=fittedLast-fittedFirst;
-    const tolerance=noise*2; // 完全由本次 Log 殘差決定，不設固定保持率門檻
+    // 0.1 kPa 是畫面顯示解析度底線，不代表感知器精度或設備升級門檻。
+    const tolerance=Math.max(.1,noise*2);
     let state='高轉壓降持平',cls='good';
     if(delta>tolerance){state='高轉壓降增加';cls='warn'}
     else if(delta<-tolerance){state='高轉壓降下降';cls='good'}
-    return {slope,delta,tolerance,state,cls,noise};
+    return {slope,delta,tolerance,state,cls,noise,comparable:true};
   }
   function analyze(raw){
     const all=Array.isArray(raw)?raw:[],source=[];
@@ -2953,7 +3049,7 @@ if(loopModeSelect){
     }
     const baseline={patmMed:median(patms)};
     if(!source.length)return {bins:[],baseline,maxRpm:null,floor:null,sourceCount:0,trend:null};
-    const maxRpm=Math.max.apply(null,source.map(x=>x.rpm));
+    const maxRpm=source.reduce((m,x)=>Math.max(m,x.rpm),-Infinity);
     const floor=Math.max(4500,Math.floor(maxRpm*.70/500)*500);
     const groups=new Map();
     for(const x of source){if(x.rpm<floor)continue;const k=Math.floor(x.rpm/500)*500;if(!groups.has(k))groups.set(k,[]);groups.get(k).push(x)}
@@ -2962,8 +3058,8 @@ if(loopModeSelect){
       const rpm=pair[0],b=pair[1];
       if(!b.length)continue;
       const patm=median(b.map(x=>x.patm)),ap=median(b.map(x=>x.ap));
-      const drop=patm-ap,ratio=ap/patm*100;
-      bins.push({rpm,n:b.length,tpsMax:Math.max.apply(null,b.map(x=>x.tps)),patm,ap,drop,ratio});
+      const drop=median(b.map(x=>x.drop)),ratio=median(b.map(x=>x.ratio));
+      bins.push({rpm,n:b.length,tpsMax:b.reduce((m,x)=>Math.max(m,x.tps),-Infinity),patm,ap,drop,ratio});
     }
     return {bins,baseline,maxRpm,floor,sourceCount:source.length,trend:trendStats(bins)};
   }
@@ -2973,7 +3069,7 @@ if(loopModeSelect){
       const all=Array.isArray(raw)?raw:[];
       if(!all.length){host.innerHTML='<section class="ci-panel ci-empty">請先完成 Log 分析，才會顯示全油門進氣受阻診斷。</section>';return;}
       const tpsVals=all.map(r=>num(r&&r.TPS_Percent)).filter(Number.isFinite);
-      const maxTps=tpsVals.length?Math.max.apply(null,tpsVals):null;
+      const maxTps=tpsVals.length?tpsVals.reduce((m,x)=>Math.max(m,x),-Infinity):null;
       const res=analyze(all),formal=res.bins;
       if(!formal.length){
         // 只有最高 TPS 本身 <90% 時，才允許顯示「沒有 TPS≥90%」；避免把其他欄位/過濾問題誤報成油門不足。
@@ -2982,15 +3078,15 @@ if(loopModeSelect){
         const withAP=wot.filter(r=>num(r&&r.Cyl1_Eng_AP)!=null).length,withAtm=wot.filter(r=>num(r&&r.P_Atm)!=null).length,withFuel=wot.filter(r=>injectionActive(r)).length;
         host.innerHTML='<section class="ci-panel ci-na"><h2>⚠️ WOT 資料存在，但進氣分析條件未成立</h2><div>本次 Log 最高油門開度</div><div class="ci-na-big">'+maxTps.toFixed(1)+'%</div><b>TPS ≥ 90%：'+wot.length+' 筆</b><div class="ci-foot">其中 Eng_AP 有效 '+withAP+' 筆、P_Atm 有效 '+withAtm+' 筆、正常噴油 '+withFuel+' 筆。此訊息用來直接指出真正缺少的條件，不再誤報成沒有全油門資料。</div></section>';return;}
       const first=formal[0],last=formal[formal.length-1],trend=res.trend||trendStats(formal);
-      const state=trend.state,statusCls=trend.cls,deltaSign=trend.delta>0?'+':'',slopeSign=trend.slope>0?'+':'';
+      const state=trend.state;
       let stateExplain='本次全油門高轉區間的 ΔP 曲線大致持平，沒有出現隨 RPM 明顯擴大的壓降趨勢。';
+      if(!trend.comparable)stateExplain='目前只有一個有效轉速區間；壓降數據保留供參考，但尚無法判斷隨 RPM 上升的變化趨勢。';
       if(state==='高轉壓降增加')stateExplain='隨 RPM 上升，ΔP 的整體趨勢由約 '+first.drop.toFixed(1)+' kPa 增加到 '+last.drop.toFixed(1)+' kPa；Log 顯示高轉流量需求增加時，進氣壓降也同步擴大。';
       else if(state==='高轉壓降下降')stateExplain='隨 RPM 上升，ΔP 的整體趨勢由約 '+first.drop.toFixed(1)+' kPa 降到 '+last.drop.toFixed(1)+' kPa；本次 Log 沒有呈現高轉壓降惡化。';
-      const tableRows=formal.map((x,i)=>{const prev=i?formal[i-1]:null,step=prev?x.drop-prev.drop:null,arrow=step==null?'—':step>0?'↗':step<0?'↘':'→',txt=step==null?'起點':arrow+' '+(step>0?'+':'')+step.toFixed(1)+' kPa';return '<tr><td>'+x.rpm.toLocaleString()+'–'+(x.rpm+499).toLocaleString()+'</td><td>'+x.tpsMax.toFixed(1)+'%</td><td><b>'+x.drop.toFixed(1)+' kPa</b></td><td>'+(x.ratio<87?'<span class="ci-ratio-under87">'+x.ratio.toFixed(1)+'%</span>':x.ratio.toFixed(1)+'%')+'</td><td>'+txt+'</td></tr>'}).join('');
+      const tableRows=formal.map((x,i)=>{const prev=i?formal[i-1]:null,step=prev?x.drop-prev.drop:null,arrow=step==null?'—':step>0?'↗':step<0?'↘':'→',txt=step==null?'起點':arrow+' '+(step>0?'+':'')+step.toFixed(1)+' kPa';return '<tr><td>'+x.rpm.toLocaleString()+'–'+(x.rpm+499).toLocaleString()+'</td><td>'+x.tpsMax.toFixed(1)+'%</td><td><b>'+x.drop.toFixed(1)+' kPa</b></td><td>'+pressureHoldStatus(x.ratio)+'</td><td>'+x.n.toLocaleString()+'</td><td>'+txt+'</td></tr>'}).join('');
       host.innerHTML='<div class="ci-dash">'
-        +'<section class="ci-panel ci-result"><div class="ci-result-grid"><div><div class="ci-state-label">高轉進氣趨勢</div><div class="ci-state '+statusCls+'">'+state+'</div><div class="ci-explain">'+stateExplain+'</div></div><div><div class="ci-metric-title">ΔP 高轉變化</div><div class="ci-big">'+deltaSign+trend.delta.toFixed(1)+'<span style="font-size:.34em;letter-spacing:0"> kPa</span></div><div class="ci-bar-hint">'+first.rpm.toLocaleString()+' → '+last.rpm.toLocaleString()+' rpm</div><div class="ci-foot" style="text-align:center">趨勢斜率 '+slopeSign+trend.slope.toFixed(2)+' kPa / 1,000 rpm</div></div></div></section>'
         +'<section class="ci-panel ci-condition"><h3>本次分析條件</h3><div class="ci-checks"><b>✓</b> 油門開度：≥ 90%<br><b>✓</b> 噴油狀態：正常<br><b>✓</b> 判斷方式：依本次 Log 的 ΔP × RPM 趨勢<br><b>✓</b> 有效 WOT 樣本：'+res.sourceCount.toLocaleString()+' 筆</div><div class="ci-tiles"><div class="ci-tile">☁ 環境大氣壓 P_Atm<b>'+(Number.isFinite(res.baseline.patmMed)?res.baseline.patmMed.toFixed(1):'—')+' kPa</b></div><div class="ci-tile">🏁 最高有效轉速<b>'+res.maxRpm.toFixed(0)+' rpm</b></div></div></section></div>'
-        +'<div class="ci-lower"><div><section class="ci-panel"><h3 class="ci-table-title">🏎️ 各轉速區間進氣壓降</h3><div class="ci-table-wrap"><table class="ci-table"><thead><tr><th>轉速 (rpm)</th><th>油門開度 (TPS)</th><th>實際壓降 ΔP</th><th>壓力保持率</th><th>相鄰變化</th></tr></thead><tbody>'+tableRows+'</tbody></table></div><div class="ci-foot">本表只顯示 TPS ≥ 90% 的有效資料。保持率只呈現實測值，不設定任何固定「合格 / 不合格」百分比。</div><div class="ci-87-alert">常用轉速區壓力保持率低於 87% 時，已能感受到高轉延伸開始受限，代表進氣系統已達值得優化設備的參考門檻。</div></section><section class="ci-panel ci-details"><details><summary>詳細數據（點擊展開）</summary><div class="ci-adv-grid"><div class="ci-tile">高轉 Eng_AP<b>'+last.ap.toFixed(1)+' kPa</b></div><div class="ci-tile">高轉 ΔP<b>'+last.drop.toFixed(1)+' kPa</b></div><div class="ci-tile">高轉保持率<b>'+last.ratio.toFixed(1)+'%</b></div><div class="ci-tile">環境 P_Atm<b>'+last.patm.toFixed(1)+' kPa</b></div></div></details></section></div>'
+        +'<div class="ci-lower"><div><section class="ci-panel"><h3 class="ci-table-title">🏎️ 各轉速區間進氣壓降</h3><div class="ci-table-wrap"><table class="ci-table"><thead><tr><th>轉速 (rpm)</th><th>油門開度 (TPS)</th><th>實際壓降 ΔP</th><th>壓力保持率</th><th>有效樣本</th><th>相鄰變化</th></tr></thead><tbody>'+tableRows+'</tbody></table></div><div class="ci-foot">本表只顯示 TPS ≥ 90% 的有效資料。有效樣本只用來呈現覆蓋度，不會因筆數不足自動刪除壓降數據。壓力保持率：≥90% 為健康、87.1～89.9% 為開始有阻力、≤87.0% 為明顯阻力。</div></section><section class="ci-panel ci-details"><details><summary>詳細數據（點擊展開）</summary><div class="ci-adv-grid"><div class="ci-tile">高轉 Eng_AP<b>'+last.ap.toFixed(1)+' kPa</b></div><div class="ci-tile">高轉 ΔP<b>'+last.drop.toFixed(1)+' kPa</b></div><div class="ci-tile">高轉保持率<b>'+last.ratio.toFixed(1)+'%</b></div><div class="ci-tile">環境 P_Atm<b>'+last.patm.toFixed(1)+' kPa</b></div></div></details></section></div>'
         +'<div><section class="ci-panel ci-trend"><h3>↗ 高轉趨勢</h3><div class="ci-trend-msg">'+state+'</div><div class="ci-faces"><div class="ci-face">☁️<small>'+first.drop.toFixed(1)+' kPa</small></div><div class="ci-arrow"></div><div class="ci-face">☁️<small>'+last.drop.toFixed(1)+' kPa</small></div></div><div class="ci-simple">💡 <b>Log 告訴我們：</b>'+stateExplain+'</div><div class="ci-foot">⚠️ 此分析只判斷整體進氣路徑的壓力損失趨勢，無法單靠此 Log 指定是哪一個零件造成。</div></section><div class="ci-why"><b>為什麼 P_Atm 不是 100？</b><br>大氣壓力會隨海拔與天氣改變，程式直接使用 Log 當時記錄的 P_Atm。</div></div></div>';
     }catch(err){
       console.error('intake render error',err);
