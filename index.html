@@ -770,7 +770,7 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 <button class="analyze-btn compare-btn" id="runBacktest" type="button">開始工況對比</button>
 <div class="backtest-result" hidden="" id="backtestResult"></div>
 </section><div class="hidden" id="result">
-<section class="card"><div class="result-mode" id="resultMode">🔴 閉迴路 ON｜Fuel_CL 校正模式</div><div class="result-quality-note">高可信度正常修正；中等證據半量試修；較少但重複同方向的可信資料採25%保守試修。</div><h2>④ 本次 Log 總覽</h2><div class="stats" id="stats"></div></section>
+<section class="card"><div class="result-mode" id="resultMode">🔴 閉迴路 ON｜Fuel_CL 校正模式</div><div class="result-quality-note">高可信度可正常修正；資料量不足時建議增加 Log，達門檻後仍可試修。所有實際油圖變動低於 ±0.8 時，統一採用 ±0.8 最小步進。</div><h2>④ 本次 Log 總覽</h2><div class="stats" id="stats"></div></section>
 
 
 
@@ -968,7 +968,7 @@ button,input,select{-webkit-tap-highlight-color:transparent}
   </div>
 </div>
 <div id="fuel"></div><div class="note" style="margin-top:8px">
-<strong>可信度分級：</strong>加權證據量以標準 100 ms 為基準，不因 logging Hz 較高自動變得更可信。證據量≥12且品質達標，仍須具有單一 Log 加權有效停留≥1.5秒且RPM片段波動≤15%、≥2個獨立片段或多 Log 同方向其中一項，才能正常修正；未通過只降為50%、25%或觀望，不刪資料。明顯斷油、零噴油、Map 範圍外、無效空值與 WBO2 對齊超距才硬排除。
+<strong>可信度分級：</strong>加權證據量以標準 100 ms 為基準，不因 logging Hz 較高自動變得更可信。證據量≥12且品質達標，仍須具有單一 Log 加權有效停留≥1.5秒且RPM片段波動≤15%、≥2個獨立片段或多 Log 同方向其中一項，才能正常修正；未通過但達門檻者保留為「可試修／建議補 Log」，不刪資料。明顯斷油、零噴油、Map 範圍外、無效空值與 WBO2 對齊超距才硬排除。
 </div>
 </section>
 <section class="card detail-card">
@@ -1008,23 +1008,23 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 <br><br>
 <strong>③ 瞬態：</strong>TPS 變化率 ≥12%/s 或 RPM 變化率 ≥600 rpm/s 會標記瞬態；瞬態資料不直接刪除，一般瞬態權重為 0.20，Fuel／Injection cut 另降至 0.05；瞬態判定後還會依 0.8 秒 hold 規則延續。
 <br><br>
-<strong>④ 可信度：</strong>加權證據量 &lt;6 原則上屬數據不足；≥3 且重複同方向、MAD與獨立工況證據通過時，可保留為25%保守試修；6～&lt;12 可進入50%半量試修；≥12 還必須有單一 Log 加權有效停留≥1.5秒且RPM片段波動≤15%、≥2個獨立片段或多 Log 同方向，才為高可信度正常修正。單一 Log 的時間或RPM穩定度不足時保留為50%試修，不直接丟棄。
+<strong>④ 可信度：</strong>加權證據量 &lt;6 原則上屬數據不足；≥3 且重複同方向、MAD與獨立工況證據通過時，可保留為可試修資料，但建議補足 Log；6～&lt;12 已達可試修門檻，仍建議增加 Log 數據；≥12 還必須有單一 Log 加權有效停留≥1.5秒且RPM片段波動≤15%、≥2個獨立片段或多 Log 同方向，才為高可信度正常修正。不同可信度只決定是否列入可試修，不改變單次油圖步進規則。
 <br><br>
 <strong>⑤ 強工況認證：</strong>程式目前實際採用任一條件即可取得 strong adoption：<br>
 ・3 次連續資料在約 1 秒內，且 RPM／TPS／AP 三軸各自集中於中位數 ±10%；<br>
 ・5 次資料在約 10 秒內，且三軸集中 ±10%；<br>
 ・同一 Map 格穩定停留 ≥2 秒且三軸集中 ±10%；<br>
 ・≥3 個穩定片段，每段 ≥6 次、三軸集中、方向一致；片段偏差最大容許落差會依偏差程度動態限制在 2～4 個百分點。<br>
-強工況代表穩定操作證據；effectiveN 6～&lt;12 時還須有獨立片段或停留證據，才以 50% 小幅試修進入工作清單，不代表直接寫入 ECU。
+強工況代表穩定操作證據；effectiveN 6～&lt;12 時還須有獨立片段或停留證據，才可列入「可試修／建議補 Log」工作清單，不代表直接寫入 ECU。
 <br><br>
-<strong>⑥ 修正建議：</strong>偏差必須 &gt;3% 且 &lt;11%。高可信度使用正常修正量；中等可信度且強工況／獨立證據通過時使用 50% 小幅試修。程式依偏差計算燃油百分比，再由你輸入目前 Map 值換算參考值；逐格輸入與完成打勾流程保持不變。
+<strong>⑥ 修正建議：</strong>偏差必須 &gt;3% 且 &lt;11%。高可信度可正常修正；資料量不足但已達門檻者標示為可試修並建議補 Log。程式依偏差與目前 Map 值換算參考值；若實際油圖變動低於 ±0.8，統一以 ±0.8 最小步進呈現；逐格輸入與完成打勾流程保持不變。
 <br><br>
 <strong>⑦ 結果分類：</strong>🛠️ 建議修改／👀 觀望／⚠️ 數據不足／🚨 偏差異常。±3% 內只保留資料，不修改；≥11% 不直接修改。
 </div></div></div></details>
 </section><section class="card intake-rules-card"><div class="section-head"><div><div class="section-tag">WOT INTAKE</div><h2>③ 進氣壓降判讀</h2><p class="section-sub">適用於 TPS ≥90% 的高轉全油門 Log；顯示實測 ΔP、壓力保持率與每個 RPM 區間的有效樣本，不參與 Fuel Map 修正。</p></div></div><div class="rule-details-inline"><div class="note compact-note"><strong>壓力保持率判讀：</strong><br>・<strong>≥90.0%｜健康：</strong>高轉進氣保持良好。<br>・<strong>87.1～89.9%｜開始有阻力：</strong>高轉進氣壓降已開始影響。<br>・<strong>≤87.0%｜明顯阻力：</strong>實際騎乘通常可感受到高轉進氣受阻。<br><br><strong>使用方式：</strong>顏色與文字直接顯示在各 RPM 區間的「壓力保持率」欄；藍色閃耀為健康、橘色為開始有阻力、紅色閃耀為明顯阻力。有效樣本只呈現資料覆蓋度，不因筆數不足自動刪除實測壓降。<br><br><strong>限制：</strong>壓降只能指出整體進氣路徑的壓力損失，不能單靠 Log 指定是哪個零件造成；空濾、進氣管、歧管、節流閥、汽門／凸輪與排氣都可能造成相同現象。</div></div></section><section class="card quality-card">
 <div class="section-head"><div><div class="section-tag">QUALITY GATE</div><h2>防失準</h2><p class="section-sub">品質不足時降低可信度，不急著修改；強工況證據只提升進入修正判定的資格。</p></div></div>
 <div class="quality-grid"><div><b>①</b><span>整條 Log Fuel_CL 判定 ON / OFF</span></div><div><b>②</b><span>溫度權重＋瞬態／資料品質權重</span></div><div><b>③</b><span>weighted MAD ≤8＋方向一致度 ≥0.7</span></div><div><b>④</b><span>單一Log直接修正：RPM波動≤15%最佳；15～25%仍可用</span></div></div>
-<div class="quality-warning">⚠️ <strong>高可信度正常修正；中等證據半量；較少但可重複驗證者25%保守試修；互相衝突才觀望。</strong> 不把所有條件疊成硬門檻，也不讓短短三筆直接取得最高級。</div>
+<div class="quality-warning">⚠️ <strong>高可信度可正常修正；資料量不足但達門檻者可試修並建議補 Log；互相衝突才觀望。</strong> 實際油圖數值會吸附至 aRacer 真實格距，變動低於一格時才採最小約 ±0.8 步進。</div>
 <div class="note" style="margin-top:10px"><strong>程式參數快照：</strong> T_Eng 為軟權重參考｜核心溫區 80～110°C｜熱機趨勢納入權重｜TPS 瞬態 ≥12%/s｜RPM 瞬態 ≥600 rpm/s｜transient hold 0.8 s｜不修 ±3.0%｜極端 ≥11%｜100 ms標準加權證據量：3 / 6 / 12｜segment：effectiveN≥4有效、≥6強證據、≥2段只作獨立重複參考｜Map：CT125 X 14×17、XX 31×25；DAX125 僅 XX 15×17，依手動選定的罐頭基底套用。同一檔案會先以檔案身分攔截，再以解壓後 SHA-256 與完整核心序列做第二、第三層防呆；正規化部分相似只提醒、不刪資料；WBO2 AFR ≥23.5 在 ON／OFF 都列為感知器異常，只隔離該時段；AFR 17～18 只有在 TPS 全收且噴油脈寬／Duty 明確下降（含歸零）時才視為收油；無斷油旗標時還必須同時有 RPM 明確下降，其餘保留為真實偏稀候選。OFF WBO2 lag 會參考 Target AFR、Fuel PW 與 Injector Duty 的階躍並驗證 AFR 反應相關性，未達門檻即沿用 RPM＋AP 動態 delay。CI 採獨立 visit bootstrap，只有跨 Log 且方向穩定才標示可信；whole-map inverse 保留作同批資料平滑趨勢，不視為外部驗證。</div>
 </section></div>
 <footer>aRacer X / XX Log 分析建議｜CT125 分析工具｜本工具只提供分析與調校建議，不會寫入 ECU。實際騎乘負載圖以真實點火格顯示 RPM／TPS／AP／SA，只供使用者自行參照，不提供點火角增減建議。<div class="gaggle-credit">此分析程式為 Gaggle 發布</div></footer>
@@ -1068,11 +1068,11 @@ const MAPS=Object.freeze({
 
 const cfg={
  temp:67,apGreen:60,apRed:80,minRef:10,stableMinSamples:3,stableWaitSec:0,
- clDeadband:3.0,clPerCell:0.8,clStateEpsilon:0,
+ clDeadband:3.0,mapAdjustStep:100/128,mapAdjustBase:100,clStateEpsilon:0,
  transientTpsRate:12,transientRpmRate:600,transientHoldSec:0.8,minDwellSec:0,
  fuelReductionMinRatio:0.15,fuelReductionMaxGapSec:1.0,
  tempCoreLow:80,tempCoreHigh:110,tempEdgeLowWeight:0.5,tempHotWeight:0.5,
- trialScale:0.50,cautiousScale:0.25,afrLeanPeg:17,minTrialEffectiveN:6,minDirectEffectiveN:12,singleLogDirectMinSeconds:1.5,
+ afrLeanPeg:17,minTrialEffectiveN:6,minDirectEffectiveN:12,singleLogDirectMinSeconds:1.5,
  evidenceIntervalMs:100,wbo2DelayMinMs:120,wbo2DelayMaxMs:450,wbo2TargetSettleMs:700,wbo2AlignmentMaxMs:220,
  // Safe v2.3: uncertain evidence is retained as advisory; only validated evidence may raise trust.
  wbo2AutoLagMinEvents:6,wbo2AutoLagMinConfidence:0.65,
@@ -1994,19 +1994,35 @@ function projectedErrorAfterCorrection(errPct,fuelPct){
   if(!Number.isFinite(e)||!Number.isFinite(f)||1+f/100<=0)return null;
   return ((1+e/100)/(1+f/100)-1)*100;
 }
+function snapMapValueToEcuStep(value){
+  const v=Number(value),step=Number(cfg.mapAdjustStep),base=Number(cfg.mapAdjustBase);
+  if(!Number.isFinite(v)||!Number.isFinite(step)||step<=0||!Number.isFinite(base))return null;
+  return base+Math.round((v-base)/step)*step;
+}
+function mapSuggestionFromFuelPct(mapValue,fuelPct){
+  const currentMap=snapMapValueToEcuStep(mapValue),pct=Number(fuelPct);
+  if(!Number.isFinite(currentMap)||!Number.isFinite(pct)||pct===0)return null;
+  const calculatedMap=currentMap*(1+pct/100),rawDelta=calculatedMap-currentMap;
+  const sign=Math.sign(rawDelta||pct),intendedDelta=sign*Math.max(Math.abs(rawDelta),cfg.mapAdjustStep);
+  let newMap=snapMapValueToEcuStep(currentMap+intendedDelta);
+  if(sign>0&&newMap<=currentMap)newMap=currentMap+cfg.mapAdjustStep;
+  if(sign<0&&newMap>=currentMap)newMap=currentMap-cfg.mapAdjustStep;
+  const appliedDelta=newMap-currentMap;
+  return {currentMap,newMap,rawDelta,appliedDelta,appliedFuelPct:appliedDelta/currentMap*100,minStep:Math.abs(rawDelta)<cfg.mapAdjustStep-1e-9};
+}
 function recommendationDecision(c,q,strong,deviation){
   const d=Math.abs(Number(deviation));
   if(!Number.isFinite(d)||d<=cfg.clDeadband||d>=11)return {action:false,tier:"watch",scale:0};
   if(q.quality==="高可信度")return {action:true,tier:"direct",scale:1};
-  // 單一 Log 只有 1～1.5 秒有效證據時不丟棄：可降為半量／保守試修；
-  // 正常修正仍由 qualityGateCell 的 1.5 秒、合格重複片段或多 Log 同方向把關。
+  // 單一 Log 只有 1～1.5 秒有效證據時不丟棄：保留為「可試修」並提示補 Log；
+  // 所有實際操作都吸附至 aRacer 真實油圖格距；只有小於一格時才補足最小約 ±0.8 步進，正常修正資格仍由 qualityGateCell 嚴格把關。
   const independent=(q.significantSegments>=2)||(q.repeatEvidence===true)||(Number(c.dwell)>=2)||(q.fileAgreement===true)||(Number(q.effectiveSeconds)>=1);
   if(q.quality==="可參考"&&strong.adopt&&independent){
-    return {action:true,tier:"trial",scale:cfg.trialScale};
+    return {action:true,tier:"trial",scale:1};
   }
-  // 少量但重複同方向的可信資料不浪費：保留為 25% 保守試修，不冒充高可信度。
+  // 少量但重複同方向的可信資料不浪費：保留為可試修，但明確提示應補 Log，不冒充高可信度。
   if(q.effectiveN>=3&&Number.isFinite(q.m)&&q.m<=10&&q.consistency>=.7&&!q.fileConflict&&strong.adopt&&independent){
-    return {action:true,tier:"cautious",scale:cfg.cautiousScale};
+    return {action:true,tier:"cautious",scale:1};
   }
   return {action:false,tier:"watch",scale:0};
 }
@@ -2052,7 +2068,7 @@ function renderWorkMiniMap(valid){
     return `<span class="work-map-axis-y">${tps}%</span>${cells}`;
   }).join("");
   const xLabels=map.rpm.map(rpm=>`<span class="work-map-axis-x">${rpm.toLocaleString()}</span>`).join("");
-  return `<section class="work-map-panel"><div class="work-map-head"><div><strong>Map 修改定位</strong><span>左側逐列為真實 TPS；下方逐欄為真實 RPM</span></div><div class="work-map-legend"><i class="direct"></i>正常修正<i class="trial"></i>半量／保守試修<i class="done"></i>已完成</div></div><div class="work-map-scroll"><div class="work-map-grid" role="grid" aria-label="Fuel Map TPS 與 RPM 修改定位" style="--map-cols:${map.rpm.length}">${rows}<span class="work-map-axis-corner">TPS<br>RPM→</span>${xLabels}</div></div><div class="work-map-axis-caption">左側 TPS ↑　／　下方 RPM →</div></section>`;
+  return `<section class="work-map-panel"><div class="work-map-head"><div><strong>Map 修改定位</strong><span>左側逐列為真實 TPS；下方逐欄為真實 RPM</span></div><div class="work-map-legend"><i class="direct"></i>正常修正<i class="trial"></i>可試修／建議補 Log<i class="done"></i>已完成</div></div><div class="work-map-scroll"><div class="work-map-grid" role="grid" aria-label="Fuel Map TPS 與 RPM 修改定位" style="--map-cols:${map.rpm.length}">${rows}<span class="work-map-axis-corner">TPS<br>RPM→</span>${xLabels}</div></div><div class="work-map-axis-caption">左側 TPS ↑　／　下方 RPM →</div></section>`;
 }
 function addNeighborEvidence(items){
   const map=currentMapDefinition();
@@ -2092,14 +2108,14 @@ function renderWorkList(items){
     return `<div class="work-item ${done?"done":""} ${inprog?"in-progress":""}" data-cell="${esc(key)}" data-tier="${trial?"trial":"direct"}">
       <div class="work-status">${done?"✅ 已完成":inprog?"🔧 進行中":"⏳ 待修正"}</div>
       <div class="work-main">
-        <div class="work-title-row"><div class="work-title">${c.rpm} RPM / TPS ${c.tps}%</div><span class="work-tier ${trial?"trial":"direct"}">${cautious?"🟠 25%保守試修":trial?"🟡 半量試修":"🟢 正常修正"}</span></div>
-        <div class="work-recommend">偏差 <strong>${pct(c.deviation)}</strong>｜建議<strong>${dir} ${Math.abs(c.fuelPct).toFixed(1)}%</strong></div>
+        <div class="work-title-row"><div class="work-title">${c.rpm} RPM / TPS ${c.tps}%</div><span class="work-tier ${trial?"trial":"direct"}">${cautious?"🟠 資料較少｜建議補 Log":trial?"🟡 資料不足｜已達可試修門檻":"🟢 正常修正"}</span></div>
+        <div class="work-recommend">偏差 <strong>${pct(c.deviation)}</strong>｜依偏差方向修正；換算油圖後，變動低於 <strong>±${cfg.mapAdjustStep.toFixed(1)}</strong> 時自動採最小步進</div>
         <div class="work-evidence">有效數 ${fmt(c.effectiveN,1)}｜大部分 ${pct(c.p10)}～${pct(c.p90)}｜MAD ${fmt(c.m,2)}｜片段 ${c.segments?.length||0}${Number.isFinite(c.effectiveSeconds)?`｜有效停留 ${c.effectiveSeconds.toFixed(1)}秒`:""}${c.fileCount>1?`｜Log同方向 ${c.fileAgreementCount||0}/${c.fileCount}`:""}${c.neighborNote?`｜${esc(c.neighborNote)}`:""}</div>
         <div class="map-input-box">
           <label>目前該格油圖數值</label>
           <input class="map-value-input" type="number" step="0.1" inputmode="decimal" value="${esc(saved)}" placeholder="輸入該格油圖數值" aria-label="${c.rpm} RPM TPS ${c.tps}% 目前油圖數值">
           <div class="map-calc-result" aria-live="polite"></div>
-          <div class="map-calc-hint">${cautious?"本格保留較少但重複的可信資料，只採 25% 保守試修。":trial?"本格採 50% 小幅試修，修改後請用 Log 驗證。":"輸入後自動換算，目標進入 ±3% 允許範圍。"}</div>
+          <div class="map-calc-hint">${cautious?"本格資料較少但方向重複，建議補足 Log 後再確認；目前已達可試修門檻。":trial?"資料量不足，建議增加 Log 數據；目前已達可試修門檻。":"輸入後自動換算；油圖變動低於 ±0.8 時會採用 ±0.8 最小步進。"}</div>
         </div>
       </div>
       <button type="button" class="work-action" data-work-action="${done?"undo":"done"}" ${!done&&!inputReady?"disabled":""}>${done?"✓ 已完成":inputReady?"我已完成此格":"先輸入目前油圖"}</button>
@@ -2107,7 +2123,7 @@ function renderWorkList(items){
   }).join("");
   const platform=$("logPlatformSelect")?.value==="android"?"Android":"Apple",series=($("ecuSeriesSelect")?.value||"").toUpperCase()+" · "+fuelMapLabel($("ecuSeriesSelect")?.value),mode=getLoopMode().toUpperCase();
   return `<div class="work-context"><div><strong>${platform}｜${series}｜Closed Loop ${mode}</strong><span id="workRestoreNote">${window.__ctProgressRestored?"已恢復上次進度":"進度會自動保存在此瀏覽器"}</span></div><b data-progress-count>${doneCount} / ${valid.length}</b></div>
-  <div class="work-toolbar"><div class="work-filters"><button type="button" class="active" data-work-filter="all">全部</button><button type="button" data-work-filter="pending">尚未完成</button><button type="button" data-work-filter="direct">正常修正</button><button type="button" data-work-filter="trial">半量／保守試修</button></div><div class="work-tools"><button type="button" data-work-nav="next">下一個未完成</button><button type="button" class="danger" data-work-reset>重設進度</button></div></div>
+  <div class="work-toolbar"><div class="work-filters"><button type="button" class="active" data-work-filter="all">全部</button><button type="button" data-work-filter="pending">尚未完成</button><button type="button" data-work-filter="direct">正常修正</button><button type="button" data-work-filter="trial">可試修／建議補 Log</button></div><div class="work-tools"><button type="button" data-work-nav="next">下一個未完成</button><button type="button" class="danger" data-work-reset>重設進度</button></div></div>
   ${renderWorkMiniMap(valid)}
   <div class="work-progress"><span>逐格修改進度</span><b data-progress-count>${doneCount} / ${valid.length}</b><div class="work-progress-track" aria-hidden="true"><i data-progress-bar style="width:${valid.length?doneCount/valid.length*100:0}%"></i></div></div>
   <div class="work-list" data-filter="all">${body||'<div class="note">目前沒有符合「正常修正」或「試修」的格；觀望資料仍保留在下方。</div>'}</div>`;
@@ -2200,13 +2216,18 @@ function bindMapValueInputs(){
       out.innerHTML='<span class="map-calc-error">⚠️ 無法計算這一格的建議值</span>';
       return;
     }
-    const newMap=map*(1+fuelPct/100);
+    const suggestion=mapSuggestionFromFuelPct(map,fuelPct);
+    if(!suggestion){
+      out.innerHTML='<span class="map-calc-error">⚠️ 無法對應油圖格距</span>';
+      return;
+    }
     const dir=fuelPct>=0?"增加":"減少";
-    const targetErr=Number(c.targetErr);
-    const targetNote=c.recommendTier==="trial"?"小幅靠近允許範圍，修改後請用 Log 驗證":"預計進入 ±3% 允許範圍";
-    const targetText=Number.isFinite(targetErr)?`<div class="result-target">🎯 預計修正後：約 <strong>${targetErr>0?"+":""}${targetErr.toFixed(1)}%</strong> 偏差｜${targetNote}</div>`:"";
-    out.innerHTML=`<div class="result-main">建議${dir}當下油量約 <strong>${Math.abs(fuelPct).toFixed(1)}%</strong></div>
-      <div class="result-sub">目前油圖 ${map.toFixed(1)} → 修正後參考值約 <strong>${newMap.toFixed(1)}</strong></div>${targetText}`;
+    const {currentMap,newMap,rawDelta,appliedDelta,appliedFuelPct,minStep}=suggestion;
+    const targetErr=projectedErrorAfterCorrection(c.deviation,appliedFuelPct);
+    const targetNote=minStep?`原計算變動 ${rawDelta>=0?"+":""}${rawDelta.toFixed(2)}，低於最小 ±${cfg.mapAdjustStep.toFixed(1)}，本次改採最小步進；修改後請用 Log 驗證。`:`依 Log 偏差換算並吸附至 aRacer 真實格距；修改後請用 Log 驗證。`;
+    const targetText=Number.isFinite(targetErr)?`<div class="result-target">🎯 以本次步進估算：偏差約 <strong>${targetErr>0?"+":""}${targetErr.toFixed(1)}%</strong>｜${targetNote}</div>`:"";
+    out.innerHTML=`<div class="result-main">建議${dir}油圖 <strong>${appliedDelta>=0?"+":""}${appliedDelta.toFixed(1)}</strong>${minStep?`（最小 ±${cfg.mapAdjustStep.toFixed(1)} 步進）`:""}</div>
+      <div class="result-sub">目前油圖 ${currentMap.toFixed(1)} → 修正後參考值約 <strong>${newMap.toFixed(1)}</strong></div>${targetText}`;
     item.classList.remove("needs-input");syncWorkAction(item);
   });
 }
@@ -2345,9 +2366,9 @@ const strongAdoptionPolicy={
   direct:[
     "RPM-TPS-AP 集中只作強工況證據，不單獨跳過 effectiveN",
     "≥2有效穩定片段（每段effectiveN≥4；≥6為強片段）／同Map尺度工況接近／方向一致／離散受控 → 重複證據；≥3片段再加強",
-    "同一Map格穩定停留≥2秒／RPM-TPS-AP集中±10% → 可搭配 effectiveN≥6 進入半量試修"
+    "同一Map格穩定停留≥2秒／RPM-TPS-AP集中±10% → 可搭配 effectiveN≥6 進入可試修／建議補 Log"
   ],
-  meaning:"強工況＝加強穩定性；高可信度正常修正，中等證據只做半量試修"
+  meaning:"強工況＝加強穩定性；高可信度正常修正，資料量較少但達門檻者可試修並建議補 Log"
 };
 
 function markStrongAdoptionEvidence(c, value){
@@ -2420,7 +2441,7 @@ function qualityGateCell(c, value, mode){
   // effectiveN為標準100 ms時間基準下的加權證據量，已納入溫度／時間／資料品質。
   const concentrated=Number.isFinite(m)&&m<=8;
   const consistencyOk=consistency==null||consistency>=0.7;
-  // 單一 Log 需至少 1.5 秒加權有效停留；1～1.5 秒仍保留並可降為半量試修。
+  // 單一 Log 需至少 1.5 秒加權有效停留；1～1.5 秒仍保留為可試修資料，並提示補 Log。
   const stabilityBest=stabilityPct==null||stabilityPct<=15;
   const stabilityOk=stabilityBest;
   const stabilityUsable=stabilityPct==null||stabilityPct<=25;
@@ -2524,7 +2545,7 @@ function buildClosedLoop(){
   const satPairs=rs.map(r=>({v:Math.abs(Number(r.Fuel_CL))>=18?1:0,w:tempWeight(r.T_Eng)*analysisWeight(r)})).filter(x=>x.w>0);
   const saturationRate=satPairs.length?satPairs.reduce((s,x)=>s+x.v*x.w,0)/satPairs.reduce((s,x)=>s+x.w,0):0;
   const saturated=extreme&&saturationRate>=0.25;
-  const quality=saturated?"閉迴路修正可能飽和":extreme?"極端偏差":decision.tier==="direct"?"最高級直接認證":decision.tier==="trial"?"條件式小幅試修":decision.tier==="cautious"?"25%保守資料試修":q.quality;
+  const quality=saturated?"閉迴路修正可能飽和":extreme?"極端偏差":decision.tier==="direct"?"最高級直接認證":decision.tier==="trial"?"資料不足｜已達可試修門檻":decision.tier==="cautious"?"資料較少｜建議補 Log 再試修":q.quality;
   const fuelPct=corr?corr.fuelPct*decision.scale:0;
   const targetErr=projectedErrorAfterCorrection(cl,fuelPct);
   const action=decision.action&&!extreme;
@@ -2539,14 +2560,14 @@ arr.sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);addNeighborEvidence(arr);
   $("fuel").innerHTML=`${renderWbo2SensorWarning(rows)}<div class="stats">
    <div class="stat">建議修改<b>${recommend.length}</b></div>
    <div class="stat">正常修正<b>${recommend.filter(c=>c.recommendTier==="direct").length}</b></div>
-   <div class="stat">半量試修<b>${recommend.filter(c=>c.recommendTier==="trial").length}</b></div>
-   <div class="stat">25%保守試修<b>${recommend.filter(c=>c.recommendTier==="cautious").length}</b></div>
+   <div class="stat">可試修／建議補 Log<b>${recommend.filter(c=>c.recommendTier==="trial").length}</b></div>
+   <div class="stat">資料較少／建議補 Log<b>${recommend.filter(c=>c.recommendTier==="cautious").length}</b></div>
    <div class="stat">±3% 內不修<b>${arr.filter(c=>!c.extreme&&Number.isFinite(c.deviation)&&Math.abs(c.deviation)<=cfg.clDeadband).length}</b></div>
    <div class="stat">數據不足<b>${arr.filter(c=>c.quality==="數據不足").length}</b></div>
    <div class="stat">極端偏差<b>${arr.filter(c=>c.extreme).length}</b></div>
   
  </div>
- <div class="note" style="margin-top:9px"><strong>最大化保留可信資料：</strong>高可信度正常修正；中等證據採 50%；較少但重複同方向且工況穩定者採 25%。溫度、瞬態與 Map 邊界採軟權重，不因單一條件不足就丟棄整格。</div>
+ <div class="note" style="margin-top:9px"><strong>最大化保留可信資料：</strong>高可信度可正常修正；資料量不足但達門檻者保留為可試修並建議補 Log；較少但重複同方向者同樣保留，避免浪費資訊。所有實際油圖變動低於 ±0.8 時採用 ±0.8 最小步進；溫度、瞬態與 Map 邊界採軟權重，不因單一條件不足就丟棄整格。</div>
  ${renderAdvancedSummary(arr,inverse,"on")}${renderConflictDetails(arr)}${renderWorkList(recommend)}${renderWatchList(arr)}`;
 
  $("detail").innerHTML=`<thead><tr><th>RPM</th><th>TPS</th><th>有效數</th><th>Fuel_CL</th><th>CI (advisory)</th><th>Inverse (advisory)</th><th>P10～P90</th><th>MAD</th><th>Log同方向</th><th>AFR偏差</th><th>溫度</th><th>穩定次數</th><th>可信度</th></tr></thead><tbody>${
@@ -2628,7 +2649,7 @@ function buildOpenLoop(){
   const strong=markStrongAdoptionEvidence(c,r=>r._analysisCorr);
   attachAdvancedCellEvidence(c,q,inverse?.cells?.get(c.rpm+"|"+c.tps),corr);
   const decision=recommendationDecision(c,q,strong,corr);
-  const quality=extreme?"極端偏差":decision.tier==="direct"?"最高級直接認證":decision.tier==="trial"?"條件式小幅試修":decision.tier==="cautious"?"25%保守資料試修":q.quality;
+  const quality=extreme?"極端偏差":decision.tier==="direct"?"最高級直接認證":decision.tier==="trial"?"資料不足｜已達可試修門檻":decision.tier==="cautious"?"資料較少｜建議補 Log 再試修":q.quality;
   const fuelPct=corrCalc?corrCalc.fuelPct*decision.scale:0;
   const targetErr=projectedErrorAfterCorrection(corr,fuelPct);
   const action=decision.action&&!extreme;
@@ -2643,13 +2664,13 @@ arr.sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);addNeighborEvidence(arr);
   $("fuel").innerHTML=`${renderWbo2SensorWarning(rows)}<div class="stats">
    <div class="stat">建議修改<b>${recommend.length}</b></div>
    <div class="stat">正常修正<b>${recommend.filter(c=>c.recommendTier==="direct").length}</b></div>
-   <div class="stat">半量試修<b>${recommend.filter(c=>c.recommendTier==="trial").length}</b></div>
-   <div class="stat">25%保守試修<b>${recommend.filter(c=>c.recommendTier==="cautious").length}</b></div>
+   <div class="stat">可試修／建議補 Log<b>${recommend.filter(c=>c.recommendTier==="trial").length}</b></div>
+   <div class="stat">資料較少／建議補 Log<b>${recommend.filter(c=>c.recommendTier==="cautious").length}</b></div>
    <div class="stat">±3% 內不修<b>${arr.filter(c=>!c.extreme&&Number.isFinite(c.deviation)&&Math.abs(c.deviation)<=cfg.clDeadband).length}</b></div>
    <div class="stat">數據不足<b>${arr.filter(c=>c.quality==="數據不足").length}</b></div>
    <div class="stat">極端偏差<b>${arr.filter(c=>c.extreme).length}</b></div>
  </div>
- <div class="note" style="margin-top:9px"><strong>最大化保留可信資料：</strong>高可信度正常修正；中等證據採 50%；較少但重複同方向且工況穩定者採 25%。OFF 模式會自動補償 WBO2 延遲；AFR 17～18 必須同時符合 TPS 全收與噴油脈寬／Duty 明確下降（含歸零）；無斷油旗標時還要 RPM 明確下降，才分流為收油，其餘保留為偏稀候選；AFR 24 異常只隔離該時段，不報廢整份 Log。</div>
+ <div class="note" style="margin-top:9px"><strong>最大化保留可信資料：</strong>高可信度可正常修正；資料量不足但達門檻者保留為可試修並建議補 Log；較少但重複同方向者同樣保留，避免浪費資訊。所有實際油圖變動低於 ±0.8 時採用 ±0.8 最小步進。OFF 模式會自動補償 WBO2 延遲；AFR 17～18 必須同時符合 TPS 全收與噴油脈寬／Duty 明確下降（含歸零）；無斷油旗標時還要 RPM 明確下降，才分流為收油，其餘保留為偏稀候選；AFR 24 異常只隔離該時段，不報廢整份 Log。</div>
  ${renderAdvancedSummary(arr,inverse,"off")}${renderConflictDetails(arr)}${renderWorkList(recommend)}${renderWatchList(arr)}`;
 
  $("detail").innerHTML=`<thead><tr><th>RPM</th><th>TPS</th><th>有效數</th><th>AFR 偏差</th><th>CI (advisory)</th><th>Inverse (advisory)</th><th>P10～P90</th><th>MAD</th><th>Log同方向</th><th>溫度</th><th>穩定次數</th><th>可信度</th></tr></thead><tbody>${
