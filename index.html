@@ -670,6 +670,20 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 </div>
 
 <div>
+<label for="baseMapSelect">原始罐頭程式基底</label>
+<select id="baseMapSelect">
+<option value="ct125" selected>CT125（預設）</option>
+<option value="dax125" disabled>DAX125（僅 MINIXX／SUPERXX）</option>
+</select>
+<style>
+.base-map-warning{display:block;margin-top:6px;line-height:1.6;color:#b91c1c;font-size:14px;font-weight:800;animation:base-map-glow 1.6s ease-in-out infinite}
+@keyframes base-map-glow{0%,100%{color:#991b1b;text-shadow:none}50%{color:#ff1616;text-shadow:0 0 3px rgba(255,35,35,.9),0 0 9px rgba(255,35,35,.75),0 0 16px rgba(255,35,35,.5)}}
+@media(prefers-reduced-motion:reduce){.base-map-warning{animation:none}}
+</style>
+<small class="base-map-warning">請選對罐頭基底，避免調錯油圖格位。</small>
+<small id="baseMapHint" style="display:block;margin-top:6px;line-height:1.6;color:#b91c1c;font-size:14px;font-weight:700">DAX125 僅供 MINIXX／SUPERXX 選用，請依 ECU 實際載入的罐頭程式選擇。</small>
+</div>
+<div>
 <label>閉迴路狀態</label>
 <select id="loopModeSelect">
 <option selected="" value="on">ON｜開啟閉迴路・Fuel_CL 主判定</option>
@@ -678,7 +692,7 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 </div>
 </div>
 <div class="setup-warning" id="setupHint">
-    ⚠️ 請先完成以上三項設定，再上傳 Log。
+    ⚠️ 請先完成以上設定，再上傳 Log。
   </div>
 </section><section class="card upload-card" id="uploadSection">
 <div class="section-head upload-head">
@@ -962,7 +976,7 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 <div class="temp-priority-legend"><span>🟢 80～110°C 偏好區</span><span>🟠 67～79°C 降權</span><span>⚠️ &gt;110°C 平滑降權</span></div>
 <div class="rule-item"><b>📈 不修</b><strong>±3.0% 內不列入修改</strong><span>實際門檻：cfg.clDeadband = 3.0</span></div>
 <div class="rule-item"><b>🚨 極端</b><strong>≥11% 不直接修改</strong><span>請重新取得 Log；目前程式門檻固定為 11%</span></div>
-<div class="rule-item"><b>🧭 Map</b><strong>只套用目前選定系列的真實格點</strong><span>X：14×17；XX：31×25，不跨系列</span></div>
+<div class="rule-item"><b>🧭 Map</b><strong>依 ECU 系列與原始罐頭程式基底套用真實格點</strong><span>CT125：X 14×17、XX 31×25；DAX125：僅 MINIXX／SUPERXX，15×17（RPM 800～12000、TPS 0～100%）。Hardware ID 識別 ECU；罐頭基底需手動確認。</span></div>
 </div>
 <div class="rule-details-inline"><div class="note compact-note">
 <strong>① ON／OFF 實際判定：</strong><br>
@@ -990,7 +1004,7 @@ button,input,select{-webkit-tap-highlight-color:transparent}
 <div class="section-head"><div><div class="section-tag">QUALITY GATE</div><h2>防失準</h2><p class="section-sub">品質不足時降低可信度，不急著修改；強工況證據只提升進入修正判定的資格。</p></div></div>
 <div class="quality-grid"><div><b>①</b><span>整條 Log Fuel_CL 判定 ON / OFF</span></div><div><b>②</b><span>溫度權重＋瞬態／資料品質權重</span></div><div><b>③</b><span>weighted MAD ≤8＋方向一致度 ≥0.7</span></div><div><b>④</b><span>單一Log直接修正：RPM波動≤15%最佳；15～25%仍可用</span></div></div>
 <div class="quality-warning">⚠️ <strong>高可信度正常修正；中等證據半量；較少但可重複驗證者25%保守試修；互相衝突才觀望。</strong> 不把所有條件疊成硬門檻，也不讓短短三筆直接取得最高級。</div>
-<div class="note" style="margin-top:10px"><strong>程式參數快照：</strong> T_Eng 為軟權重參考｜核心溫區 80～110°C｜熱機趨勢納入權重｜TPS 瞬態 ≥12%/s｜RPM 瞬態 ≥600 rpm/s｜transient hold 0.8 s｜不修 ±3.0%｜極端 ≥11%｜100 ms標準加權證據量：3 / 6 / 12｜segment：effectiveN≥4有效、≥6強證據、≥2段只作獨立重複參考｜Map：X 14×17、XX 31×25。同一檔案會先以檔案身分攔截，再以解壓後 SHA-256 與完整核心序列做第二、第三層防呆；正規化部分相似只提醒、不刪資料；WBO2 AFR ≥23.5 在 ON／OFF 都列為感知器異常，只隔離該時段；AFR 17～18 只有在 TPS 全收，並同時有斷油旗標，或無噴油且 RPM 明確下降時才視為收油，其餘保留為真實偏稀候選。OFF WBO2 lag 會參考 Target AFR、Fuel PW 與 Injector Duty 的階躍並驗證 AFR 反應相關性，未達門檻即沿用 RPM＋AP 動態 delay。CI 採獨立 visit bootstrap，只有跨 Log 且方向穩定才標示可信；whole-map inverse 保留作同批資料平滑趨勢，不視為外部驗證。</div>
+<div class="note" style="margin-top:10px"><strong>程式參數快照：</strong> T_Eng 為軟權重參考｜核心溫區 80～110°C｜熱機趨勢納入權重｜TPS 瞬態 ≥12%/s｜RPM 瞬態 ≥600 rpm/s｜transient hold 0.8 s｜不修 ±3.0%｜極端 ≥11%｜100 ms標準加權證據量：3 / 6 / 12｜segment：effectiveN≥4有效、≥6強證據、≥2段只作獨立重複參考｜Map：CT125 X 14×17、XX 31×25；DAX125 僅 XX 15×17，依手動選定的罐頭基底套用。同一檔案會先以檔案身分攔截，再以解壓後 SHA-256 與完整核心序列做第二、第三層防呆；正規化部分相似只提醒、不刪資料；WBO2 AFR ≥23.5 在 ON／OFF 都列為感知器異常，只隔離該時段；AFR 17～18 只有在 TPS 全收，並同時有斷油旗標，或無噴油且 RPM 明確下降時才視為收油，其餘保留為真實偏稀候選。OFF WBO2 lag 會參考 Target AFR、Fuel PW 與 Injector Duty 的階躍並驗證 AFR 反應相關性，未達門檻即沿用 RPM＋AP 動態 delay。CI 採獨立 visit bootstrap，只有跨 Log 且方向穩定才標示可信；whole-map inverse 保留作同批資料平滑趨勢，不視為外部驗證。</div>
 </section></div>
 <footer>aRacer X / XX Log 分析建議｜CT125 分析工具｜本工具只提供分析與調校建議，不會寫入 ECU。實際騎乘負載圖以真實點火格顯示 RPM／TPS／AP／SA，只供使用者自行參照，不提供點火角增減建議。<div class="gaggle-credit">此分析程式為 Gaggle 發布</div></footer>
 </div>
@@ -1014,6 +1028,16 @@ const X_TPS_GRID=Object.freeze([0,2,4,6,8,10,15,20,25,30,40,50,60,70,80,90,100])
 const XX_RPM_GRID=Object.freeze([400,800,1200,1600,2000,2400,2800,3200,3600,4000,4400,4800,5200,5600,6000,6400,6800,7200,7600,8000,8400,8800,9200,9600,9800,10000,10200,10400,10600,10800,11000]);
 const XX_TPS_GRID=Object.freeze([0,2,4,6,8,10,12,14,16,18,20,21,23,25,27,29,37,45,53,61,68,76,84,92,100]);
 
+const DAX_MAP=Object.freeze({rpm:Object.freeze([800,1600,2400,3200,4000,4800,5600,6400,7200,8000,8800,9600,10400,11200,12000]),tps:X_TPS_GRID});
+function selectedBaseMap(){return $("baseMapSelect")?.value||"ct125"}
+function fuelMapLabel(series){return selectedBaseMap()==="dax125"&&series==="xx"?"DAX125 15×17":series==="xx"?"CT125 31×25":"CT125 14×17"}
+function syncBaseMapSelection(){
+ const select=$("baseMapSelect");if(!select)return;
+ const allowed=$("ecuSeriesSelect")?.value==="xx";
+ select.querySelector('[value="dax125"]').disabled=!allowed;
+ if(!allowed)select.value="ct125";
+ $("baseMapHint").textContent=selectedBaseMap()==="dax125"?"此選項適用於 JA65 × DAX125 罐頭程式基底。":"DAX125 僅供 MINIXX／SUPERXX 選用，請依 ECU 實際載入的罐頭程式選擇。";
+}
 const MAPS=Object.freeze({
   "apple_x":Object.freeze({rpm:X_RPM_GRID,tps:X_TPS_GRID}),
   "android_x":Object.freeze({rpm:X_RPM_GRID,tps:X_TPS_GRID}),
@@ -1054,7 +1078,7 @@ function parseLogMeta(text){
  const hardwareId=normalizeHardwareId(hw);
  return {hardwareRaw:hw,hardwareId,ecuSn:normalizeHardwareId(ecu),tableId:table,known:ECU_HARDWARE_IDS[hardwareId]||null};
 }
-function seriesText(series){return series==="xx"?"XX 31×25":"X 14×17"}
+function seriesText(series){return series==="xx"?"XX 系列":"X 系列"}
 function validateHardwareSeries(meta,name="Log"){
  const selected=$("ecuSeriesSelect")?.value||"",known=meta?.known||null;
  if(known&&selected&&selected!==known.series){
@@ -1100,7 +1124,7 @@ async function scanHardwareFiles(files){
      if(status){status.className=`hardware-status ${unknown?"warn":"ok"}`;status.textContent=`${unknown?"⚠️":"✅"} Hardware ID ${id} → ${info.model}（${seriesText(info.series)}），已自動選擇${unknown?`；另有 ${unknown} 份未收錄 ID 需人工確認`:""}。`}
    }else if(!batchConflict&&!platformConflict){
      const ids=[...new Set(metas.map(m=>m.hardwareRaw||m.hardwareId).filter(Boolean))];
-     if(status){status.className="hardware-status warn";status.textContent=`⚠️ ${ids.length?`Hardware ID ${ids.join("、")} 尚未收錄`:"Log 未提供可辨識的 Hardware ID"}；不會自動猜測。若為 SuperXX，請手動選擇 XX 31×25，分析時會標示「SuperXX（手動確認）」。`}
+     if(status){status.className="hardware-status warn";status.textContent=`⚠️ ${ids.length?`Hardware ID ${ids.join("、")} 尚未收錄`:"Log 未提供可辨識的 Hardware ID"}；不會自動猜測。若為 SuperXX，請手動選擇 XX 系列並確認罐頭基底，分析時會標示「SuperXX（手動確認）」。`}
    }
    let loopConflict=false,detectedLoop="";
    if(!batchConflict&&!platformConflict){
@@ -1125,7 +1149,7 @@ async function scanHardwareFiles(files){
      if(loopConflict)error="同批 Log 的 Closed Loop ON／OFF 狀態不一致或無法判定，請分開分析。";
      else if(state.state&&state.state!==selectedMode)error=`選擇為 ${selectedMode.toUpperCase()}，此 Log 實際為 ${state.state.toUpperCase()}`;
     }catch(e){error=e.message}
-    const model=meta.known?.model||(meta.hardwareId&&selectedSeries==="xx"?"SuperXX（手動確認）":"未確認"),map=seriesValue?seriesText(seriesValue):"尚未選擇";
+    const model=meta.known?.model||(meta.hardwareId&&selectedSeries==="xx"?"SuperXX（手動確認）":"未確認"),map=seriesValue?fuelMapLabel(seriesValue):"尚未選擇";
     const sensorWarning=afr24?`<div class="log-preflight-error">🔴 WBO2 感知器健康警告：偵測到 ${afr24.toLocaleString()} 筆 AFR 約 24 異常值。可能與感知器污染／老化、線路短路或控制器狀態有關；異常時段已隔離，請檢查感知器良率。</div>`:"";
     return `<div class="log-preflight-item ${error||afr24?"error":""}"><div class="log-preflight-name">${esc(entry.name)}</div><div class="log-preflight-tags"><span>${platform==="apple"?"🍎 Apple":platform==="android"?"🤖 Android":"⚠️ 格式未知"}</span><span>${esc(model)}</span><span>${esc(map)}</span><span>Closed Loop ${esc(loop)}</span></div><div class="log-preflight-metrics"><div>原始筆數<b>${parsed.length.toLocaleString()}</b></div><div>可用筆數<b>${usable.toLocaleString()}</b></div><div>Hardware ID<b>${esc(meta.hardwareRaw||meta.hardwareId||"—")}</b></div><div>ECU SN<b>${esc(meta.ecuSn||"—")}</b></div><div>Table ID<b>${esc(meta.tableId||"—")}</b></div><div>WBO2 對齊超距<b>${alignmentRejected.toLocaleString()}</b></div><div>AFR 17～18 確認收油<b>${afr18.toLocaleString()}</b></div><div>AFR 24 異常<b>${afr24.toLocaleString()}</b></div></div>${sensorWarning}${error?`<div class="log-preflight-error">⚠️ ${esc(error)}</div>`:""}</div>`;
    }).join("");
@@ -1138,26 +1162,28 @@ async function scanHardwareFiles(files){
 
 
 function updateLogSystemConfirm(){
+ syncBaseMapSelection();
  const box=$("logSystemConfirm"),p=$("confirmPlatform"),e=$("confirmEngine"),pa=$("confirmParser"),m=$("confirmMap"),st=$("confirmStatus"),hint=$("setupHint");
  const platform=$("logPlatformSelect")?.value||"", series=$("ecuSeriesSelect")?.value||"";
  const ptxt=platform==="android"?"🤖 Android aRacer Log":platform==="apple"?"🍎 Apple Log":"尚未選擇";
  const stxt=series==="x"?"X 系列（SuperX / MiniX）":series==="xx"?"XX 系列（SuperXX / MiniXX）":"尚未選擇";
  if(p)p.textContent=ptxt;
- if(e)e.textContent="CT125";
+ if(e)e.textContent=selectedBaseMap()==="dax125"?"DAX125 罐頭基底":"CT125 罐頭基底";
  if(pa)pa.textContent=(platform&&series)?ptxt+" × "+stxt+" 專屬 Parser":"尚未啟用";
  if(m)m.textContent=(platform&&series)?
-   ptxt+" × "+stxt+" 的實際 Map（"+(series==="x"?"14×17":"31×25")+"）":"尚未啟用";
+   ptxt+" × "+stxt+" 的實際 Map（"+fuelMapLabel(series)+"）":"尚未啟用";
  if(platform&&series){
-   if(st)st.textContent="🟢 已選定："+ptxt+" → "+stxt+" → CT125；僅使用該組專屬格式與 Map。";
-   if(hint){hint.textContent=`✅ 設定完成：${platform==="android"?"Android":"Apple"} × ${series.toUpperCase()} ${series==="x"?"14×17":"31×25"} × Closed Loop ${getLoopMode().toUpperCase()}。可以上傳 Log。`;hint.classList.add("ready")}
+   if(st)st.textContent="🟢 已選定："+ptxt+" → "+stxt+" → "+fuelMapLabel(series)+"；使用所選罐頭基底的真實油圖。";
+   if(hint){hint.textContent=`✅ 設定完成：${platform==="android"?"Android":"Apple"} × ${series.toUpperCase()} ${fuelMapLabel(series)} × Closed Loop ${getLoopMode().toUpperCase()}。可以上傳 Log。`;hint.classList.add("ready")}
    box?.classList.add("ok");box?.classList.remove("warn");
  }else{
    if(st)st.textContent="請先完成 Log 系統與 ECU 系列選擇。";
-   if(hint){hint.textContent="⚠️ 請先完成以上三項設定，再上傳 Log。";hint.classList.remove("ready")}
+   if(hint){hint.textContent="⚠️ 請先完成以上設定，再上傳 Log。";hint.classList.remove("ready")}
    box?.classList.remove("ok","warn");
  }
 }
 function validateSelection(){
+ if(selectedBaseMap()==="dax125"&&$("ecuSeriesSelect")?.value!=="xx"){alert("DAX125 基底僅允許 MINIXX／SUPERXX ECU 使用。");return false;}
  const platform=$("logPlatformSelect")?.value||"", series=$("ecuSeriesSelect")?.value||"";
  if(!platform){alert("請先選擇 Log 系統：Apple Log 或 Android aRacer Log。");return false;}
  if(!series){alert("請先選擇 ECU 系列：X 系列或 XX 系列。");return false;}
@@ -1845,7 +1871,7 @@ function bootstrapCellCI(c,value){
  const sampleSufficient=n>=cfg.ciReliableUnits,reliable=sampleSufficient&&files>=2&&directionStable,actionable=reliable&&excludesDeadband;
  return {available:true,reliable,actionable,provisional:!reliable,sampleSufficient,units:n,files,low,high,width,directionStable,excludesDeadband,source:"independent-visit"};
 }
-function currentMapDefinition(){const platform=$("logPlatformSelect")?.value||"",series=$("ecuSeriesSelect")?.value||"";return MAPS[platform+"_"+series]||null}
+function currentMapDefinition(){const platform=$("logPlatformSelect")?.value||"",series=$("ecuSeriesSelect")?.value||"";const map=MAPS[platform+"_"+series];if(selectedBaseMap()==="dax125"){if(series!=="xx")throw new Error("DAX125 基底僅允許 MINIXX／SUPERXX ECU 使用。");return map?DAX_MAP:null}return map||null}
 function cgSolveSystem(n,apply,b,maxIter=160,tol=1e-7){const x=new Float64Array(n),r=Float64Array.from(b),p=Float64Array.from(r);let rr=0;for(const v of r)rr+=v*v;const start=rr;if(!(rr>0))return{x,converged:true,iterations:0};let converged=false,it=0;for(;it<maxIter;it++){const ap=apply(p);let pap=0;for(let i=0;i<n;i++)pap+=p[i]*ap[i];if(!(pap>1e-20))break;const alpha=rr/pap;for(let i=0;i<n;i++){x[i]+=alpha*p[i];r[i]-=alpha*ap[i]}let rr2=0;for(const v of r)rr2+=v*v;if(rr2<=Math.max(1e-14,start*tol)){converged=true;rr=rr2;break}const beta=rr2/rr;for(let i=0;i<n;i++)p[i]=r[i]+beta*p[i];rr=rr2}return{x,converged,iterations:it+1}}
 function solveWholeMap(validRows,mode){try{const map=currentMapDefinition();if(!map||!Array.isArray(validRows)||validRows.length<cfg.inverseMinRows)return{available:false,reason:"rows",cells:new Map()};const obs=[],nodes=new Set();for(const r of validRows){const b=mode==="off"?Number(r._analysisCorr):Number(r.Fuel_CL);if(!Number.isFinite(b)||Math.abs(b)>=25)continue;const rms=gridMemberships(Number(r.RPM),map.rpm),tms=gridMemberships(Number(r.TPS_Percent),map.tps);if(!rms.length||!tms.length)continue;const a=[];for(const rp of rms)for(const tp of tms){const coef=rp.weight*tp.weight;if(coef>1e-6){const key=rp.value+"|"+tp.value;a.push({key,coef});nodes.add(key)}}const w=tempWeight(r.T_Eng)*analysisWeight(r);if(a.length&&w>.01)obs.push({a,b,w,file:r._file||"Log"})}if(obs.length<cfg.inverseMinRows||nodes.size<4)return{available:false,reason:"coverage",cells:new Map(),observations:obs.length};const keys=[...nodes],index=new Map(keys.map((k,i)=>[k,i])),n=keys.length,packed=obs.map(o=>({b:o.b,w:o.w,file:o.file,idx:o.a.map(z=>index.get(z.key)),coef:o.a.map(z=>z.coef)})),diag=new Float64Array(n);for(const o of packed)for(let j=0;j<o.idx.length;j++)diag[o.idx[j]]+=o.w*o.coef[j]*o.coef[j];const positive=[...diag].filter(v=>v>0).sort((a,b)=>a-b),md=positive.length?positive[Math.floor(positive.length/2)]:1,smooth=Math.max(.02,md*cfg.inverseSmoothRatio),ridge=Math.max(1e-4,md*cfg.inverseRidgeRatio),active=new Set(keys),edges=[];for(const k of keys){const [rv,tv]=k.split("|").map(Number),ri=map.rpm.indexOf(rv),ti=map.tps.indexOf(tv),i=index.get(k);for(const [dr,dt] of [[1,0],[0,1]]){const r2=map.rpm[ri+dr],t2=map.tps[ti+dt];if(r2==null||t2==null)continue;const k2=r2+"|"+t2;if(active.has(k2))edges.push([i,index.get(k2)])}}const solve=weights=>{const rhs=new Float64Array(n);for(let oi=0;oi<packed.length;oi++){const o=packed[oi],w=weights[oi];for(let j=0;j<o.idx.length;j++)rhs[o.idx[j]]+=w*o.coef[j]*o.b}const apply=v=>{const y=new Float64Array(n);for(let oi=0;oi<packed.length;oi++){const o=packed[oi],w=weights[oi];let pred=0;for(let j=0;j<o.idx.length;j++)pred+=o.coef[j]*v[o.idx[j]];for(let j=0;j<o.idx.length;j++)y[o.idx[j]]+=w*o.coef[j]*pred}for(let i=0;i<n;i++)y[i]+=ridge*v[i];for(const [i,j] of edges){const d=v[i]-v[j];y[i]+=smooth*d;y[j]-=smooth*d}return y};return cgSolveSystem(n,apply,rhs)};let weights=packed.map(o=>o.w),sol=solve(weights),res=packed.map(o=>{let p=0;for(let j=0;j<o.idx.length;j++)p+=o.coef[j]*sol.x[o.idx[j]];return o.b-p}),scale=Math.max(.35,(med(res.map(Math.abs))||.5)*1.4826),huber=Math.max(.75,1.5*scale);weights=packed.map((o,i)=>o.w*Math.min(1,huber/Math.max(huber,Math.abs(res[i]))));sol=solve(weights);res=packed.map(o=>{let p=0;for(let j=0;j<o.idx.length;j++)p+=o.coef[j]*sol.x[o.idx[j]];return o.b-p});const beforeMad=med(packed.map(o=>Math.abs(o.b)))||0,afterMad=med(res.map(Math.abs))||0,fitGain=beforeMad>1e-9?(beforeMad-afterMad)/beforeMad:0,fileCount=new Set(packed.map(o=>o.file)).size,globalReliable=!!sol.converged&&packed.length>=Math.max(cfg.inverseMinRows,Math.ceil(n*1.5))&&fitGain>=.08;const cells=new Map();for(let i=0;i<n;i++){const value=sol.x[i],support=diag[i];cells.set(keys[i],{value,support,reliable:globalReliable&&support>=cfg.inverseMinSupport&&Number.isFinite(value)&&Math.abs(value)<20})}return{available:true,cells,converged:sol.converged,globalReliable,fitGain,observations:packed.length,nodes:n,fileCount,beforeMad,afterMad,iterations:sol.iterations}}catch(e){console.warn("whole-map inverse advisory fallback",e);return{available:false,reason:"error",cells:new Map()}}}
 function attachAdvancedCellEvidence(c,q,inverseCell,deviation){const iv=Number(inverseCell?.value),d=Number(deviation);c.inverseDeviation=Number.isFinite(iv)?iv:null;c.inverseSupport=Number.isFinite(inverseCell?.support)?inverseCell.support:null;c.inverseReliable=!!inverseCell?.reliable;c.inverseConflict=!!(c.inverseReliable&&Number.isFinite(d)&&Math.abs(d)>cfg.clDeadband&&Math.abs(iv)>cfg.clDeadband&&Math.sign(d)!==Math.sign(iv));c.ciLow=q?.ciLow??null;c.ciHigh=q?.ciHigh??null;c.ciReliable=!!q?.ciReliable;c.ciActionable=!!q?.ciActionable;c.ciProvisional=!!q?.ciProvisional;c.ciUnits=q?.ciUnits??0;c.ciFiles=q?.ciFiles??0;return c}
@@ -1853,9 +1879,9 @@ function renderAdvancedSummary(arr,inverse,mode){const stable=(arr||[]).filter(c
 
 function stableMapGroups(validRows){
  const platform=$("logPlatformSelect")?.value||"",series=$("ecuSeriesSelect")?.value||"";
- const key=platform+"_"+series,map=MAPS[key];
+ const key=platform+"_"+series+"_"+selectedBaseMap(),map=currentMapDefinition();
  if(!map)throw new Error("找不到「"+key+"」對應的真實 App Map，為避免套錯，已停止分析。");
- const expected=series==="x"?{rpm:14,tps:17}:{rpm:31,tps:25};
+ const expected=selectedBaseMap()==="dax125"?{rpm:15,tps:17}:series==="x"?{rpm:14,tps:17}:{rpm:31,tps:25};
  if(map.rpm.length!==expected.rpm||map.tps.length!==expected.tps)throw new Error("「"+key+"」Map 格數異常：目前為 "+map.rpm.length+"×"+map.tps.length+"，預期 "+expected.rpm+"×"+expected.tps+"；已停止分析。");
 
  const groups=new Map(),active=new Map();
@@ -1938,7 +1964,7 @@ function recommendationDecision(c,q,strong,deviation){
 }
 function workProgressKey(files){
   const platform=$("logPlatformSelect")?.value||"",series=$("ecuSeriesSelect")?.value||"",mode=getLoopMode();
-  const raw=[platform,series,mode,...files.map(f=>`${f.name}:${f.size}:${f.lastModified}`).sort()].join("|");
+  const raw=[platform,series,mode,...(selectedBaseMap()==="dax125"?["dax125"]:[]),...files.map(f=>`${f.name}:${f.size}:${f.lastModified}`).sort()].join("|");
   let h=2166136261;
   for(let i=0;i<raw.length;i++){h^=raw.charCodeAt(i);h=Math.imul(h,16777619)}
   return `ct125-work-v2-${(h>>>0).toString(16)}`;
@@ -1960,7 +1986,7 @@ function saveWorkProgress(){
   try{localStorage.setItem(window.__ctProgressKey,JSON.stringify({completed:[...(window.__ctCompleted||[])],inputs:window.__ctMapInputs||{},savedAt:Date.now()}))}catch(_){}
 }
 function renderWorkMiniMap(valid){
-  const key=($("logPlatformSelect")?.value||"")+"_"+($("ecuSeriesSelect")?.value||""),map=MAPS[key];
+  const map=currentMapDefinition();
   if(!map)return "";
   const vm=new Map(valid.map(c=>[c.rpm+"|"+c.tps,c]));
   const rows=[...map.tps].reverse().map(tps=>{
@@ -1976,7 +2002,7 @@ function renderWorkMiniMap(valid){
   return `<section class="work-map-panel"><div class="work-map-head"><div><strong>Map 修改定位</strong><span>左側逐列為真實 TPS；下方逐欄為真實 RPM</span></div><div class="work-map-legend"><i class="direct"></i>正常修正<i class="trial"></i>半量／保守試修<i class="done"></i>已完成</div></div><div class="work-map-scroll"><div class="work-map-grid" role="grid" aria-label="Fuel Map TPS 與 RPM 修改定位" style="--map-cols:${map.rpm.length}">${rows}<span class="work-map-axis-corner">TPS<br>RPM→</span>${xLabels}</div></div><div class="work-map-axis-caption">左側 TPS ↑　／　下方 RPM →</div></section>`;
 }
 function addNeighborEvidence(items){
-  const key=($("logPlatformSelect")?.value||"")+"_"+($("ecuSeriesSelect")?.value||""),map=MAPS[key];
+  const map=currentMapDefinition();
   if(!map)return items;
   const vm=new Map(items.map(c=>[c.rpm+"|"+c.tps,c]));
   items.forEach(c=>{
@@ -2026,7 +2052,7 @@ function renderWorkList(items){
       <button type="button" class="work-action" data-work-action="${done?"undo":"done"}" ${!done&&!inputReady?"disabled":""}>${done?"✓ 已完成":inputReady?"我已完成此格":"先輸入目前油圖"}</button>
     </div>`;
   }).join("");
-  const platform=$("logPlatformSelect")?.value==="android"?"Android":"Apple",series=$("ecuSeriesSelect")?.value==="xx"?"XX 31×25":"X 14×17",mode=getLoopMode().toUpperCase();
+  const platform=$("logPlatformSelect")?.value==="android"?"Android":"Apple",series=($("ecuSeriesSelect")?.value||"").toUpperCase()+" · "+fuelMapLabel($("ecuSeriesSelect")?.value),mode=getLoopMode().toUpperCase();
   return `<div class="work-context"><div><strong>${platform}｜${series}｜Closed Loop ${mode}</strong><span id="workRestoreNote">${window.__ctProgressRestored?"已恢復上次進度":"進度會自動保存在此瀏覽器"}</span></div><b data-progress-count>${doneCount} / ${valid.length}</b></div>
   <div class="work-toolbar"><div class="work-filters"><button type="button" class="active" data-work-filter="all">全部</button><button type="button" data-work-filter="pending">尚未完成</button><button type="button" data-work-filter="direct">正常修正</button><button type="button" data-work-filter="trial">半量／保守試修</button></div><div class="work-tools"><button type="button" data-work-nav="next">下一個未完成</button><button type="button" class="danger" data-work-reset>重設進度</button></div></div>
   ${renderWorkMiniMap(valid)}
@@ -2580,8 +2606,9 @@ arr.sort((a,b)=>a.rpm-b.rpm||a.tps-b.tps);addNeighborEvidence(arr);
 const $=id=>document.getElementById(id);
 
 function refreshSelectedLogPreflight(){const fs=[...($("logs")?.files||[])];if(fs.length)scanHardwareFiles(fs)}
+$("baseMapSelect").addEventListener("change",()=>{updateLogSystemConfirm();$("result")?.classList.add("hidden");if($("backtestResult"))$("backtestResult").hidden=true;refreshSelectedLogPreflight()});
 $("logPlatformSelect").addEventListener("change",()=>{updateLogSystemConfirm();$("result")?.classList.add("hidden");refreshSelectedLogPreflight()});
-$("ecuSeriesSelect").addEventListener("change",()=>{updateLogSystemConfirm();$("result")?.classList.add("hidden");refreshSelectedLogPreflight()});
+$("ecuSeriesSelect").addEventListener("change",()=>{updateLogSystemConfirm();$("result")?.classList.add("hidden");if($("backtestResult"))$("backtestResult").hidden=true;refreshSelectedLogPreflight()});
 $("logs").addEventListener("change",()=>{
  const fs=[...$("logs").files];
  $("result")?.classList.add("hidden");
